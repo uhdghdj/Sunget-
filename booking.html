@@ -224,10 +224,11 @@ input:focus, select:focus {
         <div>
           <label>تاريخ الوصول</label>
           <input type="date" id="checkIn" required>
+
         </div>
         <div>
           <label>تاريخ المغادرة</label>
-          <input type="date" id="checkOut" required>
+         <input type="date" id="checkOut" required>
         </div>
       </div>
 
@@ -484,7 +485,7 @@ localStorage.setItem(
         // تحويل حسب طريقة الدفع
         if (paymentMethod === 'paymob') {
           setTimeout(() => {
-            window.location.href = "netlify/functions/paymob.html";
+            window.location.href = "paymob.html";
           }, 2000);
         } else {
           showMessage(`
@@ -517,8 +518,125 @@ localStorage.setItem(
       document.getElementById('checkOut').min = today;
     });
   </script>
-  <script src="translate.js"></script>
+<script>
+const checkInInput = document.getElementById("checkIn");
+const checkOutInput = document.getElementById("checkOut");
 
+let bookedRanges = [];
+
+/* =========================
+   تحميل الحجوزات للغرفة المختارة
+========================= */
+async function loadBookedDates(roomId) {
+
+  if (!roomId) return;
+
+  const { data, error } = await supabaseClient
+    .from("bookings")
+    .select("check_in, check_out")
+    .eq("room_id", roomId)
+    .neq("status", "cancelled");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  bookedRanges = data.map(b => ({
+    start: new Date(b.check_in),
+    end: new Date(b.check_out)
+  }));
+
+  console.log("BOOKED:", bookedRanges);
+}
+
+/* =========================
+   هل الفترة محجوزة؟
+========================= */
+function isRangeBooked(startDate, endDate) {
+
+  return bookedRanges.some(range => {
+
+    return (
+      startDate < range.end &&
+      endDate > range.start
+    );
+
+  });
+
+}
+
+/* =========================
+   فحص التواريخ
+========================= */
+function validateBookingDates() {
+
+  const checkInValue = checkInInput.value;
+  const checkOutValue = checkOutInput.value;
+
+  if (!checkInValue || !checkOutValue) return;
+
+  const start = new Date(checkInValue);
+  const end = new Date(checkOutValue);
+
+  // منع المغادرة قبل الوصول
+  if (end <= start) {
+
+    showMessage(
+      "❌ تاريخ المغادرة يجب أن يكون بعد الوصول",
+      "error"
+    );
+
+    checkOutInput.value = "";
+
+    return;
+  }
+
+  // منع الحجز لو متداخل
+  if (isRangeBooked(start, end)) {
+
+    showMessage(
+      "❌ هذه الفترة محجوزة بالفعل",
+      "error"
+    );
+
+    checkInInput.value = "";
+    checkOutInput.value = "";
+
+    return;
+  }
+
+}
+
+/* =========================
+   عند اختيار غرفة
+========================= */
+document
+  .getElementById("roomSelect")
+  .addEventListener("change", async (e) => {
+
+    selectedRoomId = e.target.value;
+
+    await loadBookedDates(selectedRoomId);
+
+    calculateTotal();
+
+});
+
+/* =========================
+   فحص عند تغيير التاريخ
+========================= */
+checkInInput.addEventListener(
+  "change",
+  validateBookingDates
+);
+
+checkOutInput.addEventListener(
+  "change",
+  validateBookingDates
+);
+</script>
+  <script src="translate.js"></script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

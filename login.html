@@ -3,654 +3,6 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="format-detection" content="telephone=no" />
-    <title>SUNGET — تسجيل دخول</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-     /* 🔥 Responsive Design محسّن لكل الأجهزة 🔥 */
-:root {
-  --bg: #0b0b0f;
-  --bg-2: #14141c;
-  --surface: #1a1a24;
-  --surface-2: #20202c;
-  --text: #ffffff;
-  --text-muted: #b8b8c4;
-  --border: rgba(255, 255, 255, 0.08);
-  --accent: #ffb400;
-  --accent-2: #ff7a00;
-  --danger: #e63946;
-  --success: #27b82e;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 35px 60px -15px rgba(0, 0, 0, 0.5);
-  --radius: 20px;
-  --gradient: linear-gradient(135deg, var(--accent), var(--accent-2));
-  --gradient-hover: linear-gradient(135deg, var(--accent-2), var(--accent));
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(10px, 5vw, 30px);
-  position: relative;
-  overflow-x: hidden;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Background Animation */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 10% 30%, rgba(255, 180, 0, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255, 122, 0, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 40% 10%, rgba(255, 180, 0, 0.06) 0%, transparent 40%);
-  z-index: -1;
-  animation: backgroundFloat 30s ease-in-out infinite;
-}
-
-@keyframes backgroundFloat {
-  0%, 100% { transform: scale(1) translateY(0px); }
-  33% { transform: scale(1.05) translateY(-20px); }
-  66% { transform: scale(1.02) translateY(-10px); }
-}
-
-/* Main Card - Responsive */
-.card {
-  background: rgba(26, 26, 36, 0.95);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: clamp(30px, 8vw, 60px) clamp(25px, 6vw, 50px);
-  width: 100%;
-  max-width: clamp(350px, 90vw, 480px);
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
-  animation: cardSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  margin: 20px auto;
-}
-
-@keyframes cardSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(50px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: var(--gradient);
-  border-radius: var(--radius) var(--radius) 0 0;
-}
-
-/* Logo Section - Responsive */
-.logo {
-  text-align: center;
-  margin-bottom: clamp(25px, 6vw, 40px);
-  position: relative;
-}
-
-.logo-img {
-  width: clamp(70px, 18vw, 90px);
-  height: clamp(70px, 18vw, 90px);
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid rgba(255, 255, 255, 0.15);
-  margin: 0 auto clamp(15px, 4vw, 24px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: block;
-}
-
-.logo-img:hover {
-  transform: scale(1.08) rotate(5deg);
-  border-color: rgba(255, 180, 0, 0.4);
-  box-shadow: 0 20px 45px rgba(255, 180, 0, 0.3);
-}
-
-.logo h3 {
-  font-size: clamp(1.6rem, 6vw, 2.8rem);
-  font-weight: 800;
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.8px;
-  margin-bottom: 8px;
-  line-height: 1.2;
-}
-
-.logo h3:nth-of-type(2) {
-  font-size: clamp(1.3rem, 4vw, 2.2rem);
-  font-weight: 700;
-  color: var(--text);
-  background: none;
-  -webkit-text-fill-color: var(--text);
-  margin-top: 4px;
-  opacity: 0.9;
-  line-height: 1.3;
-}
-
-/* Form - Responsive */
-#login-form {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(20px, 5vw, 28px);
-}
-
-#login-form input {
-  width: 100%;
-  padding: clamp(18px, 5vw, 24px) clamp(20px, 6vw, 28px);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  font-size: clamp(0.95rem, 4vw, 1.1rem);
-  font-family: inherit;
-  background: var(--surface);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--text);
-  font-weight: 500;
-  min-height: 56px;
-}
-
-#login-form input::placeholder {
-  color: var(--text-muted);
-  font-weight: 400;
-}
-
-#login-form input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 
-    0 0 0 4px rgba(255, 180, 0, 0.15),
-    0 20px 40px rgba(0, 0, 0, 0.3);
-  transform: translateY(-3px);
-  background: var(--surface-2);
-}
-
-/* Password Wrapper */
-.pass-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.pass-wrapper input {
-  padding-right: clamp(60px, 15vw, 60px);
-}
-
-/* ================== GOOGLE TRANSLATE - COMPLETE HIDE ================== */
-#google_translate_element,
-.goog-te-banner-frame,
-.goog-te-menu-frame,
-.goog-te-balloon-frame,
-.goog-te-gadget,
-.goog-logo-link,
-.goog-te-gadget span,
-.skiptranslate,
-.goog-te-combo,
-.VIpgJd-ZVi9od-ORHb-OEVmkb svg,
-[aria-label*="Google"],
-[title*="Google"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  width: 0 !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  z-index: -9999 !important;
-}
-.pass-wrapper button {
-  position: absolute;
-  left: clamp(12px, 3vw, 12px);
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: clamp(16px, 4vw, 18px);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  min-width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pass-wrapper button:hover {
-  color: var(--accent);
-  background: rgba(255, 180, 0, 0.1);
-}
-
-/* Submit Button - Responsive */
-#login-form button[type="submit"] {
-  padding: clamp(20px, 5vw, 24px) clamp(32px, 8vw, 36px);
-  border: none;
-  border-radius: 50px;
-  font-size: clamp(1rem, 4vw, 1.2rem);
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-family: inherit;
-  position: relative;
-  overflow: hidden;
-  background: var(--gradient);
-  color: #000;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: var(--shadow);
-  margin-top: clamp(8px, 2vw, 12px);
-  min-height: 56px;
-}
-
-#login-form button[type="submit"]::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-  transition: left 0.7s;
-}
-
-#login-form button[type="submit"]:hover::before {
-  left: 100%;
-}
-
-#login-form button[type="submit"]:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 40px 60px -15px rgba(255, 180, 0, 0.45);
-}
-
-#login-form button[type="submit"]:active {
-  transform: translateY(-4px) scale(1.02);
-}
-
-/* Social Login - Responsive */
-.social-login {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(10px, 3vw, 12px);
-  margin-top: clamp(20px, 5vw, 20px);
-}
-
-.social-login button {
-  padding: clamp(14px, 4vw, 16px) clamp(20px, 6vw, 24px);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  background: var(--surface);
-  color: var(--text);
-  font-family: inherit;
-  font-size: clamp(0.9rem, 3.5vw, 1rem);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  position: relative;
-  overflow: hidden;
-  min-height: 52px;
-}
-
-.social-login button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  transition: left 0.6s;
-}
-
-.social-login button:hover::before {
-  left: 100%;
-}
-
-.social-login button:hover {
-  border-color: var(--accent);
-  background: rgba(255, 180, 0, 0.08);
-  transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(255, 180, 0, 0.2);
-}
-
-/* Links Section - Responsive */
-.links-section {
-  margin-top: clamp(24px, 6vw, 32px);
-  padding-top: clamp(20px, 5vw, 28px);
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.links-section .link {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: clamp(0.85rem, 3vw, 0.95rem);
-  transition: all 0.3s ease;
-  display: inline-block;
-  margin: clamp(4px, 1vw, 8px);
-  position: relative;
-  line-height: 1.5;
-}
-
-.links-section .link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.links-section .link:hover {
-  color: var(--accent);
-}
-
-.links-section .link:hover::after {
-  width: 100%;
-}
-
-/* Messages */
-#msg {
-  margin-top: clamp(20px, 5vw, 30px);
-  min-height: 24px;
-}
-
-.success, .error {
-  padding: clamp(16px, 4vw, 20px) clamp(24px, 6vw, 28px);
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: clamp(0.9rem, 3.5vw, 1rem);
-  animation: msgSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(15px);
-  border: 1px solid transparent;
-  text-align: center;
-  box-shadow: var(--shadow);
-  line-height: 1.5;
-}
-
-@keyframes msgSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Loading State */
-#login-form button[type="submit"].loading {
-  pointer-events: none;
-  position: relative;
-  color: #000;
-}
-
-#login-form button[type="submit"].loading::after {
-  content: '';
-  position: absolute;
-  width: clamp(24px, 6vw, 28px);
-  height: clamp(24px, 6vw, 28px);
-  margin: auto;
-  border: 3px solid transparent;
-  border-top-color: #000;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Animations */
-#login-form button[type="submit"] {
-  animation: buttonPulse 3s ease-in-out infinite alternate;
-}
-
-@keyframes buttonPulse {
-  from { box-shadow: var(--shadow); }
-  to { box-shadow: 0 0 50px rgba(255, 180, 0, 0.6); }
-}
-
-/* 🔥 Media Queries محسّنة لكل الأجهزة 🔥 */
-
-/* iPhone SE (320px) & Small Screens */
-@media (max-width: 375px) {
-  html { font-size: 15px; }
-  body { padding: 10px; }
-  .card { 
-    padding: 30px 25px; 
-    margin: 10px 0;
-    border-radius: 16px;
-  }
-  .logo-img { 
-    width: 65px; 
-    height: 65px; 
-  }
-  .logo h3 { 
-    font-size: 1.6rem; 
-  }
-  .logo h3:nth-of-type(2) { 
-    font-size: 1.3rem; 
-  }
-  #login-form input { 
-    padding: 18px 20px; 
-    font-size: 0.95rem;
-    min-height: 52px;
-  }
-  .pass-wrapper input { padding-right: 55px; }
-  .pass-wrapper button { 
-    left: 10px; 
-    font-size: 16px;
-    min-width: 40px;
-    height: 40px;
-  }
-}
-
-/* iPhone 12/13/14 (390px) */
-@media (max-width: 414px) {
-  .card { padding: 35px 28px; }
-  .links-section .link { 
-    display: block; 
-    margin: 6px 0; 
-  }
-}
-
-/* Tablets Portrait */
-@media (max-width: 768px) and (orientation: portrait) {
-  .card { 
-    max-width: 95vw; 
-    padding: 40px 30px; 
-  }
-  body { 
-    padding: 15px; 
-    align-items: flex-start;
-    padding-top: 20px;
-  }
-}
-
-/* Tablets Landscape */
-@media (max-width: 1024px) and (orientation: landscape) {
-  .card { 
-    max-width: 450px; 
-    padding: 40px 35px; 
-  }
-  body { padding: 20px; }
-}
-
-/* Large Tablets & Small Laptops */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .card { max-width: 500px; }
-}
-
-/* Desktop */
-@media (min-width: 1025px) {
-  .card { max-width: 500px; }
-  body { padding: 40px; }
-}
-
-/* Extra Large Screens */
-@media (min-width: 1440px) {
-  .card { max-width: 520px; }
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--surface-2);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
-/* RTL & LTR Support */
-[dir="rtl"] input { text-align: right; }
-[dir="ltr"] input { text-align: left; }
-[dir="rtl"] .pass-wrapper button { left: auto; right: 12px; }
-[dir="ltr"] .pass-wrapper button { left: 12px; right: auto; }
-[dir="rtl"] .pass-wrapper input { padding-right: 28px; padding-left: 60px; }
-[dir="ltr"] .pass-wrapper input { padding-right: 60px; padding-left: 28px; }
-
-/* Floating Particles */
-.card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: 
-    radial-gradient(2px 2px at 20px 30px, rgba(255, 180, 0, 0.3), transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(255, 122, 0, 0.25), transparent),
-    radial-gradient(1px 1px at 90px 40px, rgba(255, 180, 0, 0.4), transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(255, 122, 0, 0.3), transparent);
-  pointer-events: none;
-  animation: particlesFloat 20s linear infinite;
-  opacity: 0.3;
-}
-
-@keyframes particlesFloat {
-  from { transform: translateY(0px) rotate(0deg); }
-  to { transform: translateY(-100px) rotate(360deg); }
-}
-
-/* Prevent Zoom on iOS */
-input, button {
-  font-size: 16px;
-  -webkit-text-size-adjust: 100%;
-}
-
-/* High DPI Displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .card {
-    border-width: 0.5px;
-  }
-  .logo-img {
-    border-width: 2px;
-  }
-}
-      /* باقي الـ CSS كما هو... */
-      /* (انسخ كل الـ CSS من الرد السابق هنا) */
-    </style>
-  </head>
-  <body>
-    <div class="card">
-      <div class="logo">
-        <h3>SUNGET.COM</h3>
-        <h3>تسجيل دخول</h3>
-      </div>
-
-      <form id="login-form">
-        <input 
-          id="email" 
-          type="email" 
-          placeholder="البريد الإلكتروني" 
-          required 
-          autocomplete="email" 
-        />
-        <div class="pass-wrapper">
-          <input 
-            id="password" 
-            type="password" 
-            placeholder="كلمة المرور" 
-            required 
-            autocomplete="current-password" 
-          />
-          <button type="button" id="togglePass" aria-label="إظهار كلمة المرور">👁</button>
-        </div>
-        <button type="submit" id="loginBtn">تسجيل الدخول</button>
-      </form>
-
-      <div id="msg"></div>
-
-      <div class="social-login">
-        <button id="googleLogin">تسجيل دخول بجوجل</button>
-        <button id="facebookLogin">تسجيل دخول بفيسبوك</button>
-      </div>
-
-      <div class="links-section">
-        <a href="signup.html" class="link">ليس لديك حساب؟ إنشاء حساب جديد</a>
-        <a href="forgot_password.html" class="link">نسيت كلمة المرور؟</a>
-      </div>
-    </div>
-
-    <!doctype html>
-<html lang="ar" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>SUNGET — تسجيل دخول</title>
     <link
@@ -840,8 +192,38 @@ body::before {
   background: var(--surface-2);
 }
 
+/* Password Wrapper */
+.pass-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.pass-wrapper input {
+  padding-right: 60px;
+}
+
+.pass-wrapper button {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.pass-wrapper button:hover {
+  color: var(--accent);
+  background: rgba(255, 180, 0, 0.1);
+}
+
 /* Submit Button */
-#login-form button {
+#login-form button[type="submit"] {
   padding: 24px 36px;
   border: none;
   border-radius: 50px;
@@ -865,7 +247,7 @@ body::before {
   margin-top: 12px;
 }
 
-#login-form button::before {
+#login-form button[type="submit"]::before {
   content: '';
   position: absolute;
   top: 0;
@@ -876,17 +258,115 @@ body::before {
   transition: left 0.7s;
 }
 
-#login-form button:hover::before {
+#login-form button[type="submit"]:hover::before {
   left: 100%;
 }
 
-#login-form button:hover {
+#login-form button[type="submit"]:hover {
   transform: translateY(-8px) scale(1.03);
   box-shadow: 0 40px 60px -15px rgba(255, 180, 0, 0.45);
 }
 
-#login-form button:active {
+#login-form button[type="submit"]:active {
   transform: translateY(-4px) scale(1.02);
+}
+
+/* Social Login Buttons */
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.social-login button {
+  padding: 16px 24px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-login button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.6s;
+}
+
+.social-login button:hover::before {
+  left: 100%;
+}
+
+.social-login button:hover {
+  border-color: var(--accent);
+  background: rgba(255, 180, 0, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(255, 180, 0, 0.2);
+}
+
+#googleLogin::before {
+  content: "🔴";
+  margin-right: 8px;
+}
+
+#facebookLogin::before {
+  content: "📘";
+  margin-right: 8px;
+}
+
+/* Links Section */
+.links-section {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.links-section .link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin: 0 8px;
+  position: relative;
+}
+
+.links-section .link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.links-section .link:hover {
+  color: var(--accent);
+}
+
+.links-section .link:hover::after {
+  width: 100%;
 }
 
 /* Messages */
@@ -931,13 +411,13 @@ body::before {
 }
 
 /* Loading State */
-#login-form button.loading {
+#login-form button[type="submit"].loading {
   pointer-events: none;
   position: relative;
   color: #000;
 }
 
-#login-form button.loading::after {
+#login-form button[type="submit"].loading::after {
   content: '';
   position: absolute;
   width: 28px;
@@ -954,7 +434,7 @@ body::before {
 }
 
 /* Pulse Glow Animation */
-#login-form button {
+#login-form button[type="submit"] {
   animation: buttonPulse 3s ease-in-out infinite alternate;
 }
 
@@ -993,9 +473,18 @@ body::before {
     font-size: 1rem;
   }
   
-  #login-form button {
+  #login-form button[type="submit"] {
     padding: 22px 32px;
     font-size: 1.1rem;
+  }
+  
+  .social-login {
+    gap: 10px;
+  }
+  
+  .links-section {
+    margin-top: 24px;
+    padding-top: 20px;
   }
 }
 
@@ -1006,6 +495,11 @@ body::before {
   
   body {
     padding: 10px;
+  }
+  
+  .links-section .link {
+    display: block;
+    margin: 8px 0;
   }
 }
 
@@ -1058,134 +552,232 @@ body::before {
   from { transform: translateY(0px) rotate(0deg); }
   to { transform: translateY(-100px) rotate(360deg); }
 }
-
   </style>
   <body>
-    
-<div class="card">
+    <div class="card">
       <div class="logo">
-        
-       <h3 data-i18n="brand_name">SUNGET.COM</h3>
+        <h3 data-i18n="brand_name">SUNGET.COM</h3>
+        <h3 data-i18n="title">تسجيل دخول</h3>
+      </div>
 
-<h3 data-i18n="title">تسجيل دخول</h3>
+      <form id="login-form">
+        <input
+          id="email"
+          type="email"
+          data-i18n-placeholder="email"
+          placeholder="البريد الإلكتروني"
+          required
+        />
+        <div class="pass-wrapper">
+          <input
+            id="password"
+            type="password"
+            data-i18n-placeholder="password"
+            placeholder="كلمة المرور"
+            required
+          />
+          <button type="button" id="togglePass">👁</button>
+        </div>
+        <button type="submit" data-i18n="login">تسجيل الدخول</button>
+      </form>
 
-<form id="login-form">
-  <input
-    id="email"
-    type="email"
-    data-i18n-placeholder="email"
-    placeholder="البريد الإلكتروني"
-    required
-  />
-  <input
-    id="password"
-    type="password"
-    data-i18n-placeholder="password"
-    placeholder="كلمة المرور"
-    required
-  />
-  <button type="submit" data-i18n="login">تسجيل الدخول</button>
-  <div style="display:flex;gap:12px;margin-top:16px;">
-  <button type="button" id="btn-google" style="flex:1;background:#fff;color:#000;">
-    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.5 2.4-7.2 2.4-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C41.3 35.5 44 30.2 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
-    Google
-  </button>
-  <button type="button" id="btn-facebook" style="flex:1;background:#1877F2;color:#fff;">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M24 12a12 12 0 10-13.9 11.9v-8.4H7v-3.5h3.1V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.2h3.4l-.5 3.5h-2.9v8.4A12 12 0 0024 12z"/></svg>
-    Facebook
-  </button>
-</div>
+      <div id="msg"></div>
 
-</form>
-<div id="msg"></div>
+      <!-- Social Login -->
+      <div class="social-login">
+        <button id="googleLogin" data-i18n="google_login">تسجيل دخول بجوجل</button>
+        <button id="facebookLogin" data-i18n="facebook_login">تسجيل دخول بفيسبوك</button>
+      </div>
 
+      <!-- Links Section -->
+      <div class="links-section">
+        <a href="signup.html" class="link" data-i18n="have_account">ليس لديك حساب؟ إنشاء حساب جديد</a>
+        <a href="forgot_password.html" class="link" data-i18n="forgot_password">نسيت كلمة المرور؟</a>
+      </div>
+    </div>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- تحميل مكتبة Supabase مرة واحدة -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
 
-<script>
-const SUPABASE_URL = "https://mqvmxqzwvpasdytbpbke.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM";
+    <script>
+      // 1️⃣ إنشاء عميل Supabase
+      const SUPABASE_URL = "https://mqvmxqzwvpasdytbpbke.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM";
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* =========================
-   Helper
-========================= */
-function show(el, text, type = "error") {
-  if (!el) return;
-  el.innerHTML = `<div class="${type}">${text}</div>`;
-}
+      // 2️⃣ دالة لإظهار الرسائل
+      function show(el, text, type = "error") {
+        if (!el) return;
+        el.innerHTML = `<div class="${type}">${text}</div>`;
+      }
 
-/* =========================
-   Email Login
-========================= */
-document.getElementById("login-form")?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+      // 3️⃣ التعامل مع نموذج تسجيل الدخول
+      const loginForm = document.getElementById("login-form");
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-  const email = document.getElementById("email")?.value.trim();
-  const password = document.getElementById("password")?.value;
-  const msg = document.getElementById("msg");
+          const emailEl = document.getElementById("email");
+          const passwordEl = document.getElementById("password");
+          const submitBtn = loginForm.querySelector('button[type="submit"]');
+          const msgEl = document.getElementById("msg");
 
-  show(msg, "جارٍ تسجيل الدخول...", "success");
+          if (!emailEl || !passwordEl || !msgEl) return;
 
-  try {
-    const { data, error } = await sb.auth.signInWithPassword({
-      email,
-      password
-    });
+          const email = emailEl.value.trim();
+          const password = passwordEl.value;
 
-    if (error) {
-      show(msg, "❌ البريد أو كلمة المرور غير صحيحة");
-      return;
-    }
+          if (!email || !password) {
+            show(msgEl, "❌ يرجى إدخال البريد الإلكتروني وكلمة المرور");
+            return;
+          }
 
-    if (!data.user) {
-      show(msg, "❌ حدث خطأ في تسجيل الدخول");
-      return;
-    }
+          submitBtn.classList.add("loading");
+          submitBtn.textContent = i18next.t("msg_loading") || "جارٍ تسجيل الدخول...";
 
-    // مهم: لا تودّي المستخدم مباشرة
-    window.location.href = "auth-callback.html";
+          try {
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
 
-  } catch (err) {
-    console.error(err);
-    show(msg, "❌ حدث خطأ غير متوقع");
-  }
-});
+            if (error) {
+              show(msgEl, i18next.t("msg_wrong") || "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة");
+              return;
+            }
 
-/* =========================
-   OAuth Login Function
-========================= */
-function oauthLogin(provider) {
-  return sb.auth.signInWithOAuth({
-    provider,
-    options: {
-      redirectTo: window.location.origin + "/auth-callback.html"
-    }
-  });
-}
+            if (!data.user) {
+              show(msgEl, i18next.t("msg_no_account") || "❌ حدث خطأ: المستخدم غير موجود");
+              return;
+            }
 
-/* =========================
-   Google Login
-========================= */
-document.getElementById("btn-google")?.addEventListener("click", () => {
-  oauthLogin("google");
-});
+            console.log("User:", data.user);
+            console.log("Metadata:", data.user.user_metadata);
 
-/* =========================
-   Facebook Login
-========================= */
-document.getElementById("btn-facebook")?.addEventListener("click", () => {
-  oauthLogin("facebook");
-});
+            const role = data.user.user_metadata?.role;
 
-</script>
+            if (role === "user") {
+              show(msgEl, i18next.t("msg_user_success") || "✅ تم تسجيل الدخول كمستخدم", "success");
+              setTimeout(() => {
+                window.location.href = "index.html";
+              }, 1500);
+              return;
+            }
 
+            if (role === "provider") {
+              show(msgEl, i18next.t("msg_provider_success") || "✅ تم تسجيل الدخول كمزود خدمة", "success");
+              setTimeout(() => {
+                window.location.href = "تسجيل الفندق.html";
+              }, 1500);
+              return;
+            }
 
+            show(msgEl, "❌ نوع الحساب غير محدد");
+
+          } catch (err) {
+            console.error("Login Error:", err);
+            show(msgEl, i18next.t("msg_error") || "❌ حدث خطأ غير متوقع");
+          } finally {
+            submitBtn.classList.remove("loading");
+            submitBtn.textContent = i18next.t("login") || "تسجيل الدخول";
+          }
+        });
+      }
+
+      // Google & Facebook Login
+      document.getElementById("googleLogin").onclick = async () => {
+        await sb.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/index.html"
+          }
+        });
+      };
+
+      document.getElementById("facebookLogin").onclick = async () => {
+        await sb.auth.signInWithOAuth({
+          provider: "facebook",
+          options: {
+            redirectTo: window.location.origin + "/index.html"
+          }
+        });
+      };
+
+      // Password Toggle
+      const toggleBtn = document.getElementById("togglePass");
+      const passwordInput = document.getElementById("password");
+
+      if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener("click", () => {
+          const isHidden = passwordInput.type === "password";
+          passwordInput.type = isHidden ? "text" : "password";
+          toggleBtn.textContent = isHidden ? "🙈" : "👁";
+        });
+      }
+    </script>
+
+    <script>
+      const resources = {
+        ar: {
+          translation: {
+            brand_name: "SUNGET.COM",
+            title: "تسجيل دخول",
+            email: "البريد الإلكتروني",
+            password: "كلمة المرور",
+            login: "تسجيل الدخول",
+            google_login: "تسجيل دخول بجوجل",
+            facebook_login: "تسجيل دخول بفيسبوك",
+            have_account: "ليس لديك حساب؟ إنشاء حساب جديد",
+            forgot_password: "نسيت كلمة المرور؟",
+            msg_loading: "جارٍ تسجيل الدخول...",
+            msg_user_success: "✅ تم تسجيل الدخول كمستخدم بنجاح",
+            msg_provider_success: "✅ تم تسجيل الدخول كمزود خدمة بنجاح",
+            msg_wrong: "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة",
+            msg_no_account: "❌ لا يوجد حساب مرتبط بهذا البريد الإلكتروني",
+            msg_error: "❌ حدث خطأ أثناء تسجيل الدخول"
+          }
+        },
+        en: {
+          translation: {
+            brand_name: "SUNGET.COM",
+            title: "Login",
+            email: "Email",
+            password: "Password",
+            login: "Log In",
+            google_login: "Login with Google",
+            facebook_login: "Login with Facebook",
+            have_account: "Don't have an account? Create new",
+            forgot_password: "Forgot password?",
+            msg_loading: "Logging in...",
+            msg_user_success: "✅ Successfully logged in as user",
+            msg_provider_success: "✅ Successfully logged in as provider",
+            msg_wrong: "❌ Incorrect email or password",
+            msg_no_account: "❌ No account associated with this email",
+            msg_error: "❌ An error occurred during login"
+          }
+        }
+        // باقي اللغات...
+      };
+
+      // تهيئة i18next
+      i18next.init({
+        lng: localStorage.getItem("lang") || "ar",
+        fallbackLng: "en",
+        debug: false,
+        resources
+      }, function() {
+        updateContent();
+      });
+
+      function updateContent() {
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+          el.innerHTML = i18next.t(el.dataset.i18n);
+        });
+        document.querySelectorAll("input[data-i18n-placeholder]").forEach(el => {
+          el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
+        });
+        document.documentElement.lang = i18next.language;
+        document.documentElement.dir = i18next.language === "ar" ? "rtl" : "ltr";
+      }
+    </script>
   </body>
-</html>
-  <script src="translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  </body>
-</html>
+</html>  

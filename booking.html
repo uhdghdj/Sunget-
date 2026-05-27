@@ -458,20 +458,48 @@ if (bookingError) {
   console.log(bookingError);
   return alert("خطأ في الحجز");
 }
+// ✅ تحديد المبلغ المطلوب دفعه
 
-// ✅ حساب 5%
-const deposit = Math.round(total * 0.05);
+let amountToPay = 0;
+let remaining = 0;
+
+// لو الدفع أونلاين → يدفع المبلغ كامل
+if (paymentMethod === "hotel") {
+
+  amountToPay = total;
+
+  remaining = 0;
+
+}
+
+// لو الدفع في الفندق → يدفع 5% فقط
+else {
+
+  amountToPay = Math.round(total * 0.05);
+
+  remaining = total - amountToPay;
+
+}
 
 // ✅ حفظ البيانات
 const bookingData = {
+
   bookingId: booking.id,
+
   hotelId: hotelId,
+
   roomId: selectedRoomId,
+
   checkIn: checkIn,
+
   checkOut: checkOut,
+
   total: total,
-  amountToPay: deposit,
-  remaining: total - deposit
+
+  amountToPay: amountToPay,
+
+  remaining: remaining
+
 };
 
 // ✅ تأكد إن البيانات اتخزنت
@@ -481,22 +509,43 @@ localStorage.setItem(
   "bookingData",
   JSON.stringify(bookingData)
 );
+// ✅ لو الدفع أونلاين → يدفع كامل المبلغ
+if (paymentMethod === 'paymob') {
 
-        // تحويل حسب طريقة الدفع
-        if (paymentMethod === 'paymob') {
-          setTimeout(() => {
-            window.location.href = "paymob.html";
-          }, 2000);
-        } else {
-          showMessage(`
-            ✅ تم الحجز بنجاح!<br>
-            💰 سيتم الدفع في الفندق<br>
-            📧 تم إرسال تأكيد الحجز لبريدك الإلكتروني
-          `, 'success');
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 4000);
-        }
+  bookingData.amountToPay = total;
+  bookingData.remaining = 0;
+
+}
+
+// ✅ لو الدفع في الفندق → يدفع 5% فقط
+else {
+
+  bookingData.amountToPay = Math.round(total * 0.05);
+  bookingData.remaining = total - bookingData.amountToPay;
+
+}
+
+// تحديث localStorage
+localStorage.setItem(
+  "bookingData",
+  JSON.stringify(bookingData)
+);
+
+// رسالة نجاح
+showMessage(`
+  ✅ تم إنشاء الحجز بنجاح
+  <br>
+  ${paymentMethod === 'paymob'
+    ? '💳 سيتم تحويلك للدفع الإلكتروني'
+    : '🏨 سيتم دفع العربون الآن والباقي في الفندق'}
+`, 'success');
+
+// ✅ في الحالتين يروح لصفحة Paymob
+setTimeout(() => {
+
+  window.location.href = "paymob.html";
+
+}, 2000);
 
       } catch (error) {
         console.error('Unexpected Error:', error);

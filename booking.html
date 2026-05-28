@@ -485,6 +485,7 @@ else {
 const bookingData = {
 
   bookingId: booking.id,
+  hotel_name,
 
   hotelId: hotelId,
 
@@ -543,7 +544,7 @@ showMessage(`
 // ✅ في الحالتين يروح لصفحة Paymob
 setTimeout(() => {
 
-  window.location.href = "netlify/functions/paymob.html";
+  window.location.href = "paymob.html";
 
 }, 2000);
 

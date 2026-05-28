@@ -1,3 +1,4 @@
+
    
 <html lang="ar" dir="rtl">
   <head>
@@ -125,10 +126,6 @@
 
           <div onclick="logout()">
             <i class="fa-solid fa-arrow-right-to-bracket"></i> تسجيل خروج
-          </div>
-
-          <div onclick="deleteAccount()" style="color:red;">
-            <i class="fa-solid fa-trash"></i> حذف الحساب
           </div>
 
         </div>
@@ -593,7 +590,8 @@ async function loadBookings() {
   (data || []).forEach(b => {
     box.innerHTML += `
       <div>
-        ${b.hotel_id}<br>
+        ${b.hotel_name}<br>
+         ${b.id}<br>
         ${b.check_in} → ${b.check_out}
       </div>
     `;

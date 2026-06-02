@@ -1,4 +1,5 @@
 
+
 /* ================== SUNGET.COM STYLESHEET ================== */
 
 /* ---------- THEME VARIABLES ---------- */
@@ -1247,4 +1248,93 @@ header,
 .lang-btn,
 .lang-menu {
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+/* ================== AUTH BUTTONS RESPONSIVE ================== */
+#authButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+#authButtons .btn,
+#authButtons .login-btn {
+  white-space-space: nowrap;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 30px;
+  line-height: 1;
+}
+
+/* تابلت */
+@media (max-width: 900px) {
+  #authButtons {
+    margin-left: 10px;
+    gap: 6px;
+  }
+  #authButtons .btn,
+  #authButtons .login-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}
+
+/* موبايل */
+@media (max-width: 600px) {
+  #authButtons {
+    margin-left: 0;
+    gap: 4px; /* تقريب أكثر */
+  }
+  #authButtons .btn,
+  #authButtons .login-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 20px;
+  }
+}
+
+/* موبايل صغير: ترتيب الأزرار فوق بعض مع الحفاظ على النص */
+@media (max-width: 420px) {
+  #authButtons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px; /* تقريب الزرين */
+    width: 80px; /* عرض مناسب */
+  }
+  .header{
+
+    padding-bottom: 200px;
+  }
+  #authButtons .login-btn,
+  #authButtons .btn {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 10px;
+    text-align: center;
+  }
+}
+
+/* اسم الموقع وال菜单 ريسبونسيف */
+.logo {
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .logo {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .logo {
+    font-size: 14px;
+  }
+}
+
+/* زر اللغة بجانب القائمة */
+.lang-btn {
+  margin-right: 8px; /* بعد القائمة مباشرة */
 }

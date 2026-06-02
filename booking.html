@@ -440,16 +440,23 @@ input:focus, select:focus {
           return;
         }
 
-      const { data: booking, error: bookingError } = await supabaseClient
+     const { data: booking, error: bookingError } = await supabaseClient
   .from("bookings")
   .insert([{
+    hotel_name: hotelData.hotel_name,
     user_id: userData.user.id,
     hotel_id: hotelId,
     room_id: selectedRoomId,
     check_in: checkIn,
     check_out: checkOut,
     status: "pending",
-    total_price: total
+    total_price: total,
+
+    // طريقة الدفع
+   payment_method:
+  paymentMethod === "paymob"
+    ? "paymob"
+    : "hotel"
   }])
   .select()
   .single();
@@ -485,7 +492,7 @@ else {
 const bookingData = {
 
   bookingId: booking.id,
-    hotel_name: hotelData.hotel_name,
+  hotel_name: hotelData.hotel_name,
 
   hotelId: hotelId,
 
@@ -543,7 +550,8 @@ showMessage(`
 
 // ✅ في الحالتين يروح لصفحة Paymob
 setTimeout(() => {
-window.location.href = "netlify/functions/paymob";
+
+  window.location.href = "paymob.html";
 
 }, 2000);
 

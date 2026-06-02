@@ -88,15 +88,7 @@
     </form>
   </section>
 </main>
-<div style="display:flex; gap:10px; margin-bottom:15px">
-  <button type="button" class="btn google-btn">
-    تسجيل بجوجل
-  </button>
 
-  <button type="button" class="btn ghost facebook-btn">
-    فيسبوك
-  </button>
-</div>
 <!-- مكتبة Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -312,29 +304,7 @@ checkUserRole();
 
 
 </script>
-<script>
 
-document.querySelectorAll(".google-btn").forEach((btn) => {
-  btn.onclick = async () => {
-    await sup.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin + "/auth-callback.html"
-      }
-    });
-  };
-});
-
-   
-
-
-
-
-
-
-
-
-</script>
 
 
 

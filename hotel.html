@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
@@ -576,59 +577,67 @@ html[dir="rtl"] {
           slides.innerHTML = "";
           dots.innerHTML = "";
 
-  // جلب صور الغرف
-const { data: rooms, error: roomsError } = await supabaseClient
-  .from("rooms")
-  .select("photo_urls")
-  .eq("hotel_id", hotelId);
+ // جلب صور الغرف
+  const { data: rooms, error: roomsError } = await supabaseClient
+    .from("rooms")
+    .select("photo_urls")
+    .eq("hotel_id", hotelId);
 
-console.log("rooms:", rooms, "error:", roomsError);
+  console.log("rooms:", rooms, "error:", roomsError);
 
-const imagesArray = [];
-(rooms || []).forEach(r => {
-  if (Array.isArray(r.photo_urls)) imagesArray.push(...r.photo_urls);
-  else if (typeof r.photo_urls === "string") {
-    try {
-      const p = JSON.parse(r.photo_urls);
-      if (Array.isArray(p)) imagesArray.push(...p);
-      else imagesArray.push(...r.photo_urls.split(",").map(s=>s.trim()).filter(Boolean));
-    } catch { imagesArray.push(...r.photo_urls.split(",").map(s=>s.trim()).filter(Boolean)); }
-  }
-});
+  const imagesArray = [];
+  (rooms || []).forEach(r => {
+    if (Array.isArray(r.photo_urls)) {
+      imagesArray.push(...r.photo_urls);
+    } else if (typeof r.photo_urls === "string") {
+      try {
+        const p = JSON.parse(r.photo_urls);
+        if (Array.isArray(p)) imagesArray.push(...p);
+        else imagesArray.push(...r.photo_urls.split(",").map(s => s.trim()).filter(Boolean));
+      } catch {
+        imagesArray.push(...r.photo_urls.split(",").map(s => s.trim()).filter(Boolean));
+      }
+    }
+  });
+  console.log("imagesArray:", imagesArray);
 
-console.log("imagesArray:", imagesArray);
+  // حقن في السلايدر
+  const slidesEl = document.querySelector(".slides");
+  const dotsEl = document.querySelector(".dots");
 
-// حقن في السلايدر
-const slidesEl = document.querySelector(".slides");
-const dotsEl = document.querySelector(".dots");
+  if (!slidesEl || !imagesArray.length) return;
 
-if (slidesEl && imagesArray.length) {
   slidesEl.innerHTML = imagesArray
     .map(url => `<img src="${url}" alt="room" />`)
     .join("");
 
   if (dotsEl) {
     dotsEl.innerHTML = imagesArray
-      .map((_, i) => `<span class="${i===0?'active':''}" data-i="${i}"></span>`)
+      .map((_, i) => `<span class="${i === 0 ? 'active' : ''}" data-i="${i}"></span>`)
       .join("");
   }
 
   // كنترول السلايدر
   let current = 0;
   const total = imagesArray.length;
+
   const go = (i) => {
     current = (i + total) % total;
-    slidesEl.style.transform = `translateX(${current * 100}%)`;
+    slidesEl.style.transform = `translateX(-${current * 100}%)`; // ← سالب
     dotsEl?.querySelectorAll("span").forEach((d, idx) =>
       d.classList.toggle("active", idx === current)
     );
   };
+
   document.querySelector(".nav.prev")?.addEventListener("click", () => go(current - 1));
   document.querySelector(".nav.next")?.addEventListener("click", () => go(current + 1));
   dotsEl?.querySelectorAll("span").forEach(d =>
     d.addEventListener("click", () => go(+d.dataset.i))
   );
-}
+
+  // تشغيل تلقائي (اختياري)
+  setInterval(() => go(current + 1), 5000);
+
 
           const amenitiesBox = document.getElementById("amenities");
           amenitiesBox.innerHTML = "";

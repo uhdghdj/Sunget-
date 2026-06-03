@@ -148,6 +148,7 @@
     </div>
 
     <!-- Links -->
+     <a href="policy.html">policy</a>
     <a href="#">الرئيسية</a>
     <a href="#hotels-list">حجز الفنادق</a>
     <a href="#about">من نحن</a>
@@ -615,14 +616,25 @@ async function loadBookings() {
   box.innerHTML = "";
 
   (data || []).forEach(b => {
-    box.innerHTML += `
-      <div>
-        ${b.hotel_name}<br>
-         ${b.id}<br>
-        ${b.check_in} → ${b.check_out}
-      </div>
-    `;
-  });
+  box.innerHTML += `
+    <div
+      onclick="openBooking('${b.id}')"
+      style="
+        padding:12px;
+        margin-bottom:10px;
+        border:1px solid #ddd;
+        border-radius:10px;
+        cursor:pointer;
+      "
+    >
+      <strong>${b.hotel_name}</strong><br>
+      رقم الحجز: ${b.id}<br>
+      ${b.check_in} → ${b.check_out}
+    </div>
+  `;
+});
+
+
 }
 
 /* ================= CHAT ================= */
@@ -990,6 +1002,11 @@ document.getElementById("contactForm")
 
   this.reset();
 });
+</script>
+<script>
+window.openBooking = function(id) {
+  location.href = `booking_details.html?id=${id}`;
+};
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 

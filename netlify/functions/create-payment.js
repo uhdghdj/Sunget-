@@ -30,7 +30,7 @@ export const handler = async (event) => {
     const amount_cents = Math.round(amount * 100);
 
     // 🔥 API KEY بتاعك
-    const API_KEY = process.env.PAYMOB_API_KEY;
+    const PAYMOB_API_KEY = "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBM01EYzRPU3dpYm1GdFpTSTZJakUzTmpBeE9UUXlNamN1TXpBNU1UZ3pJbjAuODdYUkRfenRZSWp6YkhrbWZvLXlpMmh2dDZlZEloMzBwSjctUE9GSkItRzdVMUc1NzhBeVRacGFfVXI3VHVlRnZ4VDYxSklxUDFTQzBSV2N4eHRKcHc";
 
     // 1️⃣ Auth
     const authRes = await fetch("https://accept.paymob.com/api/auth/tokens", {

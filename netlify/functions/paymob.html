@@ -443,16 +443,18 @@ async function createPayment(type) {
   btn.textContent = "⏳ جارٍ المعالجة...";
 
   try {
-    const res = await fetch("/api/create-payment"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: amount,
-        integration_type: type,
-        booking_id: bookingData.bookingId
-      })
-    });
-
+   
+const res = await fetch("/api/create-payment", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    amount: amount,
+    integration_type: type,
+    booking_id: bookingData.bookingId
+  })
+});
     const data = await res.json();
     console.log("Payment response:", data);
 

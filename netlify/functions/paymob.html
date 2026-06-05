@@ -404,13 +404,14 @@ button:focus-visible {
 
   <h3 id="remaining"></h3>
 
-  <button onclick="createPayment('card')">
-    تاكيد الحجز
-  </button>
+  <button id="payBtn">
+  تاكيد الحجز
+</button>
 
 </div>
 
 <script>
+  console.log("script loaded");
 const bookingData = JSON.parse(localStorage.getItem("bookingData"));
 
 if (!bookingData) {
@@ -476,6 +477,7 @@ async function createPayment(type) {
     btn.textContent = "تأكيد الحجز";
   }
 }
+  console.log(typeof createPayment);
 </script>
 <script src="translate.js"></script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

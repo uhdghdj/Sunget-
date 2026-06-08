@@ -445,7 +445,7 @@ async function createPayment(type) {
 
   try {
    
-const res = await fetch("/api/create-payment.js", {
+const res = await fetch("/api/create-payment", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"

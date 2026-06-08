@@ -1,1 +1,334 @@
 
+
+<!doctype html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SUNGET — تسجيل حساب</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="sunget-signup.css">
+  </head>
+  <body>
+    <div class="frame">
+      <aside class="brand">
+        
+        <h3 data-i18n="brand_name">SUNGET.COM</h3>
+<div class="lead" data-i18n="brand_lead">احجز أو أدر فندقك مع SUNGET بسهولة</div>
+<div style="margin-top: auto; font-size: 13px; color: var(--muted)" data-i18n="brand_copy">
+  © 2025 — SUNGET
+</div>
+
+<main class="content">
+  <div style="display: flex; gap: 12px; margin-bottom: 20px">
+    <button id="btn-user" class="btn" type="button" data-i18n="user">مستخدم</button>
+    <button id="btn-hotel" class="btn ghost" type="button" data-i18n="hotel_owner">مالك فندق</button>
+  </div>
+
+  <!-- نموذج المستخدم -->
+  <section id="panel-user">
+    <h2 data-i18n="register_user">تسجيل مستخدم</h2>
+    <form id="form-user">
+      <div class="row">
+        <div class="field">
+          <label data-i18n="full_name">الاسم الكامل</label>
+          <input id="u_name" required />
+        </div>
+        <div class="field">
+          <label data-i18n="phone">رقم الهاتف</label>
+          <input id="u_phone" required />
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="email">البريد الإلكتروني</label>
+        <input id="u_email" type="email" required />
+      </div>
+      <div class="field">
+        <label data-i18n="password">كلمة المرور</label>
+        <input id="u_pass" type="password" minlength="6" required />
+      </div>
+      <button class="btn" type="submit" data-i18n="submit_user">سجّل كمستخدم</button>
+       <span>او</span><br>
+      <div class="social-login">
+       
+  <button id="googleLogin">
+    تسجيل الدخول ب Google
+  </button>
+</div>
+      <div style="display:flex; gap:10px; margin-bottom:15px">
+ 
+</div>
+      <div id="user-msg" style="margin-top: 10px"></div>
+    </form>
+  </section>
+
+  <!-- نموذج مالك الفندق -->
+  <section id="panel-hotel" style="display: none">
+    <h2 data-i18n="register_hotel">تسجيل مالك فندق</h2>
+    <form id="form-hotel">
+      <div class="field">
+        <label data-i18n="hotel_name">اسم الفندق</label>
+        <input id="h_name" required />
+      </div>
+      <div class="field">
+        <label data-i18n="owner_name">اسم المالك</label>
+        <input id="h_owner" required />
+      </div>
+      <div class="field">
+        <label data-i18n="phone">رقم الهاتف</label>
+        <input id="h_phone" required />
+      </div>
+      <div class="field">
+        <label data-i18n="email">البريد الإلكتروني</label>
+        <input id="h_email" type="email" required />
+      </div>
+      <div class="field">
+        <label data-i18n="password">كلمة المرور</label>
+        <input id="h_pass" type="password" minlength="6" required />
+      </div>
+      <button class="btn" type="submit" data-i18n="submit_hotel">سجّل كمالك فندق</button>
+     
+      <div id="hotel-msg" style="margin-top: 10px"></div>
+    </form>
+  </section>
+</main>
+
+
+  
+</div>
+<!-- مكتبة Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  /* ============================= */
+  /*        SUPABASE INIT          */
+  /* ============================= */
+  const SUPABASE_URL = "https://mqvmxqzwvpasdytbpbke.supabase.co";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM";
+
+  const sup = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  /* ============================= */
+  /*         UI SWITCH             */
+  /* ============================= */
+  const btnUser = document.getElementById("btn-user");
+  const btnHotel = document.getElementById("btn-hotel");
+  const panelUser = document.getElementById("panel-user");
+  const panelHotel = document.getElementById("panel-hotel");
+
+  btnUser.onclick = () => {
+    panelUser.style.display = "block";
+    panelHotel.style.display = "none";
+    btnUser.classList.remove("ghost");
+    btnHotel.classList.add("ghost");
+  };
+
+  btnHotel.onclick = () => {
+    panelHotel.style.display = "block";
+    panelUser.style.display = "none";
+    btnHotel.classList.remove("ghost");
+    btnUser.classList.add("ghost");
+  };
+
+  /* ============================= */
+  /*         MESSAGE HELPER        */
+  /* ============================= */
+  function showMsg(el, txt, type = "success") {
+    el.innerHTML = `<div class="${type === "success" ? "success" : "error"}">${txt}</div>`;
+  }
+
+ document.getElementById("form-user").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const btn = e.target.querySelector("button");
+  btn.disabled = true;
+
+  const name = document.getElementById("u_name").value.trim();
+  const phone = document.getElementById("u_phone").value.trim();
+  const email = document.getElementById("u_email").value.trim();
+  const password = document.getElementById("u_pass").value;
+  const msgEl = document.getElementById("user-msg");
+
+  try {
+    // check email
+    const { data: existing } = await sup
+      .from("profiles")
+      .select("email")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existing) {
+      showMsg(msgEl, "❌ هذا الإيميل مستخدم بالفعل", "error");
+      btn.disabled = false;
+      return;
+    }
+
+    // auth signup
+    const { data, error } = await sup.auth.signUp({
+      email,
+      password,
+      options: { data: { role: "user" } },
+    });
+
+    if (error) throw error;
+
+    // IMPORTANT: profile insert (المهم عندك)
+    const { error: profileError } = await sup
+      .from("profiles")
+      .insert([
+        {
+          auth_id: data.user.id,
+          full_name: name,
+          email,
+          phone,
+          role: "user"
+        },
+      ]);
+
+    if (profileError) throw profileError;
+
+    showMsg(msgEl, "✅ تم إنشاء الحساب بنجاح!");
+    setTimeout(() => (window.location.href = "index.html"), 1500);
+
+  } catch (err) {
+    showMsg(msgEl, "❌ " + err.message, "error");
+    console.log(err);
+  }
+
+  btn.disabled = false;
+});
+  /* ============================= */
+  document.getElementById("form-hotel").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const btn = e.target.querySelector("button");
+  btn.disabled = true;
+
+  const hotel_name = document.getElementById("h_name").value.trim();
+  const owner_name = document.getElementById("h_owner").value.trim();
+  const phone = document.getElementById("h_phone").value.trim();
+  const email = document.getElementById("h_email").value.trim();
+  const password = document.getElementById("h_pass").value;
+  const msgEl = document.getElementById("hotel-msg");
+
+  try {
+    const { data: existing } = await sup
+      .from("providers")
+      .select("email")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existing) {
+      showMsg(msgEl, "❌ هذا الإيميل مستخدم بالفعل", "error");
+      btn.disabled = false;
+      return;
+    }
+
+    const { data, error } = await sup.auth.signUp({
+      email,
+      password,
+      options: { data: { role: "provider" } },
+    });
+
+    if (error) throw error;
+
+    await sup.from("providers").insert([
+      {
+        auth_id: data.user.id,
+        hotel_name,
+        owner_name,
+        phone,
+        email,
+      },
+    ]);
+
+    showMsg(msgEl, "✅ تم إنشاء الحساب بنجاح!");
+    setTimeout(() => (window.location.href = "تسجيل الفندق.html"), 1500);
+
+  } catch (err) {
+    showMsg(msgEl, "❌ " + err.message, "error");
+  }
+
+  btn.disabled = false;
+});
+  /* ============================= */
+  /*   CHECK USER ON INDEX PAGE     */
+  /* ============================= */
+  async function checkUserRole() {
+    const { data, error } = await sup.auth.getUser();
+    if (error || !data.user) return;
+
+    const role = data.user.user_metadata?.role;
+    const sidebar = document.getElementById("clientSidebar");
+    const loginBtn = document.querySelector(".login-btn");
+
+    if (role === "user") {
+      if (sidebar) sidebar.style.display = "flex";
+      document.body.classList.add("sidebar-open");
+      if (loginBtn) loginBtn.style.display = "none";
+    }
+
+    if (role === "provider") {
+      window.location.href = "تسجيل الفندق.html";
+    }
+  }
+
+  // نفّذ الفحص عند تحميل الصفحة
+  checkUserRole();
+</script>
+
+
+
+    <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
+    <script>
+
+async function checkUserRole() {
+  const { data } = await sup.auth.getUser();
+
+  if (!data.user) return; // مش مسجل دخول
+
+  const role = data.user.user_metadata?.role;
+
+  // لو اللي داخل Provider نحوله صفحة الفندق
+  if (role === "provider") {
+    window.location.href = "تسجيل فندق.html";
+    return;
+  }
+
+  // لو User عادي → نفتح له سايدبار المستخدم
+  if (role === "user") {
+    document.getElementById("clientSidebar").style.display = "flex";
+    document.body.classList.add("sidebar-open");
+
+    const loginBtn = document.querySelector(".login-btn");
+    if (loginBtn) loginBtn.style.display = "none";
+  }
+}
+
+checkUserRole();
+
+
+
+</script>
+<script>
+document.getElementById("googleLogin").addEventListener("click", async () => {
+  const { error } = await sup.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin + "/index.html"
+    }
+  });
+
+  if (error) {
+    console.error(error);
+    alert(error.message);
+  }
+});
+</script>
+
+  </body>
+</html>

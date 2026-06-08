@@ -1,107 +1,69 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+try {
+const { amount } = req.body;
+
+const auth = Buffer.from(
+  `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+).toString("base64");
+
+const tokenRes = await fetch(
+  "https://api-m.paypal.com/v1/oauth2/token",
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
   }
+);
 
-  try {
-    const body = req.body || {};
+const tokenData = await tokenRes.json();
 
-    const CONFIG = {
-      card: { integration_id: 5245183, iframe_id: 952326 },
-    };
-
-    const integrationType = body.integration_type || "card";
-    const cfg = CONFIG[integrationType];
-
-    if (!cfg) return res.status(400).json({ error: "integration_type غير صحيح" });
-
-    const amount = Number(body.amount || 0);
-    if (!amount || amount <= 0) return res.status(400).json({ error: "amount غير صحيح" });
-
-    const amount_cents = Math.round(amount * 100);
-
-    const PAYMOB_API_KEY = process.env.PAYMOB_API_KEY;
-    if (!PAYMOB_API_KEY) return res.status(500).json({ error: "PAYMOB_API_KEY مش متظبط" });
-
-    // 1️⃣ Auth
-    const authRes = await fetch("https://accept.paymob.com/api/auth/tokens", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ api_key: PAYMOB_API_KEY }),
-    });
-    const authData = await authRes.json();
-    if (!authData.token) throw new Error("Auth failed: " + JSON.stringify(authData));
-
-    // 2️⃣ Order
-    const orderRes = await fetch("https://accept.paymob.com/api/ecommerce/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        auth_token: authData.token,
-        delivery_needed: false,
-        amount_cents,
-        currency: "EGP",
-        items: [],
-      }),
-    });
-    const orderData = await orderRes.json();
-    if (!orderData.id) throw new Error("Order failed: " + JSON.stringify(orderData));
-
-    // 3️⃣ Payment Key
-    const payRes = await fetch("https://accept.paymob.com/api/acceptance/payment_keys", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        auth_token: authData.token,
-        amount_cents,
-        expiration: 3600,
-        order_id: orderData.id,
-        billing_data: {
-          first_name: "Test",
-          last_name: "User",
-          email: "test@test.com",
-          phone_number: "+201000000000",
-          apartment: "NA",
-          floor: "NA",
-          street: "NA",
-          building: "NA",
-          shipping_method: "NA",
-          postal_code: "NA",
-          city: "Cairo",
-          country: "EG",
-          state: "NA",
+const orderRes = await fetch(
+  "https://api-m.paypal.com/v2/checkout/orders",
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${tokenData.access_token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: Number(amount).toFixed(2),
+          },
         },
-        currency: "EGP",
-        integration_id: cfg.integration_id,
-      }),
-    });
-    const payData = await payRes.json();
-    if (!payData.token) throw new Error("Payment key failed: " + JSON.stringify(payData));
+      ],
+      application_context: {
+        return_url:
+          "https://sunget.site/success.html",
+        cancel_url:
+          "https://sunget.site/cancel.html",
+      },
+    }),
+  }
+);
 
-    if (integrationType === "kiosk") {
-      const kioskRes = await fetch("https://accept.paymob.com/api/acceptance/payments/pay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: { identifier: "AGGREGATOR", subtype: "AGGREGATOR" },
-          payment_token: payData.token,
-        }),
-      });
-      const kioskData = await kioskRes.json();
-      return res.status(200).json({
-        ok: true,
-        method: "kiosk",
-        bill_reference: kioskData?.data?.bill_reference,
-      });
-    }
+const order = await orderRes.json();
 
-    const iframeUrl = `https://accept.paymob.com/api/acceptance/iframes/${cfg.iframe_id}?payment_token=${payData.token}`;
-    return res.status(200).json({ ok: true, method: integrationType, payment_url: iframeUrl });
+const approve = order.links.find(
+  (x) => x.rel === "approve"
+);
 
-  } catch (err) {
-    
-console.error(err);
+return res.status(200).json({
+  payment_url: approve.href,
+});
+
+} catch (e) {
+console.error(e);
 
 return res.status(500).json({
-  error: "حدث خطأ أثناء إنشاء عملية الدفع"
+  error: "Payment creation failed",
 });
+
+}
+}

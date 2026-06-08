@@ -20,8 +20,8 @@ export default async function handler(req, res) {
 
     const amount_cents = Math.round(amount * 100);
 
-    // 🔑 API KEY مباشر
-    const PAYMOB_API_KEY = "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBM01EYzRPU3dpYm1GdFpTSTZJakUzT0RBNE9EVTBOakV1TnpneE16azJJbjAudDBNQW9PVlZCWFVaVVc4bEctR1BkX0VLdy1nZ21GRVFZSjZrYzN5UHp4WjhKNGMxR29JZHFENml3cW5DX2xyLUZEZTRSOHJHQjJ5bXc4TmZoaEtYU1E=";
+    const PAYMOB_API_KEY = process.env.PAYMOB_API_KEY;
+    if (!PAYMOB_API_KEY) return res.status(500).json({ error: "PAYMOB_API_KEY مش متظبط" });
 
     // 1️⃣ Auth
     const authRes = await fetch("https://accept.paymob.com/api/auth/tokens", {
@@ -78,7 +78,6 @@ export default async function handler(req, res) {
     const payData = await payRes.json();
     if (!payData.token) throw new Error("Payment key failed: " + JSON.stringify(payData));
 
-    // 🏧 كيوسك
     if (integrationType === "kiosk") {
       const kioskRes = await fetch("https://accept.paymob.com/api/acceptance/payments/pay", {
         method: "POST",
@@ -96,7 +95,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // 💳 Card / Wallet
     const iframeUrl = `https://accept.paymob.com/api/acceptance/iframes/${cfg.iframe_id}?payment_token=${payData.token}`;
     return res.status(200).json({ ok: true, method: integrationType, payment_url: iframeUrl });
 

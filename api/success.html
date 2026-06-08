@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تم الدفع</title>
+</head><body><h1>جاري تأكيد الدفع...</h1><script>
+const params = new URLSearchParams(window.location.search);
+
+const orderId = params.get("token");
+
+fetch("/api/capture-payment", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    orderId
+  })
+})
+.then(r => r.json())
+.then(data => {
+
+  if (
+    data.status === "COMPLETED"
+  ) {
+
+    document.body.innerHTML =
+      "<h1>✅ تم الدفع بنجاح</h1>";
+
+  } else {
+
+    document.body.innerHTML =
+      "<h1>❌ لم يتم تأكيد الدفع</h1>";
+
+  }
+
+})
+.catch(() => {
+
+  document.body.innerHTML =
+    "<h1>❌ حدث خطأ</h1>";
+
+});
+</script></body>
+</html>

@@ -99,7 +99,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true, method: integrationType, payment_url: iframeUrl });
 
   } catch (err) {
-    console.error("FULL ERROR:", err);
-    return res.status(500).json({ error: err.message });
-  }
-}
+    
+console.error(err);
+
+return res.status(500).json({
+  error: "حدث خطأ أثناء إنشاء عملية الدفع"
+});

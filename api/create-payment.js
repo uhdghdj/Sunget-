@@ -1,11 +1,9 @@
- 
 export const handler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
 
     const CONFIG = {
-      card: { integration_id: 5245183, iframe_id: 952326  },
-     
+      card: { integration_id: 5245183, iframe_id: 952326 },
     };
 
     const integrationType = body.integration_type || "card";
@@ -29,18 +27,20 @@ export const handler = async (event) => {
 
     const amount_cents = Math.round(amount * 100);
 
-    // 🔥 API KEY بتاعك
-    const PAYMOB_API_KEY = "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBM01EYzRPU3dpYm1GdFpTSTZJakUzTmpBeE9UUXlNamN1TXpBNU1UZ3pJbjAuODdYUkRfenRZSWp6YkhrbWZvLXlpMmh2dDZlZEloMzBwSjctUE9GSkItRzdVMUc1NzhBeVRacGFfVXI3VHVlRnZ4VDYxSklxUDFTQzBSV2N4eHRKcHc";
+    // 🔐 الأفضل تحطه في Environment Variables على Vercel باسم PAYMOB_API_KEY
+    const PAYMOB_API_KEY =
+      process.env.PAYMOB_API_KEY ||
+      "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBM01EYzRPU3dpYm1GdFpTSTZJakUzTmpBeE9UUXlNamN1TXpBNU1UZ3pJbjAuODdYUkRfenRZSWp6YkhrbWZvLXlpMmh2dDZlZEloMzBwSjctUE9GSkItRzdVMUc1NzhBeVRacGFfVXI3VHVlRnZ4VDYxSklxUDFTQzBSV2N4eHRKcHc";
 
     // 1️⃣ Auth
     const authRes = await fetch("https://accept.paymob.com/api/auth/tokens", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ api_key: API_KEY }),
+      body: JSON.stringify({ api_key: PAYMOB_API_KEY }),
     });
 
     const authData = await authRes.json();
-    if (!authData.token) throw new Error(JSON.stringify(authData));
+    if (!authData.token) throw new Error("Auth failed: " + JSON.stringify(authData));
 
     // 2️⃣ Order
     const orderRes = await fetch(
@@ -59,7 +59,7 @@ export const handler = async (event) => {
     );
 
     const orderData = await orderRes.json();
-    if (!orderData.id) throw new Error(JSON.stringify(orderData));
+    if (!orderData.id) throw new Error("Order failed: " + JSON.stringify(orderData));
 
     // 3️⃣ Payment Key
     const payRes = await fetch(
@@ -72,14 +72,11 @@ export const handler = async (event) => {
           amount_cents,
           expiration: 3600,
           order_id: orderData.id,
-
-          // 🔥 أهم جزء (خليه كده بالظبط)
           billing_data: {
             first_name: "Test",
             last_name: "User",
             email: "test@test.com",
             phone_number: "+201000000000",
-
             apartment: "NA",
             floor: "NA",
             street: "NA",
@@ -90,7 +87,6 @@ export const handler = async (event) => {
             country: "EG",
             state: "NA",
           },
-
           currency: "EGP",
           integration_id: cfg.integration_id,
         }),
@@ -98,7 +94,7 @@ export const handler = async (event) => {
     );
 
     const payData = await payRes.json();
-    if (!payData.token) throw new Error(JSON.stringify(payData));
+    if (!payData.token) throw new Error("Payment key failed: " + JSON.stringify(payData));
 
     // 🏧 كيوسك
     if (integrationType === "kiosk") {
@@ -127,8 +123,7 @@ export const handler = async (event) => {
     }
 
     // 💳 Card / Wallet
-    const iframeUrl =
-      `https://accept.paymob.com/api/acceptance/iframes/${cfg.iframe_id}?payment_token=${payData.token}`;
+    const iframeUrl = `https://accept.paymob.com/api/acceptance/iframes/${cfg.iframe_id}?payment_token=${payData.token}`;
 
     return {
       statusCode: 200,
@@ -138,7 +133,6 @@ export const handler = async (event) => {
         payment_url: iframeUrl,
       }),
     };
-
   } catch (err) {
     console.error("FULL ERROR:", err);
 

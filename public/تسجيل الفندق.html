@@ -2074,7 +2074,7 @@ async function loadWallet() {
 
 <script>
 async function withdraw() {
-  const res = await fetch("/.netlify/functions/paypal-withdraw", {
+  const res = await fetch("/api/paypal-withdraw", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

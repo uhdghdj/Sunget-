@@ -2062,7 +2062,7 @@ async function loadWallet() {
 </button>
 <script>
 async function withdraw() {
-  const res = await fetch("/api/paypal-withdraw", {
+  const res = await fetch("api/paypal-withdraw.js", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

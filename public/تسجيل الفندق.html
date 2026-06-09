@@ -2057,11 +2057,7 @@ async function loadWallet() {
 }
     
     </script>
-    <script> 
-      <button onclick="withdraw()">
-  سحب الرصيد
-</button>
-
+   
 <script>
 async function withdraw() {
   const res = await fetch("/api/paypal-withdraw", {
@@ -2078,8 +2074,13 @@ async function withdraw() {
   const data = await res.json();
   console.log(data);
 }
+
+document
+  .getElementById("withdrawOnlineBtn")
+  .addEventListener("click", withdraw);
 </script>
+
       
-    </script> 
+   
   </body>
 </html>

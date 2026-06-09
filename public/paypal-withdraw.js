@@ -1,10 +1,14 @@
-// netlify/functions/paypal-withdraw.js
 
-export async function handler(event) {
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      error: "Method Not Allowed",
+    });
+  }
+
   try {
-    const { amount, paypal_email } = JSON.parse(event.body);
+    const { amount, paypal_email } = req.body;
 
-    // 1) الحصول على Access Token
     const auth = Buffer.from(
       `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
     ).toString("base64");
@@ -24,13 +28,9 @@ export async function handler(event) {
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify(tokenData),
-      };
+      return res.status(400).json(tokenData);
     }
 
-    // 2) إنشاء عملية السحب
     const payoutRes = await fetch(
       "https://api-m.paypal.com/v1/payments/payouts",
       {
@@ -61,16 +61,11 @@ export async function handler(event) {
 
     const result = await payoutRes.json();
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(result),
-    };
+    return res.status(200).json(result);
+
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: err.message,
-      }),
-    };
+    return res.status(500).json({
+      error: err.message,
+    });
   }
 }

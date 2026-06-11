@@ -2201,34 +2201,26 @@ document.addEventListener("DOMContentLoaded", function() {
   const btn = document.getElementById("withdrawBtn");
   const amountInput = document.getElementById("withdrawAmount");
   const paypalInput = document.getElementById("paypalEmail");
-  const balanceSpan = document.getElementById("availableBalance");
   
-  if (!btn || !amountInput || !paypalInput || !balanceSpan) {
-    console.error("❌ عناصر الإدخال غير موجودة");
-    return;
-  }
-  
-  // ============ دالة السحب ============
-  btn.onclick = async function() {
-    // 🛠️ الحصول على hotel_id من مكان آمن
-    let hotel_id = window.currentHotelId || localStorage.getItem('hotel_id');
-    
+  btn.addEventListener("click", async function() {
+    // ✅ استخدام authId فقط
+    const auth_id = window.authId;
     const amount = parseFloat(amountInput.value);
     const paypal_email = paypalInput.value.trim();
     
-    console.log("🟢 DATA:", { amount, paypal_email, hotel_id });
+    console.log("DATA:", { amount, paypal_email, auth_id });
     
     // ✅ التحقق
+    if (!auth_id) {
+      alert("❌ سجّل دخول ثم حاول مرة أخرى");
+      return;
+    }
     if (!amount || amount <= 0) {
       alert("أدخل مبلغ صحيح");
       return;
     }
     if (!paypal_email || !paypal_email.includes("@")) {
       alert("أدخل بريد PayPal صحيح");
-      return;
-    }
-    if (!hotel_id) {
-      alert("❌ معرف الفندق غير موجود\nسجّل دخول ثم حاول مرة أخرى");
       return;
     }
     
@@ -2239,11 +2231,10 @@ document.addEventListener("DOMContentLoaded", function() {
       const response = await fetch("/api/paypal-withdraw", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, paypal_email, hotel_id }),
+        body: JSON.stringify({ amount, paypal_email, auth_id }),
       });
       
       const data = await response.json();
-      console.log("RESPONSE:", data);
       
       if (!response.ok) {
         alert("❌ خطأ: " + (data.error || "فشل السحب"));
@@ -2251,23 +2242,15 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       
       alert("✅ تم إرسال طلب السحب بنجاح");
-      
-      if (data.available !== undefined) {
-        balanceSpan.textContent = Number(data.available).toFixed(2);
-      }
-      
       amountInput.value = "";
       
     } catch (err) {
-      console.error("❌ Error:", err);
       alert("حدث خطأ: " + err.message);
     } finally {
       btn.disabled = false;
       btn.textContent = "سحب الرصيد";
     }
-  };
-  
-  console.log("✅ زر السحب جاهز");
+  });
 });
 </script>
   </body>

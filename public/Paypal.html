@@ -1,471 +1,252 @@
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>الدفع</title>
 
   <style>
-/* ================== GET.COM — MOBILE RESPONSIVE CARD (ENHANCED) ================== */
+    :root,
+    [data-theme="dark"] {
+      --bg: #0b0b0f;
+      --bg-2: #14141c;
+      --surface: #1a1a24;
+      --surface-2: #20202c;
+      --text: #ffffff;
+      --text-muted: #b8b8c4;
+      --border: rgba(255, 255, 255, 0.12);
+      --accent: #ffb400;
+      --accent-2: #ff7a00;
+      --danger: #e63946;
+      --success: #27b82e;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      --shadow-lg: 0 35px 80px rgba(0, 0, 0, 0.7);
+      --radius: 20px;
+      --gradient-accent: linear-gradient(135deg, #ffb400, #ff7a00);
+      --glow: 0 0 40px rgba(255, 180, 0, 0.5);
+    }
 
-/* ---------- THEME VARIABLES (OPTIMIZED FOR MOBILE) ---------- */
-:root,
-[data-theme="dark"] {
-  --bg: #0b0b0f;
-  --bg-2: #14141c;
-  --surface: #1a1a24;
-  --surface-2: #20202c;
-  --text: #ffffff;
-  --text-muted: #b8b8c4;
-  --border: rgba(255, 255, 255, 0.12);
-  --accent: #ffb400;
-  --accent-2: #ff7a00;
-  --danger: #e63946;
-  --success: #27b82e;
-  --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 35px 80px rgba(0, 0, 0, 0.7);
-  --radius: 20px;
-  --gradient-accent: linear-gradient(135deg, #ffb400, #ff7a00);
-  --glow: 0 0 40px rgba(255, 180, 0, 0.5);
-}
+    [data-theme="light"] {
+      --bg: #fff8ec;
+      --bg-2: #fff2dc;
+      --surface: #ffffff;
+      --surface-2: #fff7e6;
+      --text: #1a1a24;
+      --text-muted: #5a5a6a;
+      --border: rgba(0, 0, 0, 0.12);
+      --shadow: 0 20px 60px rgba(255, 122, 0, 0.2);
+      --shadow-lg: 0 35px 80px rgba(255, 122, 0, 0.25);
+    }
 
-[data-theme="light"] {
-  --bg: #fff8ec;
-  --bg-2: #fff2dc;
-  --surface: #ffffff;
-  --surface-2: #fff7e6;
-  --text: #1a1a24;
-  --text-muted: #5a5a6a;
-  --border: rgba(0, 0, 0, 0.12);
-  --shadow: 0 20px 60px rgba(255, 122, 0, 0.2);
-  --shadow-lg: 0 35px 80px rgba(255, 122, 0, 0.25);
-}
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* ---------- RESET & BASE ---------- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    html { font-size: 16px; scroll-behavior: smooth; }
+    html, body { height: 100%; width: 100%; overflow-x: hidden; }
 
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-}
+    body {
+      font-family: "Cairo", "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-html, body {
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 180, 0, 0.25), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 122, 0, 0.25), transparent 50%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      z-index: -2;
+    }
 
-body {
-  font-family: "Cairo", "Segoe UI", Tahoma, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+    h1, h2, h3 {
+      text-align: center;
+      line-height: 1.2;
+    }
 
-/* ---------- MOBILE-OPTIMIZED BACKGROUND ---------- */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(255, 180, 0, 0.25), transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 122, 0, 0.25), transparent 50%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
-  z-index: -2;
-}
+    #price {
+      font-size: clamp(24px, 7vw, 36px);
+      font-weight: 900;
+      padding: clamp(24px, 6vw, 36px);
+      border-radius: 18px;
+      background: var(--surface-2);
+      border: 3px solid var(--accent);
+      color: var(--text);
+      box-shadow:
+        inset 0 0 30px rgba(255, 180, 0, 0.15),
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(255, 180, 0, 0.2);
+      word-wrap: break-word;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 2;
+    }
 
-/* ---------- MOBILE HEADING (LARGER & BOLDER) ---------- */
-h1 {
-  font-size: clamp(28px, 8vw, 42px);
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 28px;
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 50px rgba(255, 180, 0, 0.4);
-  animation: fadeUp 0.8s ease both;
-  line-height: 1.2;
-  padding: 0 12px;
-  letter-spacing: -0.5px;
-}
+    #remaining {
+      font-size: clamp(16px, 4vw, 20px);
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 12px;
+    }
 
-/* ---------- ULTRA LARGE MOBILE CARD ---------- */
-.box {
-  width: 100%;
-  max-width: 420px;
-  min-height: 380px;
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: clamp(32px, 8vw, 48px);
-  margin: 0 auto;
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
-  position: relative;
-  animation: bounceIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 24px;
-}
-/* ================== GOOGLE TRANSLATE - COMPLETE HIDE ================== */
-#google_translate_element,
-.goog-te-banner-frame,
-.goog-te-menu-frame,
-.goog-te-balloon-frame,
-.goog-te-gadget,
-.goog-logo-link,
-.goog-te-gadget span,
-.skiptranslate,
-.goog-te-combo,
-.VIpgJd-ZVi9od-ORHb-OEVmkb svg,
-[aria-label*="Google"],
-[title*="Google"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  width: 0 !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  z-index: -9999 !important;
-}
-.box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius);
-  padding: 2px;
-  background: var(--gradient-accent);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.7;
-  pointer-events: none;
-}
+    .box {
+      width: 100%;
+      max-width: 420px;
+      min-height: 380px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(32px, 8vw, 48px);
+      margin: 0 auto;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(25px) saturate(200%);
+      -webkit-backdrop-filter: blur(25px) saturate(200%);
+      position: relative;
+      animation: bounceIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
 
-/* ---------- EXTRA LARGE PRICE CARD ---------- */
-#price {
-  font-size: clamp(24px, 7vw, 36px);
-  font-weight: 900;
-  text-align: center;
-  padding: clamp(24px, 6vw, 36px);
-  margin: 0;
-  border-radius: 18px;
-  background: var(--surface-2);
-  border: 3px solid var(--accent);
-  color: var(--text);
-  box-shadow:
-    inset 0 0 30px rgba(255, 180, 0, 0.15),
-    0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(255, 180, 0, 0.2);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-  position: relative;
-  z-index: 2;
-}
+    #google_translate_element,
+    .goog-te-banner-frame,
+    .goog-te-menu-frame,
+    .goog-te-balloon-frame,
+    .goog-te-gadget,
+    .goog-logo-link,
+    .goog-te-gadget span,
+    .skiptranslate,
+    .goog-te-combo,
+    .VIpgJd-ZVi9od-ORHb-OEVmkb svg,
+    [aria-label*="Google"],
+    [title*="Google"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      height: 0 !important;
+      width: 0 !important;
+      overflow: hidden !important;
+      position: absolute !important;
+      z-index: -9999 !important;
+    }
 
-#price::before {
-  content: "💰";
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--surface);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
+    .box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      padding: 2px;
+      background: var(--gradient-accent);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.7;
+      pointer-events: none;
+    }
 
-/* ---------- EXTRA LARGE BUTTONS ---------- */
-button {
-  display: block;
-  width: 100%;
-  padding: clamp(20px, 6vw, 28px);
-  font-family: inherit;
-  font-size: clamp(18px, 5vw, 22px);
-  font-weight: 900;
-  color: #000;
-  background: var(--gradient-accent);
-  border: none;
-  border-radius: 18px;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 15px 40px rgba(255, 122, 0, 0.4), var(--glow);
-  position: relative;
-  overflow: hidden;
-  min-height: 60px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  -webkit-tap-highlight-color: transparent;
-}
+    #paypal-button-container {
+      position: relative;
+      z-index: 2;
+      min-height: 60px;
+    }
 
-button::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    transparent 100%);
-  transform: translateX(-100%);
-  transition: transform 0.8s ease;
-}
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: scale(0.8) translateY(40px); }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.98) translateY(-5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
 
-@media (hover: hover) {
-  button:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(255, 180, 0, 0.6), var(--glow);
-  }
-  button:hover::before {
-    transform: translateX(100%);
-  }
-}
-
-button:active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow: 0 8px 25px rgba(255, 122, 0, 0.4);
-}
-
-button:focus-visible {
-  outline: 4px solid var(--accent);
-  outline-offset: 4px;
-}
-
-/* ---------- ANIMATIONS ---------- */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes bounceIn {
-  0% { opacity: 0; transform: scale(0.8) translateY(40px); }
-  50% { transform: scale(1.05); }
-  70% { transform: scale(0.98) translateY(-5px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-/* ================== MOBILE RESPONSIVE BREAKPOINTS ================== */
-
-/* ========== LARGE SCREENS ========== */
-@media (min-width: 1440px) {
-  .box { max-width: 500px; padding: 60px; }
-  #price { font-size: 40px; padding: 40px; }
-}
-
-/* ========== TABLET ========== */
-@media (max-width: 1024px) {
-  body { padding: 24px 20px; }
-  .box { max-width: 450px; }
-}
-
-/* ========== MOBILE LARGE (iPhone 14 Pro Max, etc.) ========== */
-@media (max-width: 430px) {
-  body { padding: 24px 16px; }
-  .box { 
-    max-width: 100%; 
-    padding: 40px 32px;
-    min-height: 420px;
-  }
-  h1 { 
-    font-size: 36px; 
-    margin-bottom: 32px; 
-  }
-  #price { 
-    font-size: 32px; 
-    padding: 32px 24px; 
-  }
-  button { 
-    padding: 24px; 
-    font-size: 20px;
-    min-height: 65px;
-  }
-}
-
-/* ========== MOBILE MEDIUM (iPhone 13/14) ========== */
-@media (max-width: 375px) {
-  body { padding: 20px 14px; }
-  .box { 
-    padding: 36px 28px; 
-    min-height: 400px;
-  }
-  h1 { font-size: 34px; margin-bottom: 28px; }
-  #price { 
-    font-size: 30px; 
-    padding: 28px 20px; 
-  }
-  button { 
-    padding: 22px; 
-    font-size: 19px;
-    min-height: 62px;
-  }
-}
-
-/* ========== MOBILE SMALL (iPhone SE, etc.) ========== */
-@media (max-width: 320px) {
-  html { font-size: 15px; }
-  body { padding: 16px 12px; }
-  .box { 
-    padding: 32px 24px; 
-    min-height: 380px;
-  }
-  h1 { 
-    font-size: 30px; 
-    margin-bottom: 24px; 
-  }
-  #price { 
-    font-size: 28px; 
-    padding: 24px 18px; 
-  }
-  button { 
-    padding: 20px; 
-    font-size: 18px;
-    min-height: 58px;
-  }
-}
-
-/* ========== LANDSCAPE MODE ========== */
-@media (max-height: 500px) and (orientation: landscape) {
-  body { 
-    padding: 16px; 
-    justify-content: flex-start; 
-    align-items: stretch;
-  }
-  .box { 
-    max-width: none; 
-    height: 100vh; 
-    padding: 40px 32px;
-    border-radius: 0;
-    margin: 0;
-  }
-  h1 { 
-    margin-bottom: 20px; 
-    font-size: 28px; 
-  }
-  #price { 
-    font-size: 26px; 
-    padding: 24px 20px; 
-  }
-  button { 
-    padding: 20px; 
-    margin-top: 16px;
-  }
-}
-
-/* ========== ACCESSIBILITY ========== */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.3s !important;
-  }
-}
-
-/* ========== PRINT ========== */
-@media print {
-  body::before { display: none; }
-  body { background: #fff; color: #000; }
-  .box { box-shadow: none; border: 1px solid #000; }
-  button { display: none; }
-}
-
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.3s !important;
+      }
+    }
   </style>
 </head>
 
 <body>
 
+  <div class="box">
+    <h2 id="price"></h2>
+    <h3 id="remaining"></h3>
+    <div id="paypal-button-container"></div>
+  </div>
 
-<div class="box">
+  <script>
+    const bookingData = JSON.parse(localStorage.getItem("bookingData"));
 
-  <h2 id="price"></h2>
-
-  <h3 id="remaining"></h3>
-
-<div id="paypal-button-container"></div>
-
-</div>
-<script>
-paypal.Buttons({
-
-  async createOrder() {
-
-    const bookingData =
-      JSON.parse(localStorage.getItem("bookingData"));
-
-    const res = await fetch("/api/create-paypal-order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        amount: bookingData.amountToPay
-      })
-    });
-
-    const data = await res.json();
-
-    return data.id;
-  },
-
-  async onApprove(data) {
-
-    const res = await fetch("/api/capture-paypal-order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        orderId: data.orderID
-      })
-    });
-
-    const capture = await res.json();
-
-    if (capture.status === "COMPLETED") {
-
-      window.location.href = "/success.html";
-
-    } else {
-
-      alert("فشل الدفع");
-
+    if (!bookingData) {
+      alert("لا توجد بيانات حجز، سيتم تحويلك للرئيسية");
+      window.location.href = "index.html";
     }
-  },
 
-  onError(err) {
+    document.getElementById("price").textContent =
+      "المبلغ المطلوب: " +
+      Number(bookingData.amountToPay).toLocaleString() +
+      " جنيه";
 
-    console.error(err);
+    document.getElementById("remaining").textContent =
+      "المتبقي للدفع في الفندق: " +
+      Number(bookingData.remaining).toLocaleString() +
+      " جنيه";
+  </script>
 
-    alert("حدث خطأ أثناء الدفع");
+  <script src="https://www.paypal.com/sdk/js?client-id=AYS3gkFiNwEfBet42COzLsNCyFMxcP4HLJL8jwlJfU6LilUy5IgkyI9-Lx9DuVRx25iZG653KEU02Kom&currency=USD&intent=capture"></script>
 
-  }
+  <script>
+    paypal.Buttons({
+      createOrder: async function () {
+        const bookingData = JSON.parse(localStorage.getItem("bookingData"));
 
-}).render("#paypal-button-container");
-        </script>
-<script src="https://www.paypal.com/sdk/js?client-id=AYS3gkFiNwEfBet42COzLsNCyFMxcP4HLJL8jwlJfU6LilUy5IgkyI9-Lx9DuVRx25iZG653KEU02Kom&currency=USD&intent=capture"></script>
+        const res = await fetch("/api/create-paypal-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: bookingData.amountToPay })
+        });
+
+        const data = await res.json();
+        return data.id;
+      },
+
+      onApprove: async function (data) {
+        const res = await fetch("/api/capture-paypal-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId: data.orderID })
+        });
+
+        const capture = await res.json();
+
+        if (capture.status === "COMPLETED") {
+          window.location.href = "/success.html";
+        } else {
+          alert("فشل الدفع");
+        }
+      },
+
+      onError: function (err) {
+        console.error(err);
+        alert("حدث خطأ أثناء الدفع");
+      }
+    }).render("#paypal-button-container");
+  </script>
+
 </body>
 </html>

@@ -880,7 +880,15 @@
           </span>
         </a>
         <a href="#" id="bookingsBtn"> حجوزاتي</a>
-        <a href="#" id="walletBtn"> سحب الرصيد</a>
+      <input type="number" id="withdrawAmount" placeholder="المبلغ">
+
+<input type="email" id="paypalEmail" placeholder="PayPal Email">
+
+<button id="withdrawBtn">
+  سحب الرصيد
+</button>
+
+<span id="availableBalance">0</span>
        <a href="#" id="messagesBtn">
    رسائل العملاء
   <span id="msgCount"
@@ -2111,49 +2119,73 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
     
-   <button id="withdrawOnlineBtn">
-  سحب الرصيد
-</button>
-
  <script>
 async function withdraw() {
-  const amount = document.getElementById("amount").value;
-  const paypal_email = document.getElementById("paypal_email").value;
-
-  if (!amount || !paypal_email) {
-    alert("ادخل المبلغ وإيميل PayPal");
-    return;
-  }
-
   try {
-    const res = await fetch("api/paypal-withdraw.js", {
+    const amount = parseFloat(
+      document.getElementById("withdrawAmount").value
+    );
+
+    const paypal_email =
+      document.getElementById("paypalEmail").value.trim();
+
+    // ضع معرف الفندق الحقيقي هنا
+    const hotel_id = localStorage.getItem("hotel_id");
+
+    if (!amount || amount <= 0) {
+      alert("أدخل مبلغ صحيح");
+      return;
+    }
+
+    if (!paypal_email) {
+      alert("أدخل بريد PayPal");
+      return;
+    }
+
+    if (!hotel_id) {
+      alert("لم يتم العثور على معرف الفندق");
+      return;
+    }
+
+    const response = await fetch("/api/paypal-withdraw", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, paypal_email }),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        amount,
+        paypal_email,
+        hotel_id
+      })
     });
 
-    // اقرأ الرد كنص الأول عشان ما يكسرش لو مش JSON
-    const text = await res.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch {
-      alert("رد غير متوقع من السيرفر:\n" + text);
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.error || "فشل السحب");
+      console.error(data);
       return;
     }
 
-    if (!res.ok) {
-      console.error("Withdraw error:", data);
-      alert("فشل السحب: " + (data.error || data.message || JSON.stringify(data)));
-      return;
+    alert("تم إرسال طلب السحب بنجاح");
+
+    console.log("Withdrawal Success:", data);
+
+    if (data.available !== undefined) {
+      document.getElementById("availableBalance").textContent =
+        data.available.toFixed(2);
     }
 
-    alert("✅ تم إرسال طلب السحب بنجاح");
-    console.log(data);
   } catch (err) {
     console.error(err);
-    alert("خطأ في الشبكة: " + err.message);
+    alert("حدث خطأ أثناء السحب");
   }
 }
+
+// ربط الزر
+document
+  .getElementById("withdrawBtn")
+  ?.addEventListener("click", withdraw);
 </script>
 
    

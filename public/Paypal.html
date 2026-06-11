@@ -408,113 +408,10 @@ button:focus-visible {
 <div id="paypal-button-container"></div>
 
 </div>
-
-<script>
-  console.log("script loaded");
-const bookingData = JSON.parse(localStorage.getItem("bookingData"));
-
-if (!bookingData) {
-  alert("لا توجد بيانات حجز، سيتم تحويلك للرئيسية");
-  window.location.href = "index.html";
-}
-
-// ✅ الإصلاح: amountToPay بدل deposit
-document.getElementById("price").textContent =
-  "المبلغ المطلوب: " +
-  Number(bookingData.amountToPay).toLocaleString() +
-  " جنيه";
-
-document.getElementById("remaining").textContent =
-  "المتبقي للدفع في الفندق: " +
-  Number(bookingData.remaining).toLocaleString() +
-  " جنيه";
-
-async function createPayment(type) {
-  const amount = bookingData.amountToPay; // ✅ صح
-
-  if (!amount || amount <= 0) {
-    alert("خطأ: المبلغ غير صحيح");
-    return;
-  }
-
-  const btn = document.querySelector("button");
-  btn.disabled = true;
-  btn.textContent = "⏳ جارٍ المعالجة...";
-
-  try {
-   
-const res = await fetch("/api/create-payment", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    amount: amount,
-    integration_type: type,
-    booking_id: bookingData.bookingId
-  })
-});
-    const data = await res.json();
-    console.log("Payment response:", data);
-
-    if (data.payment_url) {
-      window.location.href = data.payment_url;
-    } else if (data.method === "kiosk") {
-      document.getElementById("kioskCode").textContent =
-        data.bill_reference || "----";
-      document.getElementById("kioskBox").style.display = "block";
-      btn.disabled = false;
-      btn.textContent = "تأكيد الحجز";
-    } else {
-      alert("خطأ في الدفع: " + (data.message || JSON.stringify(data)));
-      btn.disabled = false;
-      btn.textContent = "تأكيد الحجز";
-    }
-
-  } catch (err) {
-    console.error("Payment error:", err);
-    alert("حصل خطأ في الاتصال بالسيرفر");
-    btn.disabled = false;
-    btn.textContent = "تأكيد الحجز";
-  }
-}
-  } catch (err) {
-    console.error("Payment error:", err);
-    alert("حصل خطأ في الاتصال بالسيرفر");
-    btn.disabled = false;
-    btn.textContent = "تأكيد الحجز";
-  }
-}
-  console.log(typeof createPayment, err);
-    alert("حصل خطأ في الاتصال بالسيرفر");
-    btn.disabled = false;
-    btn.textContent = "تأكيد الحجز";
-  }
-}
-  console.log(typeof createPayment بالسيرفر");
-    btn.disabled = false;
-    btn.textContent = "تأكيد الحجز";
-  }
-}
-  console.log(typeof createPaymenttextContent = "تأكيد الحجز";
-  }
-}
-  console.log(typeof createPayment";
-  }
-}
-  console.log(typeof createPaymentaymentnt>
-
-  <scrnt);
-</script>
-<script src="translate.js"></script>
-
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD&intent=capture"></script>
-
 <script>
 paypal.Buttons({
 
-  createOrder: async function () {
+  async createOrder() {
 
     const bookingData =
       JSON.parse(localStorage.getItem("bookingData"));
@@ -534,7 +431,7 @@ paypal.Buttons({
     return data.id;
   },
 
-  onApprove: async function (data) {
+  async onApprove(data) {
 
     const res = await fetch("/api/capture-paypal-order", {
       method: "POST",
@@ -548,22 +445,27 @@ paypal.Buttons({
 
     const capture = await res.json();
 
-    if (
-      capture.status === "COMPLETED"
-    ) {
-      window.location.href =
-        "/success.html";
+    if (capture.status === "COMPLETED") {
+
+      window.location.href = "/success.html";
+
     } else {
+
       alert("فشل الدفع");
+
     }
   },
 
-  onError: function (err) {
+  onError(err) {
+
     console.error(err);
+
     alert("حدث خطأ أثناء الدفع");
+
   }
 
 }).render("#paypal-button-container");
-  </script>
+        </script>
+
 </body>
 </html>

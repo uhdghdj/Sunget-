@@ -2130,7 +2130,7 @@ async function withdraw() {
       document.getElementById("paypalEmail").value.trim();
 
     // ضع معرف الفندق الحقيقي هنا
-    const hotel_id = localStorage.getItem("hotel_id");
+  const hotel_id = currentHotelId;
 
     if (!amount || amount <= 0) {
       alert("أدخل مبلغ صحيح");

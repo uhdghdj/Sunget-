@@ -1,4 +1,7 @@
 
+هذا هو الكود الكامل لـ `src/routes/api/paypal-withdraw.ts`:
+
+```ts
 import { createFileRoute } from "@tanstack/react-router";
 
 const corsHeaders = {
@@ -16,7 +19,8 @@ const json = (data: unknown, status = 200) =>
 export const Route = createFileRoute("/api/paypal-withdraw")({
   server: {
     handlers: {
-      OPTIONS: async () => new Response(null, { status: 204, headers: corsHeaders }),
+      OPTIONS: async () =>
+        new Response(null, { status: 204, headers: corsHeaders }),
 
       POST: async ({ request }) => {
         try {
@@ -29,6 +33,11 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
 
           const clientId = process.env.PAYPAL_CLIENT_ID;
           const secret = process.env.PAYPAL_SECRET;
+          const paypalBase =
+            process.env.PAYPAL_ENV === "sandbox"
+              ? "https://api-m.sandbox.paypal.com"
+              : "https://api-m.paypal.com";
+
           if (!clientId || !secret) {
             return json({ error: "PayPal credentials غير مهيّأة" }, 500);
           }
@@ -36,7 +45,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
           // 1) إجمالي المدفوع أونلاين
-          const { data: bookings, error: bErr } = await supabaseAdmin
+          const { data: bookings, error: bErr } = await (supabaseAdmin as any)
             .from("bookings")
             .select("total_price")
             .eq("hotel_id", hotel_id)
@@ -48,7 +57,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
             0,
           );
 
-          // 2) إجمالي السحوبات السابقة (الناجحة والمعلّقة)
+          // 2) السحوبات السابقة (pending + success)
           const { data: withdrawn, error: wErr } = await supabaseAdmin
             .from("withdrawals")
             .select("amount")
@@ -66,7 +75,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
             return json({ error: "الرصيد القابل للسحب غير كافٍ", available }, 400);
           }
 
-          // 3) سجّل السحب كـ pending قبل النداء على PayPal (يحجز الرصيد)
+          // 3) سجّل السحب كـ pending لحجز الرصيد
           const { data: wRow, error: insErr } = await supabaseAdmin
             .from("withdrawals")
             .insert({ hotel_id, amount: amt, paypal_email, status: "pending" })
@@ -76,7 +85,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
 
           // 4) PayPal token
           const auth = btoa(`${clientId}:${secret}`);
-          const tokenRes = await fetch("https://api-m.paypal.com/v1/oauth2/token", {
+          const tokenRes = await fetch(`${paypalBase}/v1/oauth2/token`, {
             method: "POST",
             headers: {
               Authorization: `Basic ${auth}`,
@@ -84,7 +93,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
             },
             body: "grant_type=client_credentials",
           });
-          const tokenData = await tokenRes.json().catch(() => null) as any;
+          const tokenData = (await tokenRes.json().catch(() => null)) as any;
           if (!tokenRes.ok || !tokenData?.access_token) {
             await supabaseAdmin.from("withdrawals").update({ status: "failed" }).eq("id", wRow.id);
             return json({ error: "PayPal token failed", details: tokenData }, 502);
@@ -92,7 +101,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
 
           // 5) Payout
           const batchId = `wd_${wRow.id}_${Date.now()}`;
-          const payoutRes = await fetch("https://api-m.paypal.com/v1/payments/payouts", {
+          const payoutRes = await fetch(`${paypalBase}/v1/payments/payouts`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${tokenData.access_token}`,
@@ -108,7 +117,7 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
               }],
             }),
           });
-          const payoutData = await payoutRes.json().catch(() => null) as any;
+          const payoutData = (await payoutRes.json().catch(() => null)) as any;
 
           if (!payoutRes.ok) {
             await supabaseAdmin.from("withdrawals").update({ status: "failed" }).eq("id", wRow.id);
@@ -131,3 +140,4 @@ export const Route = createFileRoute("/api/paypal-withdraw")({
     },
   },
 });
+```

@@ -2073,44 +2073,92 @@ async function loadWallet() {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("withdrawBtn");
+
   if (!btn) {
-    console.error("❌ زر withdrawBtn مش موجود في الصفحة");
+    console.error("❌ زر withdrawBtn مش موجود");
     return;
   }
-  console.log("✅ الزر اتربط بنجاح");
+
+  console.log("✅ زر السحب جاهز");
 
   btn.addEventListener("click", async () => {
-    console.log("🟢 اتضغط على الزر");
-    const amount = document.getElementById("amount")?.value;
-    const paypal_email = document.getElementById("paypal_email")?.value;
-
-    if (!amount || !paypal_email) {
-      alert("ادخل المبلغ وإيميل PayPal");
-      return;
-    }
-
-    btn.disabled = true;
     try {
-      const res = await fetch("/api/paypal-withdraw", {
+      console.log("🟢 بدء عملية السحب");
+
+      const amount = parseFloat(
+        document.getElementById("amount")?.value
+      );
+
+      const paypal_email =
+        document.getElementById("paypal_email")?.value?.trim();
+
+      // مهم جدًا: لازم يكون معرف الفندق من الداشبورد
+      const hotel_id = window.currentHotelId;
+
+      console.log("DATA:", { amount, paypal_email, hotel_id });
+
+      // ===== VALIDATION =====
+      if (!amount || amount <= 0) {
+        alert("أدخل مبلغ صحيح");
+        return;
+      }
+
+      if (!paypal_email) {
+        alert("أدخل إيميل PayPal");
+        return;
+      }
+
+      if (!hotel_id) {
+        alert("لم يتم العثور على معرف الفندق");
+        return;
+      }
+
+      btn.disabled = true;
+
+      // ===== REQUEST =====
+      const response = await fetch("/api/paypal-withdraw", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, paypal_email }),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          amount,
+          paypal_email,
+          hotel_id
+        })
       });
-      const text = await res.text();
-      console.log("📩 status:", res.status, "body:", text);
+
+      // ===== SAFE RESPONSE PARSE =====
+      const text = await response.text();
 
       let data;
-      try { data = JSON.parse(text); } catch { data = { raw: text }; }
-
-      if (!res.ok) {
-        alert("خطأ: " + (data.error || text));
-      } else {
-        alert("✅ تم إرسال طلب السحب");
-        console.log(data);
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error("RAW RESPONSE:", text);
+        data = { error: text };
       }
+
+      console.log("STATUS:", response.status);
+      console.log("RESPONSE:", data);
+
+      // ===== ERROR =====
+      if (!response.ok) {
+        alert("❌ خطأ: " + (data.error || "فشل السحب"));
+        return;
+      }
+
+      // ===== SUCCESS =====
+      alert("✅ تم إرسال طلب السحب بنجاح");
+
+      if (data.available !== undefined) {
+        document.getElementById("availableBalance").textContent =
+          Number(data.available).toFixed(2);
+      }
+
     } catch (err) {
-      console.error("❌ Network error:", err);
-      alert("فشل الاتصال: " + err.message);
+      console.error("❌ Withdraw Error:", err);
+      alert("حدث خطأ أثناء السحب: " + err.message);
     } finally {
       btn.disabled = false;
     }

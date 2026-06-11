@@ -2118,10 +2118,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-    
- <script>
+    <script>
 async function withdraw() {
   try {
+    console.log("🟢 بدء عملية السحب");
+
     const amount = parseFloat(
       document.getElementById("withdrawAmount").value
     );
@@ -2129,9 +2130,12 @@ async function withdraw() {
     const paypal_email =
       document.getElementById("paypalEmail").value.trim();
 
-    // ضع معرف الفندق الحقيقي هنا
-  const hotel_id = currentHotelId;
+    // مهم: لازم يكون موجود من الداشبورد
+    const hotel_id = currentHotelId;
 
+    console.log("DATA:", { amount, paypal_email, hotel_id });
+
+    // ====== VALIDATION ======
     if (!amount || amount <= 0) {
       alert("أدخل مبلغ صحيح");
       return;
@@ -2147,6 +2151,7 @@ async function withdraw() {
       return;
     }
 
+    // ====== REQUEST ======
     const response = await fetch("/api/paypal-withdraw", {
       method: "POST",
       headers: {
@@ -2159,33 +2164,49 @@ async function withdraw() {
       })
     });
 
-    const data = await response.json();
+    // ====== SAFE PARSE ======
+    const data = await response.json().catch(async () => {
+      const text = await response.text();
+      console.error("RAW RESPONSE:", text);
+      return { error: text };
+    });
 
+    console.log("STATUS:", response.status);
+    console.log("RESPONSE:", data);
+
+    // ====== ERROR HANDLING ======
     if (!response.ok) {
-      alert(data.error || "فشل السحب");
-      console.error(data);
+      alert("❌ خطأ: " + (data.error || "فشل السحب"));
       return;
     }
 
-    alert("تم إرسال طلب السحب بنجاح");
-
-    console.log("Withdrawal Success:", data);
+    // ====== SUCCESS ======
+    alert("✅ تم إرسال طلب السحب بنجاح");
 
     if (data.available !== undefined) {
       document.getElementById("availableBalance").textContent =
-        data.available.toFixed(2);
+        Number(data.available).toFixed(2);
     }
 
   } catch (err) {
-    console.error(err);
-    alert("حدث خطأ أثناء السحب");
+    console.error("❌ Withdraw Error:", err);
+    alert("حدث خطأ أثناء السحب: " + err.message);
   }
 }
 
-// ربط الزر
-document
-  .getElementById("withdrawBtn")
-  ?.addEventListener("click", withdraw);
+// ربط الزر مرة واحدة فقط
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("withdrawBtn");
+
+  if (!btn) {
+    console.error("❌ زر withdrawBtn غير موجود");
+    return;
+  }
+
+  console.log("✅ زر السحب جاهز");
+
+  btn.addEventListener("click", withdraw);
+});
 </script>
 
    

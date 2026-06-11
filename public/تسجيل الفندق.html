@@ -2070,150 +2070,105 @@ async function loadWallet() {
 <input id="amount" type="number" placeholder="المبلغ" />
 <input id="paypal_email" type="email" placeholder="إيميل PayPal" />
 <p>الرصيد المتاح: <span id="availableBalance">0.00</span></p>
+<!-- في نهاية الملف قبل </body> استبدل كل السكربتات بهذا سكربت واحد فقط -->
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+// التأكد من تحميل الصفحة
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("✅ تحميل الصفحة اكتمل");
+  
   const btn = document.getElementById("withdrawBtn");
+  const amountInput = document.getElementById("withdrawAmount");
+  const paypalInput = document.getElementById("paypalEmail");
+  const balanceSpan = document.getElementById("availableBalance");
+  
   if (!btn) {
-    console.error("❌ زر withdrawBtn مش موجود");
+    console.error("❌ زر withdrawBtn غير موجود");
     return;
   }
-  console.log("✅ زر السحب جاهز");
-
-  btn.addEventListener("click", async () => {
+  
+  if (!amountInput || !paypalInput || !balanceSpan) {
+    console.error("❌ عناصر الإدخال غير موجودة");
+    return;
+  }
+  
+  console.log("✅ جميع العناصر موجودة");
+  
+  // ربط الدالة مرة واحدة فقط
+  btn.onclick = async function() {
     try {
       console.log("🟢 بدء عملية السحب");
-
-      const amount = parseFloat(document.getElementById("amount")?.value);
-      const paypal_email = document.getElementById("paypal_email")?.value?.trim();
+      
+      const amount = parseFloat(amountInput.value);
+      const paypal_email = paypalInput.value.trim();
       const hotel_id = window.currentHotelId;
-
+      
       console.log("DATA:", { amount, paypal_email, hotel_id });
-
-      // ===== VALIDATION =====
+      
+      // التحقق
       if (!amount || amount <= 0) {
         alert("أدخل مبلغ صحيح");
         return;
       }
-      if (!paypal_email) {
-        alert("أدخل إيميل PayPal");
+      if (!paypal_email || !paypal_email.includes("@")) {
+        alert("أدخل بريد PayPal صحيح");
         return;
       }
       if (!hotel_id) {
-        alert("لم يتم العثور على معرف الفندق");
+        alert("❌ معرف الفندق غير موجود - يرجى تسجيل الدخول مرة أخرى");
         return;
       }
-
+      
       btn.disabled = true;
-
-      // ===== REQUEST =====
+      btn.textContent = "جاري المعالجة...";
+      
       const response = await fetch("/api/paypal-withdraw", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, paypal_email, hotel_id }),
+        body: JSON.stringify({ 
+          amount: amount, 
+          paypal_email: paypal_email, 
+          hotel_id: hotel_id 
+        }),
       });
-
-      // ===== SAFE RESPONSE PARSE (مرة واحدة فقط) =====
+      
       let data;
+      const text = await response.text();
       try {
-        data = await response.json();
+        data = JSON.parse(text);
       } catch (e) {
-        console.error("❌ Response is not JSON");
-        data = { error: "Invalid server response" };
+        console.error("Response:", text);
+        data = { error: "استجابة غير صالحة من الخادم" };
       }
-
-      console.log("STATUS:", response.status);
-      console.log("RESPONSE:", data);
-
-      // ===== ERROR =====
+      
+      console.log("STATUS:", response.status, "RESPONSE:", data);
+      
       if (!response.ok) {
-        alert("❌ خطأ: " + (data.error || JSON.stringify(data) || "فشل السحب"));
+        alert("❌ خطأ: " + (data.error || "فشل السحب"));
         return;
       }
-
-      // ===== SUCCESS =====
+      
       alert("✅ تم إرسال طلب السحب بنجاح");
+      
       if (data.available !== undefined) {
-        const el = document.getElementById("availableBalance");
-        if (el) el.textContent = Number(data.available).toFixed(2);
+        balanceSpan.textContent = Number(data.available).toFixed(2);
       }
+      
+      // مسح الحقول
+      amountInput.value = "";
+      
     } catch (err) {
       console.error("❌ Withdraw Error:", err);
       alert("حدث خطأ أثناء السحب: " + err.message);
     } finally {
       btn.disabled = false;
+      btn.textContent = "سحب الرصيد";
     }
-  });
+  };
+  
+  console.log("✅ تم ربط زر السحب بنجاح");
 });
 </script>
 
-   <script>
-async function withdraw(btn) {
-  try {
-    console.log("🟢 بدء عملية السحب");
-
-    const amount = parseFloat(document.getElementById("withdrawAmount").value);
-    const paypal_email = document.getElementById("paypalEmail").value.trim();
-    const hotel_id = window.currentHotelId;
-
-    console.log("DATA:", { amount, paypal_email, hotel_id });
-
-    // ====== VALIDATION ======
-    if (!amount || amount <= 0) return alert("أدخل مبلغ صحيح");
-    if (!paypal_email) return alert("أدخل بريد PayPal");
-    if (!hotel_id) return alert("لم يتم العثور على معرف الفندق");
-
-    btn.disabled = true;
-
-    // ====== REQUEST ======
-    const response = await fetch("/api/paypal-withdraw", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, paypal_email, hotel_id }),
-    });
-
-    // ====== SAFE PARSE (قراءة واحدة فقط) ======
-    let data;
-    try {
-      data = await response.json();
-    } catch {
-      data = { error: "Invalid server response" };
-    }
-
-    console.log("STATUS:", response.status, "RESPONSE:", data);
-
-    // ====== ERROR ======
-    if (!response.ok) {
-      alert("❌ خطأ: " + (data.error || JSON.stringify(data)));
-      return;
-    }
-
-    // ====== SUCCESS ======
-    alert("✅ تم إرسال طلب السحب بنجاح");
-    if (data.available !== undefined) {
-      const el = document.getElementById("availableBalance");
-      if (el) el.textContent = Number(data.available).toFixed(2);
-    }
-  } catch (err) {
-    console.error("❌ Withdraw Error:", err);
-    alert("حدث خطأ أثناء السحب: " + err.message);
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-// ربط الزر مرة واحدة فقط
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("withdrawBtn");
-  if (!btn) {
-    console.error("❌ زر withdrawBtn غير موجود");
-    return;
-  }
-  console.log("✅ زر السحب جاهز");
-  btn.addEventListener("click", () => withdraw(btn));
-});
-</script>
-
-   
   </body>
 </html>

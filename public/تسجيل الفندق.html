@@ -1084,6 +1084,33 @@
       }
 
       // ============ INIT ============
+
+// ============ INIT ============
+(async function initDashboard() {
+  const { data: authData } = await supabaseClient.auth.getUser();
+  if (!authData.user) {
+    window.location.href = "login.html";
+    return;
+  }
+  authId = authData.user.id;
+
+  const { data: hotel } = await supabaseClient
+    .from("hotels")
+    .select("*")
+    .eq("auth_id", authId)
+    .maybeSingle();
+
+  if (hotel) {
+    currentHotelId = hotel.id;
+    // 👇 أضف هذا السطر للاحتياط
+    localStorage.setItem('hotel_id', hotel.id);
+    
+    showDashboard(hotel);
+    sidebar.style.display = "flex";
+    startMessages();
+  }
+})();
+      
       (async function initDashboard() {
         const { data: authData } = await supabaseClient.auth.getUser();
         if (!authData.user) {

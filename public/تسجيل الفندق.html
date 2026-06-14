@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
@@ -9,8 +8,6 @@
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap"
       rel="stylesheet"
     />
-<link rel="icon" href="favicon.png">
-    
   </head>
   <style>
     /* ================== HOTEL DASHBOARD STYLESHEET ================== */
@@ -35,35 +32,35 @@
       --sidebar-w: 250px;
       --header-h: 70px;
     }
-#withdrawOnlineBtn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.25);
-}
+    #withdrawOnlineBtn {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.25);
+    }
 
-#withdrawOnlineBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.4);
-}
+    #withdrawOnlineBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.4);
+    }
 
-#withdrawOnlineBtn:active {
-  transform: scale(0.97);
-}
+    #withdrawOnlineBtn:active {
+      transform: scale(0.97);
+    }
 
-#withdrawOnlineBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
+    #withdrawOnlineBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
     [data-theme="light"] {
       --bg: #f7f7fb;
       --bg-2: #ffffff;
@@ -800,58 +797,53 @@
       }
     }
 
-#wallet-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: var(--shadow);
-}
+    #wallet-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
 
-#wallet-section .dashboard-cards {
-  margin-bottom: 20px;
-}
+    #wallet-section .dashboard-cards {
+      margin-bottom: 20px;
+    }
 
-#withdrawBtn {
-  width: 100%;
-  padding: 14px 20px;
-  border: none;
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
+    #withdrawBtn {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
 
-  background: linear-gradient(
-    135deg,
-    var(--accent),
-    var(--accent-2)
-  );
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
 
-  color: #000;
+      color: #000;
 
-  transition: all 0.3s ease;
+      transition: all 0.3s ease;
 
-  box-shadow: 0 8px 24px rgba(255, 138, 0, 0.3);
-}
+      box-shadow: 0 8px 24px rgba(255, 138, 0, 0.3);
+    }
 
-#withdrawBtn:hover {
-  transform: translateY(-3px);
+    #withdrawBtn:hover {
+      transform: translateY(-3px);
 
-  box-shadow: 0 12px 30px rgba(255, 138, 0, 0.45);
-}
+      box-shadow: 0 12px 30px rgba(255, 138, 0, 0.45);
+    }
 
-#withdrawBtn:active {
-  transform: scale(0.97);
-}
+    #withdrawBtn:active {
+      transform: scale(0.97);
+    }
 
-#withdrawBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
+    #withdrawBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
   </style>
   <body>
     <header>
@@ -861,11 +853,11 @@
     </header>
 
     <div class="layout">
-       <nav id="sidebar">
+      <nav id="sidebar">
         <a href="#" id="dashBtn"> اللوحة</a>
         <a href="#" id="roomsBtn"> الغرف</a>
         <a href="#" id="notificationsBtn">
-           الإشعارات
+          الإشعارات
           <span
             id="notifCount"
             style="
@@ -882,34 +874,27 @@
           </span>
         </a>
         <a href="#" id="bookingsBtn"> حجوزاتي</a>
-      <input type="number" id="withdrawAmount" placeholder="المبلغ">
-
-<input type="email" id="paypalEmail" placeholder="PayPal Email">
-
-<button id="withdrawBtn">
-  سحب الرصيد
-</button>
-
-<span id="availableBalance">0</span>
-       <a href="#" id="messagesBtn">
-   رسائل العملاء
-  <span id="msgCount"
-    style="
-      background:red;
-      color:#fff;
-      border-radius:50%;
-      padding:2px 8px;
-      font-size:12px;
-      margin-right:auto;
-      display:none;
-    ">
-    0
-  </span>
-</a>
+        <a href="#" id="walletBtn"> سحب الرصيد</a>
+        <a href="#" id="messagesBtn">
+          رسائل العملاء
+          <span
+            id="msgCount"
+            style="
+              background: red;
+              color: #fff;
+              border-radius: 50%;
+              padding: 2px 8px;
+              font-size: 12px;
+              margin-right: auto;
+              display: none;
+            "
+          >
+            0
+          </span>
+        </a>
         <a href="#" id="editBtn"> تعديل البيانات</a>
         <a href="#" id="logoutBtn"> تسجيل الخروج</a>
       </nav>
-
 
       <main>
         <div id="msg"></div>
@@ -923,9 +908,9 @@
             <input id="governorate" placeholder="المحافظة" />
             <textarea id="description" placeholder="الوصف"></textarea>
             <input id="address" placeholder="العنوان" />
-            <input id="map_link" placeholder="رابط الخريطة" />
-            <input id="check_in_time" placeholder="وقت الدخول" />
-            <input id="check_out_time" placeholder="وقت الخروج" />
+            <input type="url" id="map_link" placeholder="رابط الخريطة" />
+            <input type="time" id="check_in_time" placeholder="وقت الدخول" />
+            <input type="time" id="check_out_time" placeholder="وقت الخروج" />
             <input id="room_count" type="number" placeholder="عدد الغرف" />
             <input id="room_types" placeholder="أنواع الغرف" />
             <input
@@ -935,6 +920,12 @@
             />
             <input id="amenities" placeholder="المرافق" />
             <textarea id="policies" placeholder="السياسات"></textarea>
+
+            <h2>سياسة الغاء الحجز</h2>
+            <select name="cancellation_policy" id="cancellationPolicy">
+              <option value="true">تسمح للعميل بالإلغاء</option>
+              <option value="false">لا تسمح للعميل بالإلغاء</option>
+            </select>
 
             <label>صور الفندق (يمكن إضافة المزيد عند التعديل):</label>
             <input id="photos" type="file" multiple accept="image/*" />
@@ -946,7 +937,30 @@
               <label>الصور الحالية (اضغط × للحذف):</label>
               <div id="existing-photos"></div>
             </div>
+            <textarea id="policies" placeholder="السياسات"></textarea>
 
+            <div style="grid-column: 1/-1">
+              <a
+                href="hotel-policy.html"
+                target="_blank"
+                style="
+                  color: #ffb400;
+                  font-weight: 700;
+                  text-decoration: underline;
+                "
+              >
+                📄 عرض سياسة استخدام الفنادق وشروط النشر
+              </a>
+            </div>
+            <div style="grid-column: 1/-1">
+              <label style="display: flex; gap: 8px; align-items: center">
+                <input type="checkbox" id="acceptPolicy" required />
+                أوافق على
+                <a href="hotel-policy.html" target="_blank">
+                  سياسة الفنادق والشروط
+                </a>
+              </label>
+            </div>
             <div class="actions">
               <button id="saveBtn" type="submit">حفظ</button>
               <button id="cancelEditBtn" type="button" style="display: none">
@@ -1011,1249 +1025,816 @@
 
           <div id="notificationsContainer"></div>
         </section>
-        <section id="wallet-section" style="display:none">
-  <h2>سحب الرصيد</h2>
+        <section id="wallet-section" style="display: none">
+          <h2>سحب الرصيد</h2>
 
-  <div class="dashboard-cards">
+          <div class="dashboard-cards">
+            <div class="card">
+              <h4>الدفع الإلكتروني</h4>
+              <p id="electronicAmount">0 جنيه</p>
+            </div>
 
-    <div class="card">
-      <h4>الدفع الإلكتروني</h4>
-      <p id="electronicAmount">0 جنيه</p>
-    </div>
+            <div class="card">
+              <h4>الدفع عند الاستلام</h4>
+              <p id="hotelAmount">0 جنيه</p>
+            </div>
+          </div>
 
-    <div class="card">
-      <h4>الدفع عند الاستلام</h4>
-      <p id="hotelAmount">0 جنيه</p>
-    </div>
-
-  </div>
-
-  <button id="withdrawBtn">
-    سحب الرصيد
-  </button>
-</section>
+          <button id="withdrawBtn">سحب الرصيد</button>
+        </section>
       </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      const supabaseClient = supabase.createClient(
-        "https://mqvmxqzwvpasdytbpbke.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM",
-      );
+  const supabaseClient = supabase.createClient(
+    "https://mqvmxqzwvpasdytbpbke.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM",
+  );
 
-      const form = document.getElementById("hotel-form");
-      const roomForm = document.getElementById("room-form");
-      const formTitle = document.getElementById("form-title");
-      const dash = document.getElementById("dashboard-container");
-      const formBox = document.getElementById("form-container");
-      const sidebar = document.getElementById("sidebar");
-      const chatBoxWrap = document.getElementById("chat-container");
-      const msg = document.getElementById("msg");
-      const photosInput = document.getElementById("photos");
-      const existingPhotosWrap = document.getElementById(
-        "existing-photos-wrap",
-      );
-      const existingPhotosBox = document.getElementById("existing-photos");
-      const cancelEditBtn = document.getElementById("cancelEditBtn");
-      const saveBtn = document.getElementById("saveBtn");
+  const form = document.getElementById("hotel-form");
+  const roomForm = document.getElementById("room-form");
+  const formTitle = document.getElementById("form-title");
+  const dash = document.getElementById("dashboard-container");
+  const formBox = document.getElementById("form-container");
+  const sidebar = document.getElementById("sidebar");
+  const chatBoxWrap = document.getElementById("chat-container");
+  const msg = document.getElementById("msg");
+  const photosInput = document.getElementById("photos");
+  const existingPhotosWrap = document.getElementById("existing-photos-wrap");
+  const existingPhotosBox = document.getElementById("existing-photos");
+  const cancelEditBtn = document.getElementById("cancelEditBtn");
+  const saveBtn = document.getElementById("saveBtn");
 
-      let authId = null;
-      let currentHotelId = null;
-      let isEditMode = false;
-      let existingPhotoUrls = [];
-      let messagesInterval = null;
-      let notificationsInterval = null;
-      let lastNotifications = [];
-      let editingRoomId = null;
-      let editingRoomPhotos = [];
-      function showMsg(text, success = false) {
-        msg.innerText = text;
-        msg.className = success ? "success" : "";
-        msg.style.display = "block";
-        setTimeout(() => (msg.style.display = "none"), 4000);
-      }
+  // ✅ مرجع آمن لعنصر سياسة الإلغاء (id فعلي = cancellationPolicy)
+  const cancellationPolicyEl = document.getElementById("cancellationPolicy");
 
-      function hideAllSections() {
-        dash.style.display = "none";
-        formBox.style.display = "none";
-        document.getElementById("rooms-section").style.display = "none";
-        document.getElementById("bookings-list").style.display = "none";
-        document.getElementById("notifications-section").style.display = "none";
-        document.getElementById("messages-list").style.display = "none";
-        document.getElementById("wallet-section").style.display = "none";
-        chatBoxWrap.style.display = "none";
-      }
+  let authId = null;
+  let currentHotelId = null;
+  let isEditMode = false;
+  let existingPhotoUrls = [];
+  let messagesInterval = null;
+  let notificationsInterval = null;
+  let lastNotifications = [];
+  let editingRoomId = null;
+  let editingRoomPhotos = [];
 
-      // ============ INIT ============
+  function showMsg(text, success = false) {
+    msg.innerText = text;
+    msg.className = success ? "success" : "";
+    msg.style.display = "block";
+    setTimeout(() => (msg.style.display = "none"), 4000);
+  }
 
-// ============ INIT ============
-(async function initDashboard() {
-  const { data: authData } = await supabaseClient.auth.getUser();
-  if (!authData.user) {
+  function hideAllSections() {
+    dash.style.display = "none";
+    formBox.style.display = "none";
+    document.getElementById("rooms-section").style.display = "none";
+    document.getElementById("bookings-list").style.display = "none";
+    document.getElementById("notifications-section").style.display = "none";
+    document.getElementById("messages-list").style.display = "none";
+    document.getElementById("wallet-section").style.display = "none";
+    chatBoxWrap.style.display = "none";
+  }
+
+  // ============ INIT ============
+  (async function initDashboard() {
+    const { data: authData } = await supabaseClient.auth.getUser();
+    if (!authData.user) {
+      window.location.href = "login.html";
+      return;
+    }
+    authId = authData.user.id;
+
+    const { data: hotel } = await supabaseClient
+      .from("hotels")
+      .select("*")
+      .eq("auth_id", authId)
+      .maybeSingle();
+
+    if (hotel) {
+      currentHotelId = hotel.id;
+      showDashboard(hotel);
+      sidebar.style.display = "flex";
+      startMessages();
+    }
+  })();
+
+  // ============ رفع صور الفندق ============
+  async function uploadHotelPhotos(hotelId) {
+    const files = photosInput.files;
+    if (!files || files.length === 0) return [];
+    const urls = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const ext = file.name.split(".").pop();
+      const path = `${hotelId}/${Date.now()}_${i}.${ext}`;
+      const { error } = await supabaseClient.storage
+        .from("hotel-photos")
+        .upload(path, file);
+      if (error) throw error;
+      const { data } = supabaseClient.storage
+        .from("hotel-photos")
+        .getPublicUrl(path);
+      urls.push(data.publicUrl);
+    }
+    return urls;
+  }
+
+  function renderExistingPhotos() {
+    existingPhotosBox.innerHTML = "";
+    if (!existingPhotoUrls.length) {
+      existingPhotosWrap.style.display = "none";
+      return;
+    }
+    existingPhotosWrap.style.display = "block";
+    existingPhotoUrls.forEach((url, idx) => {
+      const wrap = document.createElement("div");
+      wrap.style.position = "relative";
+      wrap.style.display = "inline-block";
+      wrap.innerHTML = `
+        <img src="${url}" />
+        <button type="button" style="position:absolute;top:4px;left:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;">×</button>`;
+      wrap.querySelector("button").onclick = () => {
+        existingPhotoUrls.splice(idx, 1);
+        renderExistingPhotos();
+      };
+      existingPhotosBox.appendChild(wrap);
+    });
+  }
+
+  function openEditMode(h) {
+    isEditMode = true;
+    currentHotelId = h.id;
+    formTitle.innerText = "تعديل بيانات الفندق";
+    saveBtn.innerText = "حفظ التعديلات";
+    cancelEditBtn.style.display = "inline-block";
+
+    // ✅ التصحيح هنا
+    if (cancellationPolicyEl) {
+      cancellationPolicyEl.value = h.cancellation_policy || "";
+    }
+
+    hotel_name.value = h.hotel_name || "";
+    city.value = h.city || "";
+    governorate.value = h.governorate || "";
+    description.value = h.description || "";
+    address.value = h.address || "";
+    map_link.value = h.map_link || "";
+    check_in_time.value = h.check_in_time || "";
+    check_out_time.value = h.check_out_time || "";
+    room_count.value = h.room_count || "";
+    room_types.value = h.room_types || "";
+    price_per_night.value = h.price_per_night || "";
+    amenities.value = h.amenities || "";
+    policies.value = h.policies || "";
+    photosInput.value = "";
+
+    existingPhotoUrls = Array.isArray(h.photo_urls) ? [...h.photo_urls] : [];
+    renderExistingPhotos();
+
+    hideAllSections();
+    formBox.style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function resetForm() {
+    form.reset();
+    existingPhotoUrls = [];
+    existingPhotosWrap.style.display = "none";
+    isEditMode = false;
+    formTitle.innerText = "إضافة الفندق";
+    saveBtn.innerText = "حفظ";
+    cancelEditBtn.style.display = "none";
+  }
+
+  cancelEditBtn.onclick = () => {
+    resetForm();
+    if (currentHotelId) {
+      hideAllSections();
+      dash.style.display = "block";
+    }
+  };
+
+  // ============ أزرار الشريط الجانبي ============
+  document.getElementById("dashBtn").onclick = async (e) => {
+    e.preventDefault();
+    const { data: hotel } = await supabaseClient
+      .from("hotels")
+      .select("*")
+      .eq("id", currentHotelId)
+      .single();
+    if (hotel) showDashboard(hotel);
+  };
+
+  document.getElementById("editBtn").onclick = async (e) => {
+    e.preventDefault();
+    const { data: hotel } = await supabaseClient
+      .from("hotels")
+      .select("*")
+      .eq("id", currentHotelId)
+      .single();
+    if (hotel) openEditMode(hotel);
+  };
+
+  document.getElementById("roomsBtn").onclick = (e) => {
+    e.preventDefault();
+    hideAllSections();
+    document.getElementById("rooms-section").style.display = "block";
+    loadRooms();
+  };
+
+  document.getElementById("logoutBtn").onclick = async (e) => {
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
     window.location.href = "login.html";
-    return;
-  }
-  authId = authData.user.id;
+  };
 
-  const { data: hotel } = await supabaseClient
-    .from("hotels")
-    .select("*")
-    .eq("auth_id", authId)
-    .maybeSingle();
+  // ============ حفظ الفندق ============
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!authId) return showMsg("غير مسجل دخول");
 
-  if (hotel) {
-    currentHotelId = hotel.id;
-    // 👇 أضف هذا السطر للاحتياط
-    localStorage.setItem('hotel_id', hotel.id);
-    
-    showDashboard(hotel);
-    sidebar.style.display = "flex";
-    startMessages();
-  }
-})();
-      
-      (async function initDashboard() {
-        const { data: authData } = await supabaseClient.auth.getUser();
-        if (!authData.user) {
-          window.location.href = "login.html";
-          return;
-        }
-        authId = authData.user.id;
+    const hotelData = {
+      auth_id: authId,
+      hotel_name: hotel_name.value,
+      city: city.value,
+      governorate: governorate.value,
+      description: description.value,
+      address: address.value,
+      map_link: map_link.value,
+      check_in_time: check_in_time.value,
+      check_out_time: check_out_time.value,
+      room_count: Number(room_count.value),
+      room_types: room_types.value,
+      price_per_night: Number(price_per_night.value),
+      amenities: amenities.value,
+      policies: policies.value,
+      cancellation_policy: cancellationPolicyEl ? cancellationPolicyEl.value : null,
+    };
 
-        const { data: hotel } = await supabaseClient
+    try {
+      saveBtn.disabled = true;
+      if (isEditMode && currentHotelId) {
+        const newUrls = await uploadHotelPhotos(currentHotelId);
+        const finalPhotoUrls = [...existingPhotoUrls, ...newUrls];
+        const { error } = await supabaseClient
           .from("hotels")
-          .select("*")
-          .eq("auth_id", authId)
-          .maybeSingle();
-
-        if (hotel) {
-          currentHotelId = hotel.id;
-          showDashboard(hotel);
-          sidebar.style.display = "flex";
-          startMessages();
+          .update({ ...hotelData, photo_urls: finalPhotoUrls })
+          .eq("id", currentHotelId);
+        if (error) throw error;
+        showMsg("✅ تم حفظ التعديلات", true);
+        showDashboard({
+          ...hotelData,
+          id: currentHotelId,
+          photo_urls: finalPhotoUrls,
+        });
+        resetForm();
+      } else {
+        const { data, error } = await supabaseClient
+          .from("hotels")
+          .insert({ ...hotelData, photo_urls: [] })
+          .select()
+          .single();
+        if (error) throw error;
+        currentHotelId = data.id;
+        const photoUrls = await uploadHotelPhotos(data.id);
+        if (photoUrls.length) {
+          await supabaseClient
+            .from("hotels")
+            .update({ photo_urls: photoUrls })
+            .eq("id", data.id);
         }
-      })();
+        showMsg("✅ تم إضافة الفندق", true);
+        showDashboard({ ...data, photo_urls: photoUrls });
+        sidebar.style.display = "flex";
+        startMessages();
+        resetForm();
+      }
+    } catch (err) {
+      showMsg("❌ خطأ: " + err.message);
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
 
-      // ============ رفع صور الفندق ============
-      async function uploadHotelPhotos(hotelId) {
-        const files = photosInput.files;
-        if (!files || files.length === 0) return [];
-        const urls = [];
+  function showDashboard(h) {
+    hideAllSections();
+    dash.style.display = "block";
+    const list = Array.isArray(h.photo_urls) ? h.photo_urls : [];
+    const photos = list.map((u) => `<img src="${u}">`).join("");
+    dash.innerHTML = `
+      <div class="dashboard-cards">
+        <div class="card"><b>اسم الفندق:</b> ${h.hotel_name || "-"}</div>
+        <div class="card"><b>المدينة:</b> ${h.city || "-"}</div>
+        <div class="card"><b>المحافظة:</b> ${h.governorate || "-"}</div>
+        <div class="card"><b>السعر:</b> ${h.price_per_night || "-"}</div>
+        <div class="card"><b>عدد الغرف:</b> ${h.room_count || "-"}</div>
+      </div>
+      <h3>صور الفندق</h3>
+      <div class="hotel-photos">${photos || "<p>لا توجد صور</p>"}</div>
+      <div class="actions">
+        <button id="editFromDash">تعديل البيانات</button>
+      </div>`;
+    document.getElementById("editFromDash").onclick = () => openEditMode(h);
+  }
+
+  roomForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!currentHotelId) return showMsg("أضف الفندق أولاً");
+
+    try {
+      const roomData = {
+        hotel_id: currentHotelId,
+        room_name: room_name.value,
+        description: room_desc.value,
+        price: Number(room_price.value),
+        capacity: Number(room_capacity.value),
+        room_type: room_type.value,
+      };
+
+      if (editingRoomId) {
+        const files = document.getElementById("room_photos").files;
+        let finalPhotos = [...editingRoomPhotos];
+
         for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const ext = file.name.split(".").pop();
-          const path = `${hotelId}/${Date.now()}_${i}.${ext}`;
-          const { error } = await supabaseClient.storage
+          const ext = files[i].name.split(".").pop();
+          const path = `rooms/${editingRoomId}/${Date.now()}_${i}.${ext}`;
+          const { error: upErr } = await supabaseClient.storage
             .from("hotel-photos")
-            .upload(path, file);
-          if (error) throw error;
-          const { data } = supabaseClient.storage
+            .upload(path, files[i]);
+          if (upErr) throw upErr;
+          const { data: urlData } = supabaseClient.storage
             .from("hotel-photos")
             .getPublicUrl(path);
-          urls.push(data.publicUrl);
+          finalPhotos.push(urlData.publicUrl);
         }
-        return urls;
+
+        const { error } = await supabaseClient
+          .from("rooms")
+          .update({ ...roomData, photo_urls: finalPhotos })
+          .eq("id", editingRoomId);
+        if (error) throw error;
+        showMsg("✅ تم تعديل الغرفة", true);
+      } else {
+        const { data, error } = await supabaseClient
+          .from("rooms")
+          .insert({ ...roomData, photo_urls: [] })
+          .select()
+          .single();
+        if (error) throw error;
+
+        const files = document.getElementById("room_photos").files;
+        const urls = [];
+        for (let i = 0; i < files.length; i++) {
+          const ext = files[i].name.split(".").pop();
+          const path = `rooms/${data.id}/${Date.now()}_${i}.${ext}`;
+          const { error: upErr } = await supabaseClient.storage
+            .from("hotel-photos")
+            .upload(path, files[i]);
+          if (upErr) throw upErr;
+          const { data: urlData } = supabaseClient.storage
+            .from("hotel-photos")
+            .getPublicUrl(path);
+          urls.push(urlData.publicUrl);
+        }
+
+        if (urls.length) {
+          await supabaseClient
+            .from("rooms")
+            .update({ photo_urls: urls })
+            .eq("id", data.id);
+        }
+        showMsg("✅ تمت إضافة الغرفة", true);
       }
 
-      function renderExistingPhotos() {
-        existingPhotosBox.innerHTML = "";
-        if (!existingPhotoUrls.length) {
-          existingPhotosWrap.style.display = "none";
+      roomForm.reset();
+      editingRoomId = null;
+      editingRoomPhotos = [];
+      roomForm.querySelector('button[type="submit"]').innerText = "إضافة الغرفة";
+      loadRooms();
+    } catch (err) {
+      showMsg("❌ خطأ: " + err.message);
+    }
+  });
+
+  // ============ تحميل الغرف ============
+  async function loadRooms() {
+    if (!currentHotelId) return;
+    const { data, error } = await supabaseClient
+      .from("rooms")
+      .select("*")
+      .eq("hotel_id", currentHotelId);
+
+    const box = document.getElementById("rooms-container");
+    box.innerHTML = "";
+
+    if (error || !data || !data.length) {
+      box.innerHTML = "<p>لا توجد غرف</p>";
+      return;
+    }
+
+    data.forEach((r) => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <h4>${r.room_name}</h4>
+        <p>💰 السعر: ${r.price}</p>
+        <p>👥 السعة: ${r.capacity}</p>
+        <p>🛏️ النوع: ${r.room_type}</p>
+        <p>${r.description || ""}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
+          ${(r.photo_urls || [])
+            .map(
+              (u) => `
+            <img src="${u}" width="80"
+            style="border-radius:8px;height:80px;object-fit:cover;">
+          `,
+            )
+            .join("")}
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <button class="edit-btn">تعديل</button>
+          <button class="del-btn">حذف</button>
+        </div>
+      `;
+
+      div.querySelector(".edit-btn").onclick = () => editRoom(r);
+
+      div.querySelector(".del-btn").onclick = async () => {
+        const ok = confirm("هل تريد حذف الغرفة؟");
+        if (!ok) return;
+        const { error } = await supabaseClient
+          .from("rooms")
+          .delete()
+          .eq("id", r.id);
+        if (error) {
+          showMsg(error.message);
           return;
         }
-        existingPhotosWrap.style.display = "block";
-        existingPhotoUrls.forEach((url, idx) => {
-          const wrap = document.createElement("div");
-          wrap.style.position = "relative";
-          wrap.style.display = "inline-block";
-          wrap.innerHTML = `
-            <img src="${url}" />
-            <button type="button" style="position:absolute;top:4px;left:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;">×</button>`;
-          wrap.querySelector("button").onclick = () => {
-            existingPhotoUrls.splice(idx, 1);
-            renderExistingPhotos();
-          };
-          existingPhotosBox.appendChild(wrap);
-        });
-      }
-
-      function openEditMode(h) {
-        isEditMode = true;
-        currentHotelId = h.id;
-        formTitle.innerText = "تعديل بيانات الفندق";
-        saveBtn.innerText = "حفظ التعديلات";
-        cancelEditBtn.style.display = "inline-block";
-
-        hotel_name.value = h.hotel_name || "";
-        city.value = h.city || "";
-        governorate.value = h.governorate || "";
-        description.value = h.description || "";
-        address.value = h.address || "";
-        map_link.value = h.map_link || "";
-        check_in_time.value = h.check_in_time || "";
-        check_out_time.value = h.check_out_time || "";
-        room_count.value = h.room_count || "";
-        room_types.value = h.room_types || "";
-        price_per_night.value = h.price_per_night || "";
-        amenities.value = h.amenities || "";
-        policies.value = h.policies || "";
-        photosInput.value = "";
-
-        existingPhotoUrls = Array.isArray(h.photo_urls)
-          ? [...h.photo_urls]
-          : [];
-        renderExistingPhotos();
-
-        hideAllSections();
-        formBox.style.display = "block";
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      function resetForm() {
-        form.reset();
-        existingPhotoUrls = [];
-        existingPhotosWrap.style.display = "none";
-        isEditMode = false;
-        formTitle.innerText = "إضافة الفندق";
-        saveBtn.innerText = "حفظ";
-        cancelEditBtn.style.display = "none";
-      }
-
-      cancelEditBtn.onclick = () => {
-        resetForm();
-        if (currentHotelId) {
-          hideAllSections();
-          dash.style.display = "block";
-        }
-      };
-
-      // ============ أزرار الشريط الجانبي ============
-      document.getElementById("dashBtn").onclick = async (e) => {
-        e.preventDefault();
-        const { data: hotel } = await supabaseClient
-          .from("hotels")
-          .select("*")
-          .eq("id", currentHotelId)
-          .single();
-        if (hotel) showDashboard(hotel);
-      };
-
-      document.getElementById("editBtn").onclick = async (e) => {
-        e.preventDefault();
-        const { data: hotel } = await supabaseClient
-          .from("hotels")
-          .select("*")
-          .eq("id", currentHotelId)
-          .single();
-        if (hotel) openEditMode(hotel);
-      };
-
-      document.getElementById("roomsBtn").onclick = (e) => {
-        e.preventDefault();
-        hideAllSections();
-        document.getElementById("rooms-section").style.display = "block";
+        showMsg("✅ تم حذف الغرفة", true);
         loadRooms();
       };
 
-      document.getElementById("logoutBtn").onclick = async (e) => {
-        e.preventDefault();
-        await supabaseClient.auth.signOut();
-        window.location.href = "login.html";
-      };
-
-      // ============ حفظ الفندق ============
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!authId) return showMsg("غير مسجل دخول");
-
-        const hotelData = {
-          auth_id: authId,
-          hotel_name: hotel_name.value,
-          city: city.value,
-          governorate: governorate.value,
-          description: description.value,
-          address: address.value,
-          map_link: map_link.value,
-          check_in_time: check_in_time.value,
-          check_out_time: check_out_time.value,
-          room_count: Number(room_count.value),
-          room_types: room_types.value,
-          price_per_night: Number(price_per_night.value),
-          amenities: amenities.value,
-          policies: policies.value,
-        };
-
-        try {
-          saveBtn.disabled = true;
-          if (isEditMode && currentHotelId) {
-            const newUrls = await uploadHotelPhotos(currentHotelId);
-            const finalPhotoUrls = [...existingPhotoUrls, ...newUrls];
-            const { error } = await supabaseClient
-              .from("hotels")
-              .update({ ...hotelData, photo_urls: finalPhotoUrls })
-              .eq("id", currentHotelId);
-            if (error) throw error;
-            showMsg("✅ تم حفظ التعديلات", true);
-            showDashboard({
-              ...hotelData,
-              id: currentHotelId,
-              photo_urls: finalPhotoUrls,
-            });
-            resetForm();
-          } else {
-            const { data, error } = await supabaseClient
-              .from("hotels")
-              .insert({ ...hotelData, photo_urls: [] })
-              .select()
-              .single();
-            if (error) throw error;
-            currentHotelId = data.id;
-            const photoUrls = await uploadHotelPhotos(data.id);
-            if (photoUrls.length) {
-              await supabaseClient
-                .from("hotels")
-                .update({ photo_urls: photoUrls })
-                .eq("id", data.id);
-            }
-            showMsg("✅ تم إضافة الفندق", true);
-            showDashboard({ ...data, photo_urls: photoUrls });
-            sidebar.style.display = "flex";
-            startMessages();
-            resetForm();
-          }
-        } catch (err) {
-          showMsg("❌ خطأ: " + err.message);
-        } finally {
-          saveBtn.disabled = false;
-        }
-      });
-
-      function showDashboard(h) {
-        hideAllSections();
-        dash.style.display = "block";
-        const list = Array.isArray(h.photo_urls) ? h.photo_urls : [];
-        const photos = list.map((u) => `<img src="${u}">`).join("");
-        dash.innerHTML = `
-          <div class="dashboard-cards">
-            <div class="card"><b>اسم الفندق:</b> ${h.hotel_name || "-"}</div>
-            <div class="card"><b>المدينة:</b> ${h.city || "-"}</div>
-            <div class="card"><b>المحافظة:</b> ${h.governorate || "-"}</div>
-            <div class="card"><b>السعر:</b> ${h.price_per_night || "-"}</div>
-            <div class="card"><b>عدد الغرف:</b> ${h.room_count || "-"}</div>
-          </div>
-          <h3>صور الفندق</h3>
-          <div class="hotel-photos">${photos || "<p>لا توجد صور</p>"}</div>
-          <div class="actions">
-            <button id="editFromDash">تعديل البيانات</button>
-          </div>`;
-        document.getElementById("editFromDash").onclick = () => openEditMode(h);
-      }
-
-      roomForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (!currentHotelId) return showMsg("أضف الفندق أولاً");
-
-        try {
-          const roomData = {
-            hotel_id: currentHotelId,
-
-            room_name: room_name.value,
-
-            description: room_desc.value,
-
-            price: Number(room_price.value),
-
-            capacity: Number(room_capacity.value),
-
-            room_type: room_type.value,
-          };
-
-          // ======================
-          // تعديل غرفة
-          // ======================
-
-          if (editingRoomId) {
-            const files = document.getElementById("room_photos").files;
-
-            let finalPhotos = [...editingRoomPhotos];
-
-            // رفع الصور الجديدة
-            for (let i = 0; i < files.length; i++) {
-              const ext = files[i].name.split(".").pop();
-
-              const path = `rooms/${editingRoomId}/${Date.now()}_${i}.${ext}`;
-
-              const { error: upErr } = await supabaseClient.storage
-                .from("hotel-photos")
-                .upload(path, files[i]);
-
-              if (upErr) throw upErr;
-
-              const { data: urlData } = supabaseClient.storage
-                .from("hotel-photos")
-                .getPublicUrl(path);
-
-              finalPhotos.push(urlData.publicUrl);
-            }
-
-            const { error } = await supabaseClient
-              .from("rooms")
-              .update({
-                ...roomData,
-                photo_urls: finalPhotos,
-              })
-              .eq("id", editingRoomId);
-
-            if (error) throw error;
-
-            showMsg("✅ تم تعديل الغرفة", true);
-          }
-
-          // ======================
-          // إضافة غرفة جديدة
-          // ======================
-          else {
-            const { data, error } = await supabaseClient
-              .from("rooms")
-              .insert({
-                ...roomData,
-                photo_urls: [],
-              })
-              .select()
-              .single();
-
-            if (error) throw error;
-
-            const files = document.getElementById("room_photos").files;
-
-            const urls = [];
-
-            for (let i = 0; i < files.length; i++) {
-              const ext = files[i].name.split(".").pop();
-
-              const path = `rooms/${data.id}/${Date.now()}_${i}.${ext}`;
-
-              const { error: upErr } = await supabaseClient.storage
-                .from("hotel-photos")
-                .upload(path, files[i]);
-
-              if (upErr) throw upErr;
-
-              const { data: urlData } = supabaseClient.storage
-                .from("hotel-photos")
-                .getPublicUrl(path);
-
-              urls.push(urlData.publicUrl);
-            }
-
-            if (urls.length) {
-              await supabaseClient
-                .from("rooms")
-                .update({
-                  photo_urls: urls,
-                })
-                .eq("id", data.id);
-            }
-
-            showMsg("✅ تمت إضافة الغرفة", true);
-          }
-
-          // Reset
-          roomForm.reset();
-
-          editingRoomId = null;
-
-          editingRoomPhotos = [];
-
-          roomForm.querySelector('button[type="submit"]').innerText =
-            "إضافة الغرفة";
-
-          loadRooms();
-        } catch (err) {
-          showMsg("❌ خطأ: " + err.message);
-        }
-      });
-
-      // ============ تحميل الغرف ============
-
-      async function loadRooms() {
-        if (!currentHotelId) return;
-
-        const { data, error } = await supabaseClient
-          .from("rooms")
-          .select("*")
-          .eq("hotel_id", currentHotelId);
-
-        const box = document.getElementById("rooms-container");
-
-        box.innerHTML = "";
-
-        if (error || !data || !data.length) {
-          box.innerHTML = "<p>لا توجد غرف</p>";
-          return;
-        }
-
-        data.forEach((r) => {
-          const div = document.createElement("div");
-
-          div.className = "card";
-
-          div.innerHTML = `
-
-      <h4>${r.room_name}</h4>
-
-      <p>💰 السعر: ${r.price}</p>
-
-      <p>👥 السعة: ${r.capacity}</p>
-
-      <p>🛏️ النوع: ${r.room_type}</p>
-
-      <p>${r.description || ""}</p>
-
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
-        ${(r.photo_urls || [])
-          .map(
-            (u) => `
-          <img src="${u}" width="80"
-          style="border-radius:8px;height:80px;object-fit:cover;">
-        `,
-          )
-          .join("")}
-      </div>
-
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-        <button class="edit-btn">تعديل</button>
-        <button class="del-btn">حذف</button>
-      </div>
-
-    `;
-
-          // تعديل
-          div.querySelector(".edit-btn").onclick = () => {
-            editRoom(r);
-          };
-
-          // حذف
-          div.querySelector(".del-btn").onclick = async () => {
-            const ok = confirm("هل تريد حذف الغرفة؟");
-
-            if (!ok) return;
-
-            const { error } = await supabaseClient
-              .from("rooms")
-              .delete()
-              .eq("id", r.id);
-
-            if (error) {
-              showMsg(error.message);
-              return;
-            }
-
-            showMsg("✅ تم حذف الغرفة", true);
-
-            loadRooms();
-          };
-
-          box.appendChild(div);
-        });
-      }
-      function editRoom(room) {
-        editingRoomId = room.id;
-
-        room_name.value = room.room_name || "";
-
-        room_desc.value = room.description || "";
-
-        room_price.value = room.price || "";
-
-        room_capacity.value = room.capacity || "";
-
-        room_type.value = room.room_type || "";
-
-        editingRoomPhotos = room.photo_urls || [];
-
-        const submitBtn = roomForm.querySelector('button[type="submit"]');
-
-        submitBtn.innerText = "حفظ التعديلات";
-
-        window.scrollTo({
-          top: document.getElementById("rooms-section").offsetTop,
-          behavior: "smooth",
-        });
-      } // ← دي كانت ناقصة
-
-      // ============ الحجوزات ============
-      document.getElementById("bookingsBtn").onclick = async (e) => {
-        e.preventDefault();
-        hideAllSections();
-        document.getElementById("bookings-list").style.display = "block";
-        const { data, error } = await supabaseClient
-          .from("bookings")
-          .select("*")
-          .eq("hotel_id", currentHotelId)
-          .order("created_at", { ascending: false });
-        const box = document.getElementById("bookingsContainer");
-        box.innerHTML = "";
-        if (error || !data || !data.length) {
-          box.innerHTML = "<p>لا توجد حجوزات</p>";
-          return;
-        }
-       data.forEach((b) => {
-  const div = document.createElement("div");
-  div.className = "card";
-  div.style.cursor = "pointer";
-
-  div.innerHTML = `
-    <p><b>العميل:</b> ${b.user_name}</p>
-    <p><b>تاريخ الوصول:</b> ${b.check_in}</p>
-    <p><b>تاريخ المغادرة:</b> ${b.check_out}</p>
-    <p><b>السعر:</b> ${b.total_price}</p>
-  `;
-
-  div.onclick = () => {
-  openChat(b.user_id, b.user_name || "عميل");
-
-  setTimeout(() => {
-    document.getElementById("chat-container")
-      .scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 100);
-};
-
-  box.appendChild(div);
-});
-function scrollChatToBottom() {
-  const box = document.getElementById("chatBox");
-  box.scrollTop = box.scrollHeight;
-}
-      };
-document.getElementById("notificationsBtn").onclick = (e) => {
-
-  e.preventDefault();
-
-  hideAllSections();
-
-  document.getElementById(
-    "notifications-section"
-  ).style.display = "block";
-
-  loadNotifications();
-
-};
-      document.getElementById("messagesBtn").onclick = async (e) => {
-        e.preventDefault();
-
-        hideAllSections();
-
-        document.getElementById("messages-list").style.display = "block";
-
-        const { data, error } = await supabaseClient
-          .from("hotel_messages")
-          .select("user_id, sender_name")
-          .eq("hotel_id", currentHotelId);
-
-        if (error) {
-          showMsg(error.message);
-          return;
-        }
-
-        const uniqueChats = [
-          ...new Map(data.map((m) => [m.user_id, m])).values(),
-        ];
-
-        const box = document.getElementById("chatsList");
-
-        box.innerHTML = "";
-
-        if (!uniqueChats.length) {
-          box.innerHTML = "<p>لا توجد محادثات</p>";
-          return;
-        }
-
-        uniqueChats.forEach((chat) => {
-          const div = document.createElement("div");
-
-          div.className = "card";
-
-          div.style.cursor = "pointer";
-
-          div.innerText = chat.sender_name?.trim() || "عميل";
-
-          div.onclick = () => openChat(chat.user_id, chat.sender_name);
-
-          box.appendChild(div);
-        });
-      };
-      let currentChatUserId = null;
-      let currentChatUserName = null;
-      async function openChat(userId, userName) {
-        currentChatUserId = userId;
-
-        currentChatUserName = userName;
-
-        chatBoxWrap.style.display = "block";
-
-        const { data, error } = await supabaseClient
-          .from("hotel_messages")
-          .select("*")
-          .eq("hotel_id", currentHotelId)
-          .eq("user_id", userId)
-          .order("created_at", { ascending: true });
-
-        if (error) {
-          showMsg(error.message);
-          return;
-        }
-
-        const box = document.getElementById("chatBox");
-
-        box.innerHTML = "";
-
-        (data || []).forEach((m) => {
-          const count = data?.length || 0;
-
-if (msgCount) {
-  if (count > 0) {
-    msgCount.style.display = "inline-block";
-    msgCount.innerText = count;
-  } else {
-    msgCount.style.display = "none";
-  }
-}
-          const p = document.createElement("p");
-
-          p.textContent =
-            (m.sender_type === "hotel" ? "🏨 أنت: " : `👤 ${m.sender_name}: `) +
-            m.message;
-
-          p.style.textAlign = m.sender_type === "hotel" ? "left" : "right";
-
-          p.style.margin = "6px 0";
-
-          box.appendChild(p);
-        });
-
-        box.scrollTop = box.scrollHeight;
-      }
-
-      function startMessages() {
-        loadMessages();
-        if (messagesInterval) clearInterval(messagesInterval);
-        messagesInterval = setInterval(loadMessages, 3000);
-      }
-
-     async function loadMessages() {
-
-  if (!currentHotelId || !currentChatUserId) return;
-
-  const { data, error } = await supabaseClient
-    .from("hotel_messages")
-    .select("*")
-    .eq("hotel_id", currentHotelId)
-    .eq("user_id", currentChatUserId)
-    .order("created_at", { ascending: true });
-
-  if (error) return;
-
-  const box = document.getElementById("chatBox");
-
-  box.innerHTML = "";
-
-  (data || []).forEach((m) => {
-
-    const p = document.createElement("p");
-
-    p.textContent =
-      (m.sender_type === "hotel" ? "🏨 أنت: " : "👤 العميل: ") +
-      m.message;
-
-    p.style.textAlign =
-      m.sender_type === "hotel" ? "left" : "right";
-
-    p.style.margin = "6px 0";
-
-    box.appendChild(p);
-
-  });
-
-  box.scrollTop = box.scrollHeight;
-
-  loadNotifications();
-
-  // ======================
-  // 🔴 عداد الرسائل
-  // ======================
-  const msgCount = document.getElementById("msgCount");
-
-  const count = (data || []).length;
-
-  if (msgCount) {
-
-    if (count > 0) {
-      msgCount.style.display = "inline-block";
-      msgCount.innerText = count;
-    } else {
-      msgCount.style.display = "none";
-    }
-
+      box.appendChild(div);
+    });
   }
 
-}
-      async function sendReply() {
-        const input = document.getElementById("msgInput");
+  function editRoom(room) {
+    editingRoomId = room.id;
+    room_name.value = room.room_name || "";
+    room_desc.value = room.description || "";
+    room_price.value = room.price || "";
+    room_capacity.value = room.capacity || "";
+    room_type.value = room.room_type || "";
+    editingRoomPhotos = room.photo_urls || [];
+    const submitBtn = roomForm.querySelector('button[type="submit"]');
+    submitBtn.innerText = "حفظ التعديلات";
+    window.scrollTo({
+      top: document.getElementById("rooms-section").offsetTop,
+      behavior: "smooth",
+    });
+  }
 
-        const message = input.value.trim();
-
-        if (!message || !currentHotelId || !currentChatUserId) return;
-
-        const { error } = await supabaseClient.from("hotel_messages").insert([
-          {
-            hotel_id: currentHotelId,
-
-            user_id: currentChatUserId,
-
-            sender_type: "hotel",
-
-            sender_name: currentChatUserName,
-
-            message: message,
-          },
-        ]);
-
-        if (error) {
-          showMsg(error.message);
-          return;
-        }
-
-        input.value = "";
-
-        loadMessages();
-      }
-    </script>
-    <script>
-      // ============ Sidebar Toggle (Mobile) ============
-      const menuToggleBtn = document.getElementById("menuToggle");
-      const sidebarEl = document.getElementById("sidebar");
-
-      if (menuToggleBtn && sidebarEl) {
-        // فتح/إغلاق
-        menuToggleBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          sidebarEl.classList.toggle("active");
-        });
-
-        // إغلاق عند الضغط على أي رابط داخل الـ sidebar
-        sidebarEl.querySelectorAll("a").forEach((link) => {
-          link.addEventListener("click", () => {
-            if (window.innerWidth <= 768) sidebarEl.classList.remove("active");
-          });
-        });
-
-        // إغلاق عند الضغط خارج الـ sidebar
-        document.addEventListener("click", (e) => {
-          if (
-            window.innerWidth <= 768 &&
-            sidebarEl.classList.contains("active") &&
-            !sidebarEl.contains(e.target) &&
-            e.target !== menuToggleBtn
-          ) {
-            sidebarEl.classList.remove("active");
-          }
-        });
-
-        // إغلاق عند تكبير الشاشة
-        window.addEventListener("resize", () => {
-          if (window.innerWidth > 768) sidebarEl.classList.remove("active");
-        });
-      }
-
-async function loadNotifications() {
-
-  if (!currentHotelId) return;
-
-  // إشعارات الجدول
-  const { data: dbNotifications } =
-    await supabaseClient
-      .from("notifications")
-      .select("*")
-      .eq("hotel_id", currentHotelId)
-      .order("created_at", {
-        ascending: false
-      });
-
-  // الحجوزات
-  const { data: bookings } =
-    await supabaseClient
+  // ============ الحجوزات ============
+  document.getElementById("bookingsBtn").onclick = async (e) => {
+    e.preventDefault();
+    hideAllSections();
+    document.getElementById("bookings-list").style.display = "block";
+    const { data, error } = await supabaseClient
       .from("bookings")
       .select("*")
       .eq("hotel_id", currentHotelId)
-      .order("created_at", {
-        ascending: false
-      });
+      .order("created_at", { ascending: false });
+    const box = document.getElementById("bookingsContainer");
+    box.innerHTML = "";
+    if (error || !data || !data.length) {
+      box.innerHTML = "<p>لا توجد حجوزات</p>";
+      return;
+    }
+    data.forEach((b) => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.style.cursor = "pointer";
+      div.innerHTML = `
+        <p><b>العميل:</b> ${b.user_name}</p>
+        <p><b>تاريخ الوصول:</b> ${b.check_in}</p>
+        <p><b>تاريخ المغادرة:</b> ${b.check_out}</p>
+        <p><b>السعر:</b> ${b.total_price}</p>
+      `;
+      div.onclick = () => {
+        openChat(b.user_id, b.user_name || "عميل");
+        setTimeout(() => {
+          document
+            .getElementById("chat-container")
+            .scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      };
+      box.appendChild(div);
+    });
+  };
 
-  // الرسائل
-  const { data: messages } =
-    await supabaseClient
+  document.getElementById("notificationsBtn").onclick = (e) => {
+    e.preventDefault();
+    hideAllSections();
+    document.getElementById("notifications-section").style.display = "block";
+    loadNotifications();
+  };
+
+  document.getElementById("messagesBtn").onclick = async (e) => {
+    e.preventDefault();
+    hideAllSections();
+    document.getElementById("messages-list").style.display = "block";
+
+    const { data, error } = await supabaseClient
+      .from("hotel_messages")
+      .select("user_id, sender_name")
+      .eq("hotel_id", currentHotelId);
+
+    if (error) {
+      showMsg(error.message);
+      return;
+    }
+
+    const uniqueChats = [...new Map(data.map((m) => [m.user_id, m])).values()];
+    const box = document.getElementById("chatsList");
+    box.innerHTML = "";
+
+    if (!uniqueChats.length) {
+      box.innerHTML = "<p>لا توجد محادثات</p>";
+      return;
+    }
+
+    uniqueChats.forEach((chat) => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.style.cursor = "pointer";
+      div.innerText = chat.sender_name?.trim() || "عميل";
+      div.onclick = () => openChat(chat.user_id, chat.sender_name);
+      box.appendChild(div);
+    });
+  };
+
+  let currentChatUserId = null;
+  let currentChatUserName = null;
+
+  async function openChat(userId, userName) {
+    currentChatUserId = userId;
+    currentChatUserName = userName;
+    chatBoxWrap.style.display = "block";
+
+    const { data, error } = await supabaseClient
       .from("hotel_messages")
       .select("*")
       .eq("hotel_id", currentHotelId)
-      .order("created_at", {
-        ascending: false
-      });
+      .eq("user_id", userId)
+      .order("created_at", { ascending: true });
 
-  let notifications = [];
-
-  // إشعارات الحجوزات
-  (bookings || []).forEach(b => {
-
-    notifications.push({
-
-      type: "booking",
-
-      text:
-        `📋 حجز جديد من ${b.user_name || "عميل"}`,
-
-      date:
-        b.created_at
-
-    });
-
-  });
-
-  // إشعارات الرسائل
-  (messages || []).forEach(m => {
-
-    if (m.sender_type !== "hotel") {
-
-      notifications.push({
-
-        type: "message",
-
-        text:
-          `💬 رسالة جديدة من ${m.sender_name || "عميل"}`,
-
-        date:
-          m.created_at
-
-      });
-
+    if (error) {
+      showMsg(error.message);
+      return;
     }
 
-  });
+    const box = document.getElementById("chatBox");
+    const msgCount = document.getElementById("msgCount");
+    box.innerHTML = "";
 
-  // إشعارات جدول notifications
-  (dbNotifications || []).forEach(n => {
+    const count = data?.length || 0;
+    if (msgCount) {
+      if (count > 0) {
+        msgCount.style.display = "inline-block";
+        msgCount.innerText = count;
+      } else {
+        msgCount.style.display = "none";
+      }
+    }
 
-    notifications.push({
-
-      type: "notification",
-
-      text:
-        n.message || "إشعار جديد",
-
-      date:
-        n.created_at
-
+    (data || []).forEach((m) => {
+      const p = document.createElement("p");
+      p.textContent =
+        (m.sender_type === "hotel" ? "🏨 أنت: " : `👤 ${m.sender_name}: `) +
+        m.message;
+      p.style.textAlign = m.sender_type === "hotel" ? "left" : "right";
+      p.style.margin = "6px 0";
+      box.appendChild(p);
     });
 
-  });
-
-  // ترتيب
-  notifications.sort(
-    (a, b) =>
-      new Date(b.date) -
-      new Date(a.date)
-  );
-
-  // العدد
-  const notifCount =
-    document.getElementById("notifCount");
-
-  if (notifications.length > 0) {
-
-    notifCount.style.display =
-      "inline-block";
-
-    notifCount.innerText =
-      notifications.length;
-
-  } else {
-
-    notifCount.style.display =
-      "none";
-
+    box.scrollTop = box.scrollHeight;
   }
 
-  // عرض الإشعارات
-  const box =
-    document.getElementById(
-      "notificationsContainer"
-    );
-
-  box.innerHTML = "";
-
-  if (!notifications.length) {
-
-    box.innerHTML =
-      "<p>لا توجد إشعارات</p>";
-
-    return;
-
+  function startMessages() {
+    loadMessages();
+    if (messagesInterval) clearInterval(messagesInterval);
+    messagesInterval = setInterval(loadMessages, 3000);
   }
 
-  notifications.forEach(n => {
+  async function loadMessages() {
+    if (!currentHotelId || !currentChatUserId) return;
+    const { data, error } = await supabaseClient
+      .from("hotel_messages")
+      .select("*")
+      .eq("hotel_id", currentHotelId)
+      .eq("user_id", currentChatUserId)
+      .order("created_at", { ascending: true });
 
-    const div =
-      document.createElement("div");
+    if (error) return;
 
-    div.className = "card";
+    const box = document.getElementById("chatBox");
+    box.innerHTML = "";
+    (data || []).forEach((m) => {
+      const p = document.createElement("p");
+      p.textContent =
+        (m.sender_type === "hotel" ? "🏨 أنت: " : "👤 العميل: ") + m.message;
+      p.style.textAlign = m.sender_type === "hotel" ? "left" : "right";
+      p.style.margin = "6px 0";
+      box.appendChild(p);
+    });
+    box.scrollTop = box.scrollHeight;
 
-    div.innerHTML = `
-      <p>${n.text}</p>
+    loadNotifications();
 
-      <small>
-        ${new Date(
-          n.date
-        ).toLocaleString()}
-      </small>
-    `;
+    const msgCount = document.getElementById("msgCount");
+    const count = (data || []).length;
+    if (msgCount) {
+      if (count > 0) {
+        msgCount.style.display = "inline-block";
+        msgCount.innerText = count;
+      } else {
+        msgCount.style.display = "none";
+      }
+    }
+  }
 
-    box.appendChild(div);
+  async function sendReply() {
+    const input = document.getElementById("msgInput");
+    const message = input.value.trim();
+    if (!message || !currentHotelId || !currentChatUserId) return;
 
-  });
+    const { error } = await supabaseClient.from("hotel_messages").insert([
+      {
+        hotel_id: currentHotelId,
+        user_id: currentChatUserId,
+        sender_type: "hotel",
+        sender_name: currentChatUserName,
+        message: message,
+      },
+    ]);
 
-}
+    if (error) {
+      showMsg(error.message);
+      return;
+    }
 
+    input.value = "";
+    loadMessages();
+  }
+</script>
 
-document.getElementById("walletBtn").onclick = async (e) => {
+<script>
+  // ============ Sidebar Toggle (Mobile) ============
+  const menuToggleBtn = document.getElementById("menuToggle");
+  const sidebarEl = document.getElementById("sidebar");
 
-  e.preventDefault();
+  if (menuToggleBtn && sidebarEl) {
+    menuToggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      sidebarEl.classList.toggle("active");
+    });
 
-  hideAllSections();
+    sidebarEl.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 768) sidebarEl.classList.remove("active");
+      });
+    });
 
-  document.getElementById(
-    "wallet-section"
-  ).style.display = "block";
+    document.addEventListener("click", (e) => {
+      if (
+        window.innerWidth <= 768 &&
+        sidebarEl.classList.contains("active") &&
+        !sidebarEl.contains(e.target) &&
+        e.target !== menuToggleBtn
+      ) {
+        sidebarEl.classList.remove("active");
+      }
+    });
 
-  await loadWallet();
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) sidebarEl.classList.remove("active");
+    });
+  }
 
-};
+  async function loadNotifications() {
+    if (!currentHotelId) return;
 
-async function loadWallet() {
+    const { data: dbNotifications } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .eq("hotel_id", currentHotelId)
+      .order("created_at", { ascending: false });
 
-  const { data, error } =
-    await supabaseClient
+    const { data: bookings } = await supabaseClient
+      .from("bookings")
+      .select("*")
+      .eq("hotel_id", currentHotelId)
+      .order("created_at", { ascending: false });
+
+    const { data: messages } = await supabaseClient
+      .from("hotel_messages")
+      .select("*")
+      .eq("hotel_id", currentHotelId)
+      .order("created_at", { ascending: false });
+
+    let notifications = [];
+
+    (bookings || []).forEach((b) => {
+      notifications.push({
+        type: "booking",
+        text: `📋 حجز جديد من ${b.user_name || "عميل"}`,
+        date: b.created_at,
+      });
+    });
+
+    (messages || []).forEach((m) => {
+      if (m.sender_type !== "hotel") {
+        notifications.push({
+          type: "message",
+          text: `💬 رسالة جديدة من ${m.sender_name || "عميل"}`,
+          date: m.created_at,
+        });
+      }
+    });
+
+    (dbNotifications || []).forEach((n) => {
+      notifications.push({
+        type: "notification",
+        text: n.message || "إشعار جديد",
+        date: n.created_at,
+      });
+    });
+
+    notifications.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const notifCount = document.getElementById("notifCount");
+    if (notifications.length > 0) {
+      notifCount.style.display = "inline-block";
+      notifCount.innerText = notifications.length;
+    } else {
+      notifCount.style.display = "none";
+    }
+
+    const box = document.getElementById("notificationsContainer");
+    box.innerHTML = "";
+
+    if (!notifications.length) {
+      box.innerHTML = "<p>لا توجد إشعارات</p>";
+      return;
+    }
+
+    notifications.forEach((n) => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <p>${n.text}</p>
+        <small>${new Date(n.date).toLocaleString()}</small>
+      `;
+      box.appendChild(div);
+    });
+  }
+
+  document.getElementById("walletBtn").onclick = async (e) => {
+    e.preventDefault();
+    hideAllSections();
+    document.getElementById("wallet-section").style.display = "block";
+    await loadWallet();
+  };
+
+  async function loadWallet() {
+    const { data, error } = await supabaseClient
       .from("bookings")
       .select("*")
       .eq("hotel_id", currentHotelId);
 
-  if (error) {
-    showMsg(error.message);
-    return;
-  }
-
-  let electronicTotal = 0;
-  let hotelTotal = 0;
-
-  (data || []).forEach(b => {
-
-    const amount =
-      Number(b.total_price || 0) * 0.95;
-
-    if (
-      b.payment_method === "paymob"
-    ) {
-
-      electronicTotal += amount;
-
+    if (error) {
+      showMsg(error.message);
+      return;
     }
 
-    if (
-      b.payment_method === "hotel"
-    ) {
+    let electronicTotal = 0;
+    let hotelTotal = 0;
 
-      hotelTotal += amount;
+    (data || []).forEach((b) => {
+      const amount = Number(b.total_price || 0) * 0.95;
+      if (b.payment_method === "paymob") electronicTotal += amount;
+      if (b.payment_method === "hotel") hotelTotal += amount;
+    });
 
-    }
-
-  });
-
-  document.getElementById(
-    "electronicAmount"
-  ).innerText =
-    electronicTotal.toLocaleString() +
-    " جنيه";
-
-  document.getElementById(
-    "hotelAmount"
-  ).innerText =
-    hotelTotal.toLocaleString() +
-    " جنيه";
-
-}
-    
-    </script>
-
-<button id="withdrawBtn">سحب الرصيد</button>
-<input id="amount" type="number" placeholder="المبلغ" />
-<input id="paypal_email" type="email" placeholder="إيميل PayPal" />
-<p>الرصيد المتاح: <span id="availableBalance">0.00</span></p>
-<!-- في نهاية الملف قبل </body> استبدل كل السكربتات بهذا سكربت واحد فقط -->
-
-<script>
-// التأكد من تحميل الصفحة
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("✅ تحميل الصفحة اكتمل");
-  
-  const btn = document.getElementById("withdrawBtn");
-  const amountInput = document.getElementById("withdrawAmount");
-  const paypalInput = document.getElementById("paypalEmail");
-  const balanceSpan = document.getElementById("availableBalance");
-  
-  if (!btn) {
-    console.error("❌ زر withdrawBtn غير موجود");
-    return;
+    document.getElementById("electronicAmount").innerText =
+      electronicTotal.toLocaleString() + " جنيه";
+    document.getElementById("hotelAmount").innerText =
+      hotelTotal.toLocaleString() + " جنيه";
   }
-  
-  if (!amountInput || !paypalInput || !balanceSpan) {
-    console.error("❌ عناصر الإدخال غير موجودة");
-    return;
-  }
-  
-  console.log("✅ جميع العناصر موجودة");
-  
-  // ربط الدالة مرة واحدة فقط
-  btn.onclick = async function() {
-    try {
-      console.log("🟢 بدء عملية السحب");
-      
-      const amount = parseFloat(amountInput.value);
-      const paypal_email = paypalInput.value.trim();
-      const hotel_id = window.currentHotelId;
-      
-      console.log("DATA:", { amount, paypal_email, hotel_id });
-      
-      // التحقق
-      if (!amount || amount <= 0) {
-        alert("أدخل مبلغ صحيح");
-        return;
-      }
-      if (!paypal_email || !paypal_email.includes("@")) {
-        alert("أدخل بريد PayPal صحيح");
-        return;
-      }
-      if (!hotel_id) {
-        alert("❌ معرف الفندق غير موجود - يرجى تسجيل الدخول مرة أخرى");
-        return;
-      }
-      
-      btn.disabled = true;
-      btn.textContent = "جاري المعالجة...";
-      
-      const response = await fetch("/api/paypal-withdraw", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          amount: amount, 
-          paypal_email: paypal_email, 
-          hotel_id: hotel_id 
-        }),
-      });
-      
-      let data;
-      const text = await response.text();
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.error("Response:", text);
-        data = { error: "استجابة غير صالحة من الخادم" };
-      }
-      
-      console.log("STATUS:", response.status, "RESPONSE:", data);
-      
-      if (!response.ok) {
-        alert("❌ خطأ: " + (data.error || "فشل السحب"));
-        return;
-      }
-      
-      alert("✅ تم إرسال طلب السحب بنجاح");
-      
-      if (data.available !== undefined) {
-        balanceSpan.textContent = Number(data.available).toFixed(2);
-      }
-      
-      // مسح الحقول
-      amountInput.value = "";
-      
-    } catch (err) {
-      console.error("❌ Withdraw Error:", err);
-      alert("حدث خطأ أثناء السحب: " + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "سحب الرصيد";
-    }
-  };
-  
-  console.log("✅ تم ربط زر السحب بنجاح");
-});
 </script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const btn = document.getElementById("withdrawBtn");
-  const amountInput = document.getElementById("withdrawAmount");
-  const paypalInput = document.getElementById("paypalEmail");
-  
-  btn.addEventListener("click", async function() {
-    // ✅ استخدام authId فقط
-    const auth_id = window.authId;
-    const amount = parseFloat(amountInput.value);
-    const paypal_email = paypalInput.value.trim();
-    
-    console.log("DATA:", { amount, paypal_email, auth_id });
-    
-    // ✅ التحقق
-    if (!auth_id) {
-      alert("❌ سجّل دخول ثم حاول مرة أخرى");
-      return;
-    }
-    if (!amount || amount <= 0) {
-      alert("أدخل مبلغ صحيح");
-      return;
-    }
-    if (!paypal_email || !paypal_email.includes("@")) {
-      alert("أدخل بريد PayPal صحيح");
-      return;
-    }
-    
-    btn.disabled = true;
-    btn.textContent = "جاري المعالجة...";
-    
-    try {
-      const response = await fetch("/api/paypal-withdraw", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, paypal_email, auth_id }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        alert("❌ خطأ: " + (data.error || "فشل السحب"));
-        return;
-      }
-      
-      alert("✅ تم إرسال طلب السحب بنجاح");
-      amountInput.value = "";
-      
-    } catch (err) {
-      alert("حدث خطأ: " + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "سحب الرصيد";
-    }
-  });
-});
-</script>
+
   </body>
 </html>
+

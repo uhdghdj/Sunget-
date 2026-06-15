@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
@@ -7,11 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
     <link rel="stylesheet" href="hotel-details.css" />
-<link rel="icon" href="favicon.png">
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
-<link rel="icon" href="favicon.png">
-    
   </head>
   <style>
 /* ================== HOTEL DETAILS - SUNGET.COM ================== */
@@ -30,7 +29,7 @@
   --accent-2: #ff7a00;
   --danger: #e63946;
   --success: #27b82e;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow: 0 10px 30px rgba(2, 1, 1, 0.45);
   --radius: 14px;
   --header-h: 80px;
 }
@@ -537,6 +536,57 @@ html[dir="rtl"] {
   margin-left:8px;
 }
 
+#contactHotelBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  width:100%;
+  padding:18px 24px;
+  margin-top:15px;
+
+  background:linear-gradient(135deg,#ffb400,#ff7a00);
+  color:#000;
+  text-decoration:none;
+  font-weight:800;
+  font-size:16px;
+  border-radius:30px;
+
+  transition:all .3s ease;
+  box-shadow:0 8px 20px rgba(255,180,0,.25);
+}
+
+#contactHotelBtn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 15px 35px rgba(255,180,0,.4);
+}
+
+#contactHotelBtn:active{
+  transform:translateY(0);
+}
+
+.cancellation-section{
+  max-width:900px;
+  margin:0 auto 60px;
+  padding:0 5%;
+}
+
+.cancellation-section h2{
+  font-size:28px;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.cancellation-section h2::after{
+  content:"";
+  display:block;
+  width:60px;
+  height:4px;
+  margin:10px auto 0;
+  border-radius:2px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+}
   </style>
   <body>
     <!-- ===== HEADER ===== -->
@@ -562,6 +612,9 @@ html[dir="rtl"] {
     </section>
 
     <div class="book-wrap">
+      <a href="#chat-section" id="contactHotelBtn">
+  💬 تواصل مع الفندق
+      </a>
       <button id="bookNowBtn" class="book-btn">
         <i class="fa-solid fa-calendar-check"></i>
         احجز الآن
@@ -571,6 +624,13 @@ html[dir="rtl"] {
   <h2>سياسات الفندق</h2>
 
   <div id="hotelPolicies" class="policies-list">
+  </div>
+</section>
+<section class="cancellation-section">
+  <h2>سياسة الإلغاء</h2>
+
+  <div id="cancellationPolicyCard" class="policy-item">
+    جارٍ التحميل...
   </div>
 </section>
     <section class="hotel-info">
@@ -590,7 +650,7 @@ html[dir="rtl"] {
       </a>
     </section>
 
-    <section class="chat-section">
+    <section id="chat-section" class="chat-section">
       <h2 data-i18n="chat.title">الدردشة مع الفندق</h2>
       <div id="chatBox" class="chat-box"></div>
       <div class="chat-input-wrap">
@@ -625,7 +685,21 @@ html[dir="rtl"] {
           document.getElementById("hotelName").textContent = data.hotel_name;
           document.getElementById("hotelPrice").textContent =
             data.price_per_night + " " + i18next.t("hotel.price");
+
           document.getElementById("hotelDesc").textContent = data.description || "";
+
+          const cancellationBox =
+  document.getElementById("cancellationPolicyCard");
+
+cancellationBox.innerHTML = data.cancellation_policy
+  ? `
+    <i class="fa-solid fa-rotate-left"></i>
+    يسمح بإلغاء الحجز
+  `
+  : `
+    <i class="fa-solid fa-ban"></i>
+    لا يسمح بإلغاء الحجز بعد تأكيده
+  `;
           document.getElementById("hotelPolicies").innerHTML =
   data.policies;
 
@@ -868,6 +942,21 @@ if (policiesBox) {
   }
 }
     </script>
+    <script>
+document
+.getElementById("contactHotelBtn")
+.addEventListener("click", function(e){
+
+  e.preventDefault();
+
+  document
+  .querySelector("#chat-section")
+  .scrollIntoView({
+    behavior:"smooth"
+  });
+
+});
+</script>
 <script src="translate.js"></script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <!-- تم حذف الملفات الخاصة بجوجل ترانسليت تماماً -->

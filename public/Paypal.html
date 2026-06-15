@@ -188,65 +188,79 @@
     <h3 id="remaining"></h3>
     <div id="paypal-button-container"></div>
   </div>
+<script>
+  const bookingData = JSON.parse(localStorage.getItem("bookingData"));
 
-  <script>
-    const bookingData = JSON.parse(localStorage.getItem("bookingData"));
+  if (!bookingData) {
+    alert("لا توجد بيانات حجز، سيتم تحويلك للرئيسية");
+    window.location.href = "index.html";
+  }
 
-    if (!bookingData) {
-      alert("لا توجد بيانات حجز، سيتم تحويلك للرئيسية");
-      window.location.href = "index.html";
-    }
+  document.getElementById("price").textContent =
+    "المبلغ المطلوب: " +
+    Number(bookingData.amountToPay).toLocaleString() +
+    " جنيه";
 
-    document.getElementById("price").textContent =
-      "المبلغ المطلوب: " +
-      Number(bookingData.amountToPay).toLocaleString() +
-      " جنيه";
+  document.getElementById("remaining").textContent =
+    "المتبقي للدفع في الفندق: " +
+    Number(bookingData.remaining).toLocaleString() +
+    " جنيه";
+</script>
 
-    document.getElementById("remaining").textContent =
-      "المتبقي للدفع في الفندق: " +
-      Number(bookingData.remaining).toLocaleString() +
-      " جنيه";
-  </script>
 
   <script src="https://www.paypal.com/sdk/js?client-id=AYS3gkFiNwEfBet42COzLsNCyFMxcP4HLJL8jwlJfU6LilUy5IgkyI9-Lx9DuVRx25iZG653KEU02Kom&currency=USD&intent=capture"></script>
+<script>
+  // سعر الصرف (عدّله أو هاته من API)
+  const USD_RATE = 48;
 
-  <script>
-    paypal.Buttons({
-      createOrder: async function () {
-        const bookingData = JSON.parse(localStorage.getItem("bookingData"));
+  paypal.Buttons({
+    createOrder: async function () {
+      const bookingData = JSON.parse(localStorage.getItem("bookingData"));
+      const amountEGP = Number(bookingData.amountToPay);
 
-        const res = await fetch("/api/create-paypal-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: bookingData.amountToPay })
-        });
+      // اعرض المبلغ بالجنيه في الواجهة
+      const priceEl = document.getElementById("price");
+      if (priceEl) priceEl.innerText = amountEGP.toLocaleString() + " جنيه";
 
-        const data = await res.json();
-        return data.id;
-      },
+      const res = await fetch("/api/create-paypal-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amountEGP: amountEGP,
+          usdRate: USD_RATE
+        })
+      });
 
-      onApprove: async function (data) {
-        const res = await fetch("/api/capture-paypal-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderId: data.orderID })
-        });
-
-        const capture = await res.json();
-
-        if (capture.status === "COMPLETED") {
-          window.location.href = "/success.html";
-        } else {
-          alert("فشل الدفع");
-        }
-      },
-
-      onError: function (err) {
-        console.error(err);
-        alert("حدث خطأ أثناء الدفع");
+      const data = await res.json();
+      if (!data.id) {
+        alert("تعذّر إنشاء الطلب");
+        throw new Error(data.error || "create order failed");
       }
-    }).render("#paypal-button-container");
-  </script>
+      return data.id;
+    },
+
+    onApprove: async function (data) {
+      const res = await fetch("/api/capture-paypal-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: data.orderID })
+      });
+
+      const capture = await res.json();
+      if (capture.status === "COMPLETED") {
+        window.location.href = "/success.html";
+      } else {
+        alert("فشل الدفع");
+      }
+    },
+
+    onError: function (err) {
+      console.error(err);
+      alert("حدث خطأ أثناء الدفع");
+    }
+  }).render("#paypal-button-container");
+</script>
+
   <script src="translate.js"></script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>

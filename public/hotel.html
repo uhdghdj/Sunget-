@@ -11,8 +11,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
-
-     <link rel="icon" href="favicon.png">
   </head>
   <style>
 /* ================== HOTEL DETAILS - SUNGET.COM ================== */
@@ -944,18 +942,47 @@ if (policiesBox) {
   }
 }
     </script>
-    <script>
+   <script>
 document
 .getElementById("contactHotelBtn")
 .addEventListener("click", function(e){
 
   e.preventDefault();
 
-  document
-  .querySelector("#chat-section")
-  .scrollIntoView({
-    behavior:"smooth"
-  });
+  const chat = document.getElementById("chat-section");
+
+  if(chat){
+    chat.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+
+});
+
+window.addEventListener("load", () => {
+
+  if(window.location.hash === "#chat-section"){
+
+    const scrollToChat = () => {
+
+      const chat = document.getElementById("chat-section");
+
+      if(chat){
+
+        chat.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      }
+
+    };
+
+    // بعد تحميل كل الصور والسلايدر
+    setTimeout(scrollToChat, 1500);
+
+  }
 
 });
 </script>

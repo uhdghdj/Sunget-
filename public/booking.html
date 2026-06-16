@@ -7,7 +7,6 @@
 <title>صفحة الحجز</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="icon" href="favicon.png">
 <style>
 /* نفس الـ CSS اللي عندك - كامل ومُحسَّن */
 :root {
@@ -207,6 +206,66 @@ input:focus, select:focus {
   body { padding: 20px 12px; }
   .booking-container { padding: 20px 16px; }
 }
+
+.room-images{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:10px;
+  margin-top:15px;
+}
+
+.room-images img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:.3s;
+}
+
+.room-images img:hover{
+  transform:scale(1.03);
+}
+
+.slider-container{
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 15px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.slider-track{
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.slider-track img{
+  width: 100%;
+  flex-shrink: 0;
+  height: 250px;
+  object-fit: cover;
+}
+
+.nav{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  font-size: 28px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 2;
+  border-radius: 8px;
+}
+
+.prev{ left: 10px; }
+.next{ right: 10px; }
+
 </style>
 </head>
 <body>
@@ -220,7 +279,17 @@ input:focus, select:focus {
       <select id="roomSelect" required>
         <option value="">تحميل الغرف...</option>
       </select>
+<div id="roomImages" class="room-images">
 
+<div class="slider-container" id="roomSlider">
+  <button class="nav prev" id="prevBtn">‹</button>
+
+  <div class="slider-track" id="sliderTrack"></div>
+
+  <button class="nav next" id="nextBtn">›</button>
+</div>
+
+</div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div>
           <label>تاريخ الوصول</label>
@@ -235,8 +304,8 @@ input:focus, select:focus {
 
       <label>طريقة الدفع</label>
       <select id="paymentMethod">
-        <option value="paymob">💳 دفع أونلاين (Paymob)</option>
-        <option value="hotel">🏨 الدفع في الفندق</option>
+        <option value="paymob"> دفع أونلاين (Paypal)</option>
+        <option value="hotel"> الدفع في الفندق</option>
       </select>
 
       <div id="totalPrice">السعر الإجمالي: 0 جنيه</div>
@@ -355,37 +424,63 @@ input:focus, select:focus {
         hotelData = hotel;
         document.getElementById("hotelName").textContent = hotel.hotel_name;
 
-        // تحميل الغرف
-        const { data: rooms, error: roomsError } = await supabaseClient
-          .from("rooms")
-          .select("*")
-          .eq("hotel_id", hotelId)
-          .order('room_type');
+   // تحميل الغرف
+const { data: rooms, error: roomsError } = await supabaseClient
+  .from("rooms")
+  .select("*")
+  .eq("hotel_id", hotelId)
+  .order("room_type");
 
-        if (roomsError || !rooms?.length) {
-          showMessage('❌ لا توجد غرف متاحة لهذا الفندق', 'error');
-          return;
-        }
+if (roomsError || !rooms?.length) {
+  showMessage("❌ لا توجد غرف متاحة لهذا الفندق", "error");
+  return;
+}
 
-        roomsArray = rooms;
-        const roomSelect = document.getElementById("roomSelect");
-        roomSelect.innerHTML = '<option value="">اختر غرفة...</option>';
+roomsArray = rooms;
 
-        roomPrices = {};
-        rooms.forEach(room => {
-          const option = document.createElement("option");
-          option.value = room.id;
-          option.textContent = `${room.room_type} - ${room.room_number || 'غير محدد'} (${room.price || room.base_price || 0} جنيه/ليلة)`;
-          roomPrices[room.id] = Number(room.price || room.base_price || 0);
-          roomSelect.appendChild(option);
-        });
+const roomSelect = document.getElementById("roomSelect");
+const roomImages = document.getElementById("roomImages");
 
-        selectedRoomId = null;
-        roomSelect.addEventListener("change", (e) => {
-          selectedRoomId = e.target.value;
-          calculateTotal();
-        });
+roomSelect.innerHTML = '<option value="">اختر غرفة...</option>';
 
+roomPrices = {};
+
+rooms.forEach(room => {
+  const option = document.createElement("option");
+
+  option.value = room.id;
+  option.textContent =
+    `${room.room_type} - ${room.room_number || "غير محدد"} (${room.price || room.base_price || 0} جنيه/ليلة)`;
+
+  // ✅ هنا التعديل الأساسي: photo_urls
+  option.dataset.images = room.photo_urls || "[]";
+
+  roomPrices[room.id] = Number(room.price || room.base_price || 0);
+
+  roomSelect.appendChild(option);
+});
+
+selectedRoomId = null;
+
+roomSelect.addEventListener("change", (e) => {
+  selectedRoomId = e.target.value;
+
+  calculateTotal();
+
+  const raw = e.target.selectedOptions[0]?.dataset.images || "";
+
+  const images = raw
+    .split(",")
+    .map(img => img.trim())
+    .filter(Boolean);
+
+  if (!images.length) {
+    renderSlider([]);
+    return;
+  }
+
+  renderSlider(images);
+});
         // Event Listeners للتواريخ
         document.getElementById("checkIn").addEventListener("change", calculateTotal);
         document.getElementById("checkOut").addEventListener("change", calculateTotal);
@@ -545,14 +640,14 @@ showMessage(`
   ✅ تم إنشاء الحجز بنجاح
   <br>
   ${paymentMethod === 'paymob'
-    ? '💳 سيتم تحويلك للدفع الإلكتروني'
-    : '🏨 سيتم دفع العربون الآن والباقي في الفندق'}
+    ? ' سيتم تحويلك للدفع الإلكتروني'
+    : ' سيتم دفع العربون الآن والباقي في الفندق'}
 `, 'success');
 
 // ✅ في الحالتين يروح لصفحة Paymob
 setTimeout(() => {
 
-window.location.href = "/Paypal.html";
+  window.location.href = "paymob.html";
 
 }, 2000);
 
@@ -575,6 +670,46 @@ window.location.href = "/Paypal.html";
       document.getElementById('checkIn').min = today;
       document.getElementById('checkOut').min = today;
     });
+
+    const sliderTrack = document.getElementById("sliderTrack");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+let currentIndex = 0;
+let images = [];
+
+function renderSlider(imgs){
+  images = imgs;
+  currentIndex = 0;
+
+  sliderTrack.innerHTML = "";
+
+  imgs.forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    sliderTrack.appendChild(img);
+  });
+
+  updateSlider();
+}
+
+function updateSlider(){
+  sliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+}
+
+prevBtn.onclick = () => {
+  if(currentIndex > 0){
+    currentIndex--;
+    updateSlider();
+  }
+};
+
+nextBtn.onclick = () => {
+  if(currentIndex < images.length - 1){
+    currentIndex++;
+    updateSlider();
+  }
+};
   </script>
 <script>
 const checkInInput = document.getElementById("checkIn");

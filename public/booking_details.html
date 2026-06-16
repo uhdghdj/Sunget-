@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>تفاصيل الحجز</title>
- <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="icon" href="favicon.png">
+
 <style>
 body{
   font-family:"Cairo",sans-serif;
@@ -30,7 +28,6 @@ body{
 .status{
   margin-top:15px;
   padding:10px;
-  background:#1e8e3e;
   border-radius:10px;
   font-weight:bold;
 }
@@ -58,30 +55,27 @@ body{
   z-index: -9999 !important;
 }
 
+
 </style>
 </head>
+
 <body>
 
 <div class="card">
   <h2>تفاصيل الحجز</h2>
 
-  <div id="bookingInfo">
-    جاري التحميل...
-  </div>
+  <div id="bookingInfo">جاري التحميل...</div>
 
-  <div class="status">
-    ✅ تم تأكيد الحجز
-  </div>
+  <div class="status" id="statusBox">...</div>
 </div>
 
 <script>
-
 const supabaseClient = supabase.createClient(
   "https://mqvmxqzwvpasdytbpbke.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM"
 );
-const params = new URLSearchParams(location.search);
-const bookingId = params.get("id");
+
+const bookingId = new URLSearchParams(location.search).get("id");
 
 async function loadBooking() {
 
@@ -92,22 +86,109 @@ async function loadBooking() {
     .single();
 
   if (error || !data) {
-    document.getElementById("bookingInfo").innerHTML =
-      "الحجز غير موجود";
+    document.getElementById("bookingInfo").innerHTML = "الحجز غير موجود";
     return;
   }
 
+  const now = new Date();
+  const checkIn = new Date(data.check_in);
+  const checkOut = new Date(data.check_out);
+
+  const allowCancel =
+    data.cancellation_policy === true ||
+    data.cancellation_policy === "Cancellation is allowed.";
+
+  let status = data.status || "active";
+
+  if (status === "cancelled") {
+    status = "cancelled";
+  } else if (now > checkOut) {
+    status = "completed";
+  } else {
+    status = "active";
+  }
+
   document.getElementById("bookingInfo").innerHTML = `
-    <h3>${data.hotel_name}</h3>
+    <h3>${data.hotel_name || ""}</h3>
 
     <p>رقم الحجز: ${data.id}</p>
 
-    <p>
-      ${data.check_in}
-      →
-      ${data.check_out}
-    </p>
+    <p>الغرفة: ${data.room_name || "-"}</p>
+
+    <p>${data.check_in} → ${data.check_out}</p>
+
+    <div id="cancelArea"></div>
   `;
+
+  const statusBox = document.getElementById("statusBox");
+
+  if (status === "active") {
+    statusBox.innerHTML = "🟢 الحجز ساري";
+    statusBox.style.background = "#1e8e3e";
+  } else if (status === "completed") {
+    statusBox.innerHTML = "⚪ حجز منتهي";
+    statusBox.style.background = "#555";
+  } else if (status === "cancelled") {
+    statusBox.innerHTML = "🔴 تم إلغاء الحجز";
+    statusBox.style.background = "#d32f2f";
+  }
+
+  const cancelDeadline = new Date(checkIn);
+  cancelDeadline.setDate(cancelDeadline.getDate() + 1);
+
+  if (status === "active" && now < cancelDeadline && allowCancel) {
+
+    document.getElementById("cancelArea").innerHTML = `
+      <button id="cancelBtn"
+        style="
+          background:#d32f2f;
+          color:#fff;
+          border:none;
+          padding:12px 20px;
+          border-radius:10px;
+          cursor:pointer;
+          margin-top:15px;
+          font-family:Cairo;
+        ">
+        إلغاء الحجز
+      </button>
+    `;
+
+    document.getElementById("cancelBtn").onclick = async () => {
+
+      if (!confirm("هل تريد إلغاء الحجز؟")) return;
+
+      const { error } = await supabaseClient
+        .from("bookings")
+        .update({
+          status: "cancelled"
+        })
+        .eq("id", bookingId);
+
+      if (error) {
+        alert("حدث خطأ أثناء الإلغاء");
+        return;
+      }
+
+      alert("تم إلغاء الحجز بنجاح");
+      location.reload();
+    };
+
+  } else if (!allowCancel) {
+
+    document.getElementById("cancelArea").innerHTML = `
+      <div style="
+        margin-top:15px;
+        padding:12px;
+        border-radius:10px;
+        background:#332200;
+        color:#ffb400;
+        font-weight:bold;
+      ">
+        ❌ هذا الحجز غير قابل للإلغاء حسب سياسة الفندق
+      </div>
+    `;
+  }
 }
 
 loadBooking();

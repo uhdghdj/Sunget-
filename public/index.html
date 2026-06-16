@@ -1,3 +1,4 @@
+
    
 <html lang="ar" dir="rtl">
   <head>
@@ -586,30 +587,33 @@ async function loadMessagesBox() {
     box.innerHTML = `<div style="padding:10px">لا توجد رسائل</div>`;
   }
 
-  data.forEach(m => {
-    const isUnread = !m.read;
-    if (isUnread) unreadCount++;
+ data.forEach(m => {
+  const isUnread = !m.read;
+  if (isUnread) unreadCount++;
 
-    const div = document.createElement("div");
-    div.style.cssText = `
-      padding:15px;
-      border-bottom:1px solid #eee;
-      cursor:pointer;
-      ${isUnread ? 'background:#e3f2fd' : ''}
-    `;
+  const div = document.createElement("div");
+  div.style.cssText = `
+    padding:15px;
+    border-bottom:1px solid #eee;
+    cursor:pointer;
+    ${isUnread ? 'background:#e3f2fd' : ''}
+  `;
 
-    div.innerHTML = `
-      <strong>${m.hotel_name || 'فندق'}</strong><br>
-      ${m.message}<br>
-      <small>${new Date(m.created_at).toLocaleString('ar-EG')}</small>
-    `;
+  div.innerHTML = `
+    <strong>${m.hotel_name || 'فندق'}</strong><br>
+    ${m.message}<br>
+    <small>${new Date(m.created_at).toLocaleString('ar-EG')}</small>
+  `;
 
-    // 👇 مهم: بدل onclick في HTML
-    div.onclick = () => goToHotelChat(m.hotel_id);
+  // ✅ الحل هنا
+  div.onclick = () => {
+    if (m.hotel_id) {
+      window.location.href = `hotel.html?id=${m.hotel_id}#chat-section`;
+    }
+  };
 
-    box.appendChild(div);
-  });
-
+  box.appendChild(div);
+});
   // ===== العداد =====
   if (countEl) {
     if (unreadCount > 0) {

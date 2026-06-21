@@ -7,7 +7,6 @@
 <title>صفحة الحجز</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-   <link rel="icon" href="favicon.png">
 <style>
 /* نفس الـ CSS اللي عندك - كامل ومُحسَّن */
 :root {
@@ -289,7 +288,13 @@ input:focus, select:focus {
 
   <button class="nav next" id="nextBtn">›</button>
 </div>
-
+<div id="roomCapacity" style="
+margin-top:10px;
+padding:10px;
+background:#20202c;
+border-radius:10px;
+display:none;
+">
 </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div>
@@ -455,6 +460,7 @@ rooms.forEach(room => {
 
   // ✅ هنا التعديل الأساسي: photo_urls
   option.dataset.images = room.photo_urls || "[]";
+  option.dataset.capacity = room.capacity;
 
   roomPrices[room.id] = Number(room.price || room.base_price || 0);
 
@@ -468,7 +474,24 @@ roomSelect.addEventListener("change", (e) => {
 
   calculateTotal();
 
-  const raw = e.target.selectedOptions[0]?.dataset.images || "";
+  // عرض السعة
+  const capacity =
+    e.target.selectedOptions[0]?.dataset.capacity || "";
+
+  const capacityBox =
+    document.getElementById("roomCapacity");
+
+  if (capacity) {
+    capacityBox.style.display = "block";
+    capacityBox.innerHTML =
+      `👥 سعة الغرفة: ${capacity} أشخاص`;
+  } else {
+    capacityBox.style.display = "none";
+  }
+
+  // عرض الصور
+  const raw =
+    e.target.selectedOptions[0]?.dataset.images || "";
 
   const images = raw
     .split(",")
@@ -648,7 +671,7 @@ showMessage(`
 // ✅ في الحالتين يروح لصفحة Paymob
 setTimeout(() => {
 
-  window.location.href = "Paypal.html";
+  window.location.href = "paymob.html";
 
 }, 2000);
 

@@ -1835,6 +1835,25 @@
       hotelTotal.toLocaleString() + " جنيه";
   }
 </script>
+    <button onclick="payHotel()">حوّل للفندق</button>
+<script>
+async function payHotel() {
+  const res = await fetch('/api/payout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      hotelEmail: 'hotel@example.com',
+      bookingId: '12345',
+      totalAmount: 100,
+      commissionPercent: 15,
+      currency: 'USD',
+    }),
+  });
+  const data = await res.json();
+  alert(data.ok ? `تم! نصيب الفندق: ${data.hotelShare}` : `خطأ: ${data.error}`);
+}
+</script>
+
 
   </body>
 </html>

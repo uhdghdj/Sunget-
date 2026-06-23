@@ -1,4 +1,11 @@
-// api/payout.js
+// api/payout.js — ⚠️ TEMPORARY: hardcoded keys for testing only
+// احذف الـ Keys من هنا فوراً بعد الاختبار وحطهم في Environment Variables
+
+const PAYPAL_CLIENT_ID = "AYS3gkFiNwEfBet42COzLsNCyFMxcP4HLJL8jwlJfU6LilUy5IgkyI9-Lx9DuVRx25iZG653KEU02Kom";
+const PAYPAL_CLIENT_SECRET = "EFkO8JIUGdk9IyDHOKgQEZ3sH3TMFhW12Zwq6QKoZtN5V0hWkwjootuXK1AMHGykUsxdX6z2BE9YD7AV";
+const PAYPAL_BASE_URL = "https://api-m.paypal.com"; // Live
+// للاختبار في Sandbox: "https://api-m.sandbox.paypal.com"
+
 export default async function handler(req, res) {
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,13 +23,9 @@ export default async function handler(req, res) {
 
     const hotelShare = Math.round(totalAmount * (1 - commissionPercent / 100) * 100) / 100;
 
-    const base = process.env.PAYPAL_BASE_URL || 'https://api-m.sandbox.paypal.com';
-    const id = process.env.PAYPAL_CLIENT_ID;
-    const secret = process.env.PAYPAL_CLIENT_SECRET;
-
     // 1) Access Token
-    const auth = Buffer.from(`${id}:${secret}`).toString('base64');
-    const tokenRes = await fetch(`${base}/v1/oauth2/token`, {
+    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString('base64');
+    const tokenRes = await fetch(`${PAYPAL_BASE_URL}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
         Authorization: `Basic ${auth}`,
@@ -31,10 +34,13 @@ export default async function handler(req, res) {
       body: 'grant_type=client_credentials',
     });
     const tokenJson = await tokenRes.json();
-    if (!tokenRes.ok) return res.status(500).json({ error: 'PayPal auth failed', details: tokenJson });
+    if (!tokenRes.ok) {
+      console.error('PayPal auth error:', tokenJson);
+      return res.status(500).json({ error: 'PayPal auth failed', details: tokenJson });
+    }
 
     // 2) Payout
-    const payoutRes = await fetch(`${base}/v1/payments/payouts`, {
+    const payoutRes = await fetch(`${PAYPAL_BASE_URL}/v1/payments/payouts`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${tokenJson.access_token}`,
@@ -51,19 +57,24 @@ export default async function handler(req, res) {
           amount: { value: hotelShare.toFixed(2), currency },
           receiver: hotelEmail,
           note: `Booking ${bookingId}`,
-          sender_item_id: bookingId,
+          sender_item_id: String(bookingId),
         }],
       }),
     });
     const payoutJson = await payoutRes.json();
-    if (!payoutRes.ok) return res.status(500).json({ error: 'Payout failed', details: payoutJson });
+    if (!payoutRes.ok) {
+      console.error('PayPal payout error:', payoutJson);
+      return res.status(500).json({ error: 'Payout failed', details: payoutJson });
+    }
 
     return res.status(200).json({
       ok: true,
       hotelShare,
+      currency,
       batchId: payoutJson.batch_header?.payout_batch_id,
     });
   } catch (e) {
+    console.error(e);
     return res.status(500).json({ error: e.message });
   }
 }

@@ -1,143 +1,115 @@
+// netlify/functions/paypal-withdraw.js
+const PAYPAL_BASE = "https://api-m.paypal.com"; // Live
+// للاختبار: "https://api-m.sandbox.paypal.com"
+const COMMISSION_PERCENT = 15; // نسبة الموقع
 
-هذا هو الكود الكامل لـ `src/routes/api/paypal-withdraw.ts`:
-
-```ts
-import { createFileRoute } from "@tanstack/react-router";
-
-const corsHeaders = {
+const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Content-Type": "application/json",
 };
 
-const json = (data: unknown, status = 200) =>
-  new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json", ...corsHeaders },
-  });
+export async function handler(event) {
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 204, headers: CORS, body: "" };
+  }
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, headers: CORS, body: JSON.stringify({ error: "Method not allowed" }) };
+  }
 
-export const Route = createFileRoute("/api/paypal-withdraw")({
-  server: {
-    handlers: {
-      OPTIONS: async () =>
-        new Response(null, { status: 204, headers: corsHeaders }),
+  try {
+    const { amount, paypal_email, booking_id } = JSON.parse(event.body || "{}");
 
-      POST: async ({ request }) => {
-        try {
-          const { amount, paypal_email, hotel_id } = await request.json();
-          const amt = Number(amount);
+    if (!amount || !paypal_email) {
+      return {
+        statusCode: 400,
+        headers: CORS,
+        body: JSON.stringify({ error: "amount و paypal_email مطلوبين" }),
+      };
+    }
 
-          if (!amt || amt <= 0 || !paypal_email || !hotel_id) {
-            return json({ error: "amount و paypal_email و hotel_id مطلوبين" }, 400);
-          }
+    // حساب نصيب الفندق بعد خصم العمولة
+    const hotelShare =
+      Math.round(Number(amount) * (1 - COMMISSION_PERCENT / 100) * 100) / 100;
 
-          const clientId = process.env.PAYPAL_CLIENT_ID;
-          const secret = process.env.PAYPAL_SECRET;
-          const paypalBase =
-            process.env.PAYPAL_ENV === "sandbox"
-              ? "https://api-m.sandbox.paypal.com"
-              : "https://api-m.paypal.com";
+    // 1) Access Token
+    const auth = Buffer.from(
+      `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
+    ).toString("base64");
 
-          if (!clientId || !secret) {
-            return json({ error: "PayPal credentials غير مهيّأة" }, 500);
-          }
-
-          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-          // 1) إجمالي المدفوع أونلاين
-          const { data: bookings, error: bErr } = await (supabaseAdmin as any)
-            .from("bookings")
-            .select("total_price")
-            .eq("hotel_id", hotel_id)
-            .eq("payment_method", "online");
-          if (bErr) return json({ error: bErr.message }, 500);
-
-          const totalEarned = (bookings ?? []).reduce(
-            (s: number, r: any) => s + Number(r.total_price || 0),
-            0,
-          );
-
-          // 2) السحوبات السابقة (pending + success)
-          const { data: withdrawn, error: wErr } = await supabaseAdmin
-            .from("withdrawals")
-            .select("amount")
-            .eq("hotel_id", hotel_id)
-            .in("status", ["pending", "success"]);
-          if (wErr) return json({ error: wErr.message }, 500);
-
-          const totalWithdrawn = (withdrawn ?? []).reduce(
-            (s: number, r: any) => s + Number(r.amount || 0),
-            0,
-          );
-
-          const available = totalEarned - totalWithdrawn;
-          if (amt > available) {
-            return json({ error: "الرصيد القابل للسحب غير كافٍ", available }, 400);
-          }
-
-          // 3) سجّل السحب كـ pending لحجز الرصيد
-          const { data: wRow, error: insErr } = await supabaseAdmin
-            .from("withdrawals")
-            .insert({ hotel_id, amount: amt, paypal_email, status: "pending" })
-            .select()
-            .single();
-          if (insErr) return json({ error: insErr.message }, 500);
-
-          // 4) PayPal token
-          const auth = btoa(`${clientId}:${secret}`);
-          const tokenRes = await fetch(`${paypalBase}/v1/oauth2/token`, {
-            method: "POST",
-            headers: {
-              Authorization: `Basic ${auth}`,
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "grant_type=client_credentials",
-          });
-          const tokenData = (await tokenRes.json().catch(() => null)) as any;
-          if (!tokenRes.ok || !tokenData?.access_token) {
-            await supabaseAdmin.from("withdrawals").update({ status: "failed" }).eq("id", wRow.id);
-            return json({ error: "PayPal token failed", details: tokenData }, 502);
-          }
-
-          // 5) Payout
-          const batchId = `wd_${wRow.id}_${Date.now()}`;
-          const payoutRes = await fetch(`${paypalBase}/v1/payments/payouts`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${tokenData.access_token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              sender_batch_header: { sender_batch_id: batchId, email_subject: "Your withdrawal" },
-              items: [{
-                recipient_type: "EMAIL",
-                receiver: paypal_email,
-                amount: { value: amt.toFixed(2), currency: "USD" },
-                note: "Withdrawal from hotel platform",
-              }],
-            }),
-          });
-          const payoutData = (await payoutRes.json().catch(() => null)) as any;
-
-          if (!payoutRes.ok) {
-            await supabaseAdmin.from("withdrawals").update({ status: "failed" }).eq("id", wRow.id);
-            return json({ error: "PayPal payout failed", details: payoutData }, payoutRes.status);
-          }
-
-          await supabaseAdmin
-            .from("withdrawals")
-            .update({
-              status: "success",
-              paypal_batch_id: payoutData?.batch_header?.payout_batch_id ?? batchId,
-            })
-            .eq("id", wRow.id);
-
-          return json({ success: true, available: available - amt, payout: payoutData });
-        } catch (err: any) {
-          return json({ error: err?.message ?? "Unknown error" }, 500);
-        }
+    const tokenRes = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-    },
-  },
-});
-```
+      body: "grant_type=client_credentials",
+    });
+
+    const tokenData = await tokenRes.json();
+    if (!tokenRes.ok || !tokenData.access_token) {
+      console.error("PayPal auth error:", tokenData);
+      return {
+        statusCode: 400,
+        headers: CORS,
+        body: JSON.stringify({ error: "PayPal auth failed", details: tokenData }),
+      };
+    }
+
+    // 2) إنشاء عملية السحب
+    const batchId = `booking_${booking_id || Date.now()}_${Date.now()}`;
+    const payoutRes = await fetch(`${PAYPAL_BASE}/v1/payments/payouts`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sender_batch_header: {
+          sender_batch_id: batchId,
+          email_subject: "تم تحويل مستحقاتك من Sunget",
+          email_message: `دفعة الحجز رقم ${booking_id || ""}`,
+        },
+        items: [
+          {
+            recipient_type: "EMAIL",
+            receiver: paypal_email,
+            amount: { value: hotelShare.toFixed(2), currency: "USD" },
+            note: "Withdrawal from Sunget hotel platform",
+            sender_item_id: String(booking_id || Date.now()),
+          },
+        ],
+      }),
+    });
+
+    const result = await payoutRes.json();
+    if (!payoutRes.ok) {
+      console.error("PayPal payout error:", result);
+      return {
+        statusCode: 400,
+        headers: CORS,
+        body: JSON.stringify({ error: "Payout failed", details: result }),
+      };
+    }
+
+    return {
+      statusCode: 200,
+      headers: CORS,
+      body: JSON.stringify({
+        ok: true,
+        hotelShare,
+        currency: "USD",
+        batchId: result.batch_header?.payout_batch_id,
+        status: result.batch_header?.batch_status,
+      }),
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      statusCode: 500,
+      headers: CORS,
+      body: JSON.stringify({ error: err.message }),
+    };
+  }
+}

@@ -1,993 +1,851 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <title>تفاصيل الفندق</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-    <link rel="stylesheet" href="hotel-details.css" />
-<link rel="icon" href="favicon.png">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <title>تفاصيل الفندق – Sunget</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-/* ================== HOTEL DETAILS - SUNGET.COM ================== */
-
-/* ---------- THEME VARIABLES ---------- */
-:root,
-[data-theme="dark"] {
-  --bg: #0b0b0f;
-  --bg-2: #14141c;
-  --surface: #1a1a24;
-  --surface-2: #20202c;
-  --text: #ffffff;
-  --text-muted: #b8b8c4;
-  --border: rgba(255, 255, 255, 0.08);
-  --accent: #ffb400;
-  --accent-2: #ff7a00;
-  --danger: #e63946;
-  --success: #27b82e;
-  --shadow: 0 10px 30px rgba(2, 1, 1, 0.45);
-  --radius: 14px;
-  --header-h: 80px;
-}
-
-[data-theme="light"] {
-  --bg: #f7f7fb;
-  --bg-2: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f1f1f7;
-  --text: #1a1a24;
-  --text-muted: #555566;
-  --border: rgba(0, 0, 0, 0.08);
-  --accent: #ff8a00;
-  --accent-2: #ff5e00;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
-
-/* ================== GOOGLE TRANSLATE - COMPLETE HIDE ================== */
-#google_translate_element,
-.goog-te-banner-frame,
-.goog-te-menu-frame,
-.goog-te-balloon-frame,
-.goog-te-gadget,
-.goog-logo-link,
-.goog-te-gadget span,
-.skiptranslate,
-.goog-te-combo,
-.VIpgJd-ZVi9od-ORHb-OEVmkb svg,
-[aria-label*="Google"],
-[title*="Google"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  width: 0 !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  z-index: -9999 !important;
-}
-
-body {
-  top: 0 !important;
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* إخفاء أي تأثيرات جانبية */
-.goog-text-highlight,
-.goog-te-modal,
-.goog-te-menu-value {
-  display: none !important;
-}
-
-/* ---------- RESET & BASE ---------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: "Cairo", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-html[dir="rtl"] {
-  direction: rtl;
-  text-align: right;
-}
-
-/* باقي الـ CSS كما هو بدون تغيير */
-.hotel-header {
-  background: linear-gradient(135deg, rgba(11, 11, 15, 0.95), rgba(26, 26, 36, 0.95));
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 25px 5%;
-  text-align: center;
-  position: relative;
-  box-shadow: var(--shadow);
-}
-
-.hotel-header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  opacity: 0.1;
-  z-index: 0;
-}
-
-.hotel-header h1 {
-  font-size: clamp(28px, 6vw, 42px);
-  font-weight: 800;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -0.5px;
-}
-
-.hotel-header .price {
-  font-size: clamp(20px, 4vw, 28px);
-  font-weight: 700;
-  color: var(--accent);
-  position: relative;
-  z-index: 1;
-}
-
-/* باقي الـ CSS كما هو... (السلايدر، الأزرار، المرافق، الشات، إلخ) */
-.slider-wrap {
-  max-width: 1100px;
-  margin: 30px auto 0;
-  padding: 0 5%;
-}
-
-.slider {
-  position: relative;
-  overflow: hidden;
-  height: 450px;
-  border-radius: var(--radius);
-  direction: ltr;
-}
-
-.slides {
-  display: flex;
-  flex-wrap: nowrap;
-  height: 100%;
-  width: 100%;
-  transition: transform 0.5s ease;
-  will-change: transform;
-}
-
-.slides img {
-  width: 100%;
-  height: 100%;
-  flex: 0 0 100%;
-  object-fit: cover;
-  user-select: none;
-  -webkit-user-drag: none;
-  pointer-events: none;
-}
-
-.nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #fff;
-  font-size: 22px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav.prev { left: 15px; }
-.nav.next { right: 15px; }
-
-.nav:hover {
-  background: var(--accent);
-  color: #000;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.dots {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  padding: 18px 0 4px;
-}
-
-.dots span {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-
-.dots span.active,
-.dots span:hover {
-  background: var(--accent);
-  transform: scale(1.2);
-}
-
-.book-wrap {
-  padding: 0 5%;
-  margin: 20px 0 40px;
-  display: flex;
-  justify-content: center;
-}
-
-.book-btn {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #000;
-  font-weight: 700;
-  font-size: 18px;
-  padding: 16px 40px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 10px 25px rgba(255, 180, 0, 0.35);
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.book-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(255, 180, 0, 0.45);
-}
-
-.hotel-info {
-  max-width: 900px;
-  margin: 0 auto 60px;
-  padding: 0 5%;
-}
-
-.hotel-info h2,
-.amenities-section h2,
-.chat-section h2 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: center;
-  position: relative;
-}
-
-.hotel-info h2::after,
-.amenities-section h2::after,
-.chat-section h2::after {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  border-radius: 2px;
-  margin: 10px auto 0;
-}
-
-.hotel-info p {
-  font-size: 16px;
-  line-height: 1.9;
-  color: var(--text-muted);
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.amenities-section {
-  max-width: 900px;
-  margin: 0 auto 60px;
-  padding: 0 5%;
-}
-
-.amenities {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 15px;
-  padding: 20px 0;
-}
-
-.amenity {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 12px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  cursor: default;
-}
-
-.amenity:hover {
-  background: var(--surface-2);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  border-color: var(--accent);
-}
-
-.map-section {
-  max-width: 900px;
-  margin: 0 auto 60px;
-  padding: 0 5%;
-  text-align: center;
-}
-
-.map-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--surface);
-  color: var(--text);
-  padding: 16px 30px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 16px;
-  border: 2px solid var(--border);
-  transition: all 0.3s ease;
-}
-
-.map-btn:hover {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(255, 180, 0, 0.35);
-  border-color: var(--accent);
-}
-
-.chat-section {
-  max-width: 700px;
-  margin: 0 auto 80px;
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 40px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-}
-
-.chat-box {
-  background: var(--surface-2);
-  border-radius: 16px;
-  height: 400px;
-  padding: 20px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  border: 1px solid var(--border);
-}
-
-.chat-box p {
-  margin-bottom: 12px;
-  padding: 12px 16px;
-  border-radius: 18px;
-  max-width: 75%;
-  font-size: 15px;
-  line-height: 1.5;
-  word-wrap: break-word;
-  animation: messageSlide 0.3s ease;
-}
-
-@keyframes messageSlide {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.chat-box p[style*="text-align: right"] {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #000;
-  margin-left: auto;
-}
-
-.chat-box p[style*="text-align: left"] {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-.chat-input-wrap {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-#chatInput {
-  flex: 1;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 25px;
-  padding: 14px 20px;
-  font-family: inherit;
-  font-size: 15px;
-  color: var(--text);
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-#chatInput:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 180, 0, 0.15);
-}
-
-#sendMsg {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #000;
-  font-weight: 700;
-  padding: 14px 24px;
-  border-radius: 25px;
-  font-size: 15px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-#sendMsg:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 180, 0, 0.35);
-}
-
-.chat-box::-webkit-scrollbar { width: 6px; }
-.chat-box::-webkit-scrollbar-track { background: transparent; }
-.chat-box::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-}
-.chat-box::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-@media (max-width: 768px) {
-  .slider { height: 350px; }
-  .nav { width: 42px; height: 42px; font-size: 18px; }
-  .hotel-header { padding: 20px 4%; }
-  .book-btn { padding: 14px 30px; font-size: 16px; }
-  .amenities { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
-  .chat-section { margin-bottom: 40px; padding: 30px 20px; }
-  .chat-box { height: 300px; }
-}
-
-@media (max-width: 480px) {
-  .slider { height: 240px; border-radius: 12px; }
-  .nav { width: 38px; height: 38px; font-size: 16px; }
-  .nav.prev { left: 8px; }
-  .nav.next { right: 8px; }
-  .hotel-header h1 { font-size: 24px; }
-  .hotel-header .price { font-size: 20px; }
-  .book-btn { padding: 12px 24px; font-size: 15px; }
-  .amenities { grid-template-columns: 1fr 1fr; }
-  .amenity { padding: 14px 10px; font-size: 13px; }
-  .chat-input-wrap { flex-direction: column; }
-  #sendMsg { width: 100%; }
-  .chat-section { padding: 25px 15px; }
-}
-
-.policies-section{
-  max-width:900px;
-  margin:0 auto 60px;
-  padding:0 5%;
-}
-
-.policies-section h2{
-  font-size:28px;
-  font-weight:700;
-  margin-bottom:20px;
-  text-align:center;
-  position:relative;
-}
-
-.policies-section h2::after{
-  content:"";
-  display:block;
-  width:60px;
-  height:4px;
-  margin:10px auto 0;
-  border-radius:2px;
-  background:linear-gradient(135deg,var(--accent),var(--accent-2));
-}
-
-.policies-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.policy-item{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-  transition:.3s;
-}
-
-.policy-item:hover{
-  border-color:var(--accent);
-  transform:translateY(-2px);
-}
-
-.policy-item i{
-  color:var(--accent);
-  margin-left:8px;
-}
-
-#contactHotelBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-
-  width:100%;
-  padding:18px 24px;
-  margin-top:15px;
-
-  background:linear-gradient(135deg,#ffb400,#ff7a00);
-  color:#000;
-  text-decoration:none;
-  font-weight:800;
-  font-size:16px;
-  border-radius:30px;
-
-  transition:all .3s ease;
-  box-shadow:0 8px 20px rgba(255,180,0,.25);
-}
-
-#contactHotelBtn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 15px 35px rgba(255,180,0,.4);
-}
-
-#contactHotelBtn:active{
-  transform:translateY(0);
-}
-
-.cancellation-section{
-  max-width:900px;
-  margin:0 auto 60px;
-  padding:0 5%;
-}
-
-.cancellation-section h2{
-  font-size:28px;
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.cancellation-section h2::after{
-  content:"";
-  display:block;
-  width:60px;
-  height:4px;
-  margin:10px auto 0;
-  border-radius:2px;
-  background:linear-gradient(135deg,var(--accent),var(--accent-2));
-}
-  </style>
-  <body>
-    <!-- ===== HEADER ===== -->
-    <!-- تم إخفاء google_translate_element تماماً بالـ CSS -->
-
-    <header class="hotel-header">
-      <h1 id="hotelName">جارٍ التحميل...</h1>
-      <p class="price"><span id="hotelPrice"></span></p>
-    </header>
-
-    <!-- باقي المحتوى كما هو -->
-    <section class="slider-section">
-      <div class="slider-wrap">
-        <div class="slider">
-          <div id="slides" class="slides"></div>
-          <button class="nav prev" aria-label="السابق">‹</button>
-          <div id="gallery" class="gallery"></div>
-
-          <button class="nav next" aria-label="التالي">›</button>
-          <div id="dots" class="dots"></div>
-        </div>
-      </div>
-    </section>
-
-    <div class="book-wrap">
-      <a href="#chat-section" id="contactHotelBtn">
-  💬 تواصل مع الفندق
-      </a>
-      <button id="bookNowBtn" class="book-btn">
-        <i class="fa-solid fa-calendar-check"></i>
-        احجز الآن
-      </button>
-    </div>
-<section class="policies-section">
-  <h2>سياسات الفندق</h2>
-
-  <div id="hotelPolicies" class="policies-list">
-  </div>
-</section>
-<section class="cancellation-section">
-  <h2>سياسة الإلغاء</h2>
-
-  <div id="cancellationPolicyCard" class="policy-item">
-    جارٍ التحميل...
-  </div>
-</section>
-    <section class="hotel-info">
-      <h2>وصف الفندق</h2>
-      <p id="hotelDesc"></p>
-    </section>
-
-    <section class="amenities-section">
-      <h2 data-i18n="hotel.amenities">المرافق</h2>
-      <div id="amenities" class="amenities"></div>
-    </section>
-
-    <section class="map-section">
-      <a id="mapLink" href="#" target="_blank" class="map-btn" data-i18n="hotel.map">
-        <i class="fa-solid fa-map-location-dot"></i>
-        عرض الموقع على الخريطة
-      </a>
-    </section>
-
-    <section id="chat-section" class="chat-section">
-      <h2 data-i18n="chat.title">الدردشة مع الفندق</h2>
-      <div id="chatBox" class="chat-box"></div>
-      <div class="chat-input-wrap">
-        <input type="text" id="chatInput" data-i18n-placeholder="chat.placeholder" placeholder="اكتب رسالتك..." />
-        <button id="sendMsg" data-i18n="chat.send">إرسال</button>
-      </div>
-    </section>
-
-    <script>
-      /* ===== SUPABASE INIT ===== */
-      const supabaseClient = supabase.createClient(
-        "https://mqvmxqzwvpasdytbpbke.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM"
-      );
-
-      const params = new URLSearchParams(window.location.search);
-      const hotelId = params.get("id");
-      let currentSlide = 0;
-
-      /* باقي الـ JavaScript كما هو بدون تغيير */
-      async function loadHotel() {
-        if (!hotelId) return;
-        try {
-          const { data, error } = await supabaseClient
-            .from("hotels").select("*").eq("id", hotelId).single();
-
-          if (error || !data) {
-            document.body.innerHTML = "❌ الفندق غير موجود";
-            return;
-          }
-
-          document.getElementById("hotelName").textContent = data.hotel_name;
-          document.getElementById("hotelPrice").textContent =
-            data.price_per_night + " " + i18next.t("hotel.price");
-
-          document.getElementById("hotelDesc").textContent = data.description || "";
-
-          const cancellationBox =
-  document.getElementById("cancellationPolicyCard");
-
-cancellationBox.innerHTML = data.cancellation_policy
-  ? `
-    <i class="fa-solid fa-rotate-left"></i>
-    يسمح بإلغاء الحجز
-  `
-  : `
-    <i class="fa-solid fa-ban"></i>
-    لا يسمح بإلغاء الحجز بعد تأكيده
-  `;
-          document.getElementById("hotelPolicies").innerHTML =
-  data.policies;
-
-          const slides = document.getElementById("slides");
-          const dots = document.getElementById("dots");
-          slides.innerHTML = "";
-          dots.innerHTML = "";
-
- // جلب صور الغرف
-  const { data: rooms, error: roomsError } = await supabaseClient
-    .from("rooms")
-    .select("photo_urls")
-    .eq("hotel_id", hotelId);
-
-  console.log("rooms:", rooms, "error:", roomsError);
-
-  const imagesArray = [];
-  (rooms || []).forEach(r => {
-    if (Array.isArray(r.photo_urls)) {
-      imagesArray.push(...r.photo_urls);
-    } else if (typeof r.photo_urls === "string") {
-      try {
-        const p = JSON.parse(r.photo_urls);
-        if (Array.isArray(p)) imagesArray.push(...p);
-        else imagesArray.push(...r.photo_urls.split(",").map(s => s.trim()).filter(Boolean));
-      } catch {
-        imagesArray.push(...r.photo_urls.split(",").map(s => s.trim()).filter(Boolean));
-      }
+    :root {
+      --bg:#0b0b0f; --bg2:#14141c; --surface:#1a1a24; --surface2:#20202c;
+      --text:#ffffff; --muted:#b8b8c4; --border:rgba(255,255,255,0.08);
+      --accent:#ffb400; --accent2:#ff7a00; --danger:#e63946; --success:#27b82e;
+      --shadow:0 10px 30px rgba(0,0,0,0.45); --r:14px;
     }
-  });
-  console.log("imagesArray:", imagesArray);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Cairo",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden}
 
-  // حقن في السلايدر
-  const slidesEl = document.querySelector(".slides");
-  const dotsEl = document.querySelector(".dots");
+    /* BACK */
+    .back-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;margin:14px 5%;background:var(--surface);color:var(--muted);text-decoration:none;border-radius:30px;font-size:14px;font-weight:600;border:1px solid var(--border);transition:all .3s;cursor:pointer}
+    .back-btn:hover{background:var(--surface2);color:var(--accent);border-color:var(--accent)}
 
-  if (!slidesEl || !imagesArray.length) return;
+    /* HEADER */
+    .hotel-header{background:linear-gradient(135deg,rgba(11,11,15,.95),rgba(26,26,36,.95));backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:32px 5%;text-align:center;position:relative}
+    .hotel-header::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--accent),var(--accent2));opacity:.08}
+    .hotel-header h1{font-size:clamp(26px,5vw,42px);font-weight:800;position:relative;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hotel-header .price-tag{font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--accent);margin-top:6px;position:relative}
+    .meta-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px;flex-wrap:wrap;position:relative}
+    .meta-badge{background:rgba(255,180,0,.12);color:var(--accent);padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700;border:1px solid rgba(255,180,0,.25)}
 
-  slidesEl.innerHTML = imagesArray
-    .map(url => `<img src="${url}" alt="room" />`)
-    .join("");
+    /* STICKY BAR */
+    .sticky-bar{position:sticky;top:0;z-index:90;background:rgba(20,20,28,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;transform:translateY(-100%);transition:transform .35s ease}
+    .sticky-bar.visible{transform:translateY(0)}
+    .sbb-price{font-size:20px;font-weight:800;color:var(--accent)}
+    .sbb-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:800;font-size:14px;padding:10px 24px;border:none;border-radius:30px;cursor:pointer;transition:all .3s;font-family:"Cairo",sans-serif}
+    .sbb-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,180,0,.35)}
 
-  if (dotsEl) {
-    dotsEl.innerHTML = imagesArray
-      .map((_, i) => `<span class="${i === 0 ? 'active' : ''}" data-i="${i}"></span>`)
-      .join("");
-  }
+    /* MAIN SLIDER (Hotel photos) */
+    .slider-section{padding:24px 5% 0}
+    .slider{position:relative;overflow:hidden;height:460px;border-radius:var(--r)}
+    .slides{display:flex;height:100%;transition:transform .5s ease;will-change:transform}
+    .slides img{width:100%;height:100%;flex:0 0 100%;object-fit:cover;cursor:zoom-in;user-select:none}
+    .nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:24px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;transition:all .3s}
+    .nav.prev{left:14px} .nav.next{right:14px}
+    .nav:hover{background:var(--accent);color:#000;transform:translateY(-50%) scale(1.1)}
+    .dots{display:flex;gap:8px;justify-content:center;padding:14px 0 4px}
+    .dots span{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s}
+    .dots span.active,.dots span:hover{background:var(--accent);transform:scale(1.3)}
+    .no-photo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;background:var(--surface2)}
 
-  // كنترول السلايدر
-  let current = 0;
-  const total = imagesArray.length;
+    /* BOOK WRAP */
+    .book-wrap{display:flex;justify-content:center;gap:14px;padding:22px 5%;flex-wrap:wrap}
+    .book-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:700;font-size:16px;padding:14px 36px;border-radius:50px;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(255,180,0,.3);transition:all .3s;border:none;cursor:pointer;font-family:"Cairo",sans-serif}
+    .book-btn:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(255,180,0,.45)}
+    .contact-btn{background:var(--surface);color:var(--text);font-weight:700;font-size:16px;padding:14px 36px;border-radius:50px;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);transition:all .3s;text-decoration:none;cursor:pointer}
+    .contact-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
 
-  const go = (i) => {
-    current = (i + total) % total;
-    slidesEl.style.transform = `translateX(-${current * 100}%)`; // ← سالب
-    dotsEl?.querySelectorAll("span").forEach((d, idx) =>
-      d.classList.toggle("active", idx === current)
-    );
-  };
+    /* SECTION WRAPPER */
+    section{max-width:960px;margin:0 auto 56px;padding:0 5%}
+    section h2{font-size:26px;font-weight:700;margin-bottom:22px;text-align:center;position:relative}
+    section h2::after{content:"";display:block;width:56px;height:4px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:2px;margin:10px auto 0}
 
-  document.querySelector(".nav.prev")?.addEventListener("click", () => go(current - 1));
-  document.querySelector(".nav.next")?.addEventListener("click", () => go(current + 1));
-  dotsEl?.querySelectorAll("span").forEach(d =>
-    d.addEventListener("click", () => go(+d.dataset.i))
+    /* INFO GRID */
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:22px}
+    .info-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:all .3s}
+    .info-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .info-card i{color:var(--accent);font-size:18px;width:22px;text-align:center;flex-shrink:0}
+    .ic-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase}
+    .ic-val{font-size:14px;font-weight:700;margin-top:2px;word-break:break-word}
+    .hotel-desc{font-size:15px;line-height:1.9;color:var(--muted);text-align:center;max-width:720px;margin:0 auto}
+
+    /* AMENITIES */
+    .amenities-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+    .amenity{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center;font-weight:600;font-size:13px;transition:all .3s}
+    .amenity:hover{background:var(--surface2);border-color:var(--accent);transform:translateY(-2px)}
+
+    /* POLICIES */
+    .policies-list{display:flex;flex-direction:column;gap:10px}
+    .policy-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;transition:all .3s}
+    .policy-item:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .policy-item i{color:var(--accent);font-size:16px;flex-shrink:0}
+    .cancel-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px;font-weight:700;font-size:15px}
+    .cancel-box i{font-size:22px}
+    .cancel-box.allowed{border-color:rgba(39,184,46,.35);color:var(--success)}
+    .cancel-box.denied{border-color:rgba(230,57,70,.35);color:var(--danger)}
+
+    /* MAP */
+    .map-btn{display:inline-flex;align-items:center;gap:12px;background:var(--surface);color:var(--text);padding:14px 28px;border-radius:50px;font-weight:700;font-size:15px;border:1px solid var(--border);transition:all .3s;text-decoration:none}
+    .map-btn:hover{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,180,0,.3)}
+    .map-section{text-align:center}
+
+    /* ROOMS SECTION */
+    .rooms-grid{display:flex;flex-direction:column;gap:24px}
+    .room-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s}
+    .room-card:hover{border-color:rgba(255,180,0,.3);box-shadow:0 12px 32px rgba(0,0,0,.35)}
+    /* room mini slider */
+    .room-slider-wrap{position:relative;width:100%;height:240px;overflow:hidden;background:var(--surface2)}
+    .room-slider-track{display:flex;height:100%;transition:transform .4s ease}
+    .room-slider-track img{width:100%;flex-shrink:0;object-fit:cover;height:100%;cursor:zoom-in}
+    .rsl-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;font-size:22px;padding:5px 13px;cursor:pointer;border-radius:7px;line-height:1;transition:background .2s;z-index:2}
+    .rsl-nav:hover{background:rgba(255,180,0,.55)}
+    .rsl-prev{left:8px} .rsl-next{right:8px}
+    .rsl-counter{position:absolute;bottom:8px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+    .room-cover-badge{position:absolute;top:10px;right:10px;background:var(--accent);color:#000;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;z-index:2}
+    .no-room-photo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;flex-direction:column;gap:8px}
+    /* room body */
+    .room-body{padding:20px}
+    .room-header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+    .room-name{font-size:18px;font-weight:800}
+    .room-price-box{text-align:left;flex-shrink:0}
+    .room-price-val{font-size:22px;font-weight:800;color:var(--accent)}
+    .room-price-label{font-size:12px;color:var(--muted)}
+    .room-meta-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .room-tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--muted)}
+    .room-tag.accent{background:rgba(255,180,0,.1);border-color:rgba(255,180,0,.25);color:var(--accent)}
+    .room-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+    .room-section-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+    .room-beds-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .bed-tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+    .room-features-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .feature-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--muted)}
+    .room-book-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:700;font-size:14px;padding:11px 24px;border-radius:30px;border:none;cursor:pointer;font-family:"Cairo",sans-serif;transition:all .3s;margin-top:4px}
+    .room-book-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,180,0,.35)}
+    .room-flags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .room-flag{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;border:1px solid}
+    .room-flag.green{background:rgba(39,184,46,.1);border-color:rgba(39,184,46,.3);color:var(--success)}
+    .room-flag.blue{background:rgba(0,150,255,.08);border-color:rgba(0,150,255,.25);color:#5ca9f0}
+    .room-flag.amber{background:rgba(255,180,0,.08);border-color:rgba(255,180,0,.25);color:var(--accent)}
+
+    /* REVIEWS */
+    .review-summary{display:flex;gap:28px;margin-bottom:28px;flex-wrap:wrap}
+    .score-circle{background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;width:90px;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+    .score-circle span{font-size:26px;font-weight:900;color:#000;line-height:1}
+    .score-circle small{font-size:11px;font-weight:700;color:rgba(0,0,0,.6)}
+    .score-word{font-size:17px;font-weight:800;color:var(--accent);margin-top:8px}
+    .review-bars{flex:1;display:flex;flex-direction:column;gap:10px}
+    .review-bar-row{display:flex;align-items:center;gap:10px}
+    .rbl{font-size:13px;font-weight:600;width:70px;text-align:right;color:var(--muted);flex-shrink:0}
+    .rbtrack{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+    .rbfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .6s ease}
+    .rbv{font-size:13px;font-weight:700;width:30px;color:var(--accent)}
+    .reviews-list{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+    .review-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}
+    .r-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+    .r-name{font-weight:700;font-size:15px}
+    .r-stars{color:var(--accent);font-size:14px}
+    .r-date{font-size:12px;color:var(--muted)}
+    .r-body{font-size:14px;color:var(--muted);line-height:1.7}
+    .review-form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px}
+    .review-form h3{font-size:17px;font-weight:700;margin-bottom:16px}
+    .star-input{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:4px;margin-bottom:14px}
+    .star-input input{display:none}
+    .star-input label{font-size:28px;cursor:pointer;color:rgba(255,255,255,.2);transition:color .2s}
+    .star-input label:hover,.star-input label:hover~label,.star-input input:checked~label{color:var(--accent)}
+    .review-ta{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:"Cairo",sans-serif;font-size:14px;color:var(--text);resize:vertical;min-height:100px;margin-bottom:14px;outline:none;transition:border-color .3s}
+    .review-ta:focus{border-color:var(--accent)}
+    .review-submit{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:700;font-size:15px;padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-family:"Cairo",sans-serif;transition:all .3s}
+    .review-submit:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,180,0,.35)}
+
+    /* CHAT */
+    .chat-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px;box-shadow:var(--shadow);max-width:720px;margin:0 auto}
+    .chat-box{background:var(--surface2);border-radius:14px;height:380px;padding:18px;overflow-y:auto;margin-bottom:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+    .bubble{max-width:75%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;word-wrap:break-word;animation:msgIn .25s ease}
+    @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .bubble.mine{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;margin-right:auto}
+    .bubble.theirs{background:var(--surface);border:1px solid var(--border);margin-left:auto}
+    .chat-input-row{display:flex;gap:10px}
+    #chatInput{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:25px;padding:12px 18px;font-family:"Cairo",sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .3s}
+    #chatInput:focus{border-color:var(--accent)}
+    #sendMsg{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:700;padding:12px 22px;border-radius:25px;font-size:14px;cursor:pointer;border:none;font-family:"Cairo",sans-serif;transition:all .3s;white-space:nowrap}
+    #sendMsg:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,180,0,.35)}
+
+    /* LIGHTBOX */
+    .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:999;align-items:center;justify-content:center;flex-direction:column}
+    .lightbox.open{display:flex}
+    .lb-img{max-width:90vw;max-height:78vh;object-fit:contain;border-radius:10px}
+    .lb-close{position:absolute;top:16px;right:20px;color:#fff;font-size:28px;cursor:pointer;opacity:.8;line-height:1;transition:opacity .2s}
+    .lb-close:hover{opacity:1}
+    .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);color:#fff;border:none;font-size:32px;padding:8px 16px;cursor:pointer;border-radius:8px;transition:background .2s}
+    .lb-nav:hover{background:rgba(255,180,0,.4)}
+    .lb-prev{left:12px} .lb-next{right:12px}
+    .lb-counter{position:absolute;bottom:60px;color:rgba(255,255,255,.6);font-size:13px}
+    .lb-thumbs{position:absolute;bottom:12px;display:flex;gap:6px;overflow-x:auto;max-width:90vw;padding:4px}
+    .lb-thumb{width:48px;height:36px;object-fit:cover;border-radius:5px;cursor:pointer;opacity:.5;border:2px solid transparent;transition:all .2s}
+    .lb-thumb.active,.lb-thumb:hover{opacity:1;border-color:var(--accent)}
+
+    ::-webkit-scrollbar{width:7px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:10px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+    @media(max-width:768px){
+      .slider{height:300px}
+      .book-wrap{flex-direction:column;align-items:center}
+      .book-btn,.contact-btn{width:100%;justify-content:center}
+      .review-summary{flex-direction:column;align-items:center}
+      .chat-wrap{padding:20px 16px}
+      .chat-box{height:260px}
+      .room-slider-wrap{height:190px}
+    }
+    @media(max-width:480px){
+      .slider{height:220px}
+      .nav{width:36px;height:36px;font-size:18px}
+      .amenities-grid{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BACK -->
+  <div>
+    <a class="back-btn" onclick="history.back();return false" href="#">
+      <i class="fa-solid fa-arrow-right"></i> العودة إلى النتائج
+    </a>
+  </div>
+
+  <!-- HOTEL HEADER -->
+  <header class="hotel-header">
+    <h1 id="hotelName">جارٍ التحميل...</h1>
+    <p class="price-tag" id="hotelPrice"></p>
+    <div class="meta-row" id="metaRow"></div>
+  </header>
+
+  <!-- STICKY BAR -->
+  <div class="sticky-bar" id="stickyBar">
+    <strong id="sbbName" style="font-size:15px"></strong>
+    <div style="display:flex;align-items:baseline;gap:5px">
+      <span class="sbb-price" id="sbbPrice"></span>
+      <span style="font-size:12px;color:var(--muted)">/ ليلة</span>
+    </div>
+    <button class="sbb-btn" id="sbbBookBtn">
+      <i class="fa-solid fa-calendar-check"></i> احجز الآن
+    </button>
+  </div>
+
+  <!-- HOTEL PHOTOS SLIDER -->
+  <div class="slider-section">
+    <div class="slider">
+      <div id="hotelSlides" class="slides"></div>
+      <button class="nav prev" id="hPrev" aria-label="السابق">‹</button>
+      <button class="nav next" id="hNext" aria-label="التالي">›</button>
+    </div>
+    <div id="hotelDots" class="dots"></div>
+  </div>
+
+  <!-- BOOK BUTTONS -->
+  <div class="book-wrap">
+    <a class="contact-btn" href="#chat-section">
+      <i class="fa-solid fa-comment-dots"></i> تواصل مع الفندق
+    </a>
+    <button class="book-btn" id="bookNowBtn">
+      <i class="fa-solid fa-calendar-check"></i> احجز الآن
+    </button>
+  </div>
+
+  <!-- INFO -->
+  <section>
+    <h2>معلومات الفندق</h2>
+    <div class="info-grid" id="infoGrid"></div>
+    <p class="hotel-desc" id="hotelDesc"></p>
+  </section>
+
+  <!-- AMENITIES (hotel level) -->
+  <section id="amenSection" style="display:none">
+    <h2>مرافق الفندق</h2>
+    <div class="amenities-grid" id="amenGrid"></div>
+  </section>
+
+  <!-- POLICIES -->
+  <section id="polSection" style="display:none">
+    <h2>سياسات الفندق</h2>
+    <div id="polList" class="policies-list"></div>
+  </section>
+
+  <!-- CANCELLATION -->
+  <section id="cancelSection" style="display:none">
+    <h2>سياسة الإلغاء</h2>
+    <div id="cancelCard"></div>
+  </section>
+
+  <!-- MAP -->
+  <section class="map-section" id="mapSection" style="display:none">
+    <h2>الموقع على الخريطة</h2>
+    <a id="mapLink" href="#" target="_blank" class="map-btn">
+      <i class="fa-solid fa-map-location-dot"></i> فتح الخريطة
+    </a>
+  </section>
+
+  <!-- ROOMS -->
+  <section id="roomsSection" style="display:none">
+    <h2>الغرف المتاحة</h2>
+    <div class="rooms-grid" id="roomsGrid"></div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviewsSection">
+    <h2>تقييمات الضيوف</h2>
+    <div id="reviewSummary" class="review-summary" style="display:none">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div class="score-circle"><span id="avgScore">-</span><small>/ 10</small></div>
+        <div class="score-word" id="scoreWord">-</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:5px" id="reviewCount"></div>
+      </div>
+      <div class="review-bars">
+        <div class="review-bar-row"><span class="rbl">الموقع</span><div class="rbtrack"><div class="rbfill" id="bLocation"></div></div><span class="rbv" id="vLocation">-</span></div>
+        <div class="review-bar-row"><span class="rbl">النظافة</span><div class="rbtrack"><div class="rbfill" id="bCleanliness"></div></div><span class="rbv" id="vCleanliness">-</span></div>
+        <div class="review-bar-row"><span class="rbl">الراحة</span><div class="rbtrack"><div class="rbfill" id="bComfort"></div></div><span class="rbv" id="vComfort">-</span></div>
+        <div class="review-bar-row"><span class="rbl">الخدمة</span><div class="rbtrack"><div class="rbfill" id="bService"></div></div><span class="rbv" id="vService">-</span></div>
+        <div class="review-bar-row"><span class="rbl">القيمة</span><div class="rbtrack"><div class="rbfill" id="bValue"></div></div><span class="rbv" id="vValue">-</span></div>
+      </div>
+    </div>
+    <div id="reviewsList" class="reviews-list"></div>
+    <div id="reviewFormWrap"></div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="chat-section">
+    <h2>الدردشة مع الفندق</h2>
+    <div class="chat-wrap">
+      <div id="chatBox" class="chat-box"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="اكتب رسالتك..." />
+        <button id="sendMsg">إرسال</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="lbBgClick(event)">
+    <div class="lb-close" onclick="lbClose()">✕</div>
+    <button class="lb-nav lb-prev" onclick="lbGo(-1);event.stopPropagation()">‹</button>
+    <img class="lb-img" id="lbImg" src="" alt="" />
+    <button class="lb-nav lb-next" onclick="lbGo(1);event.stopPropagation()">›</button>
+    <div class="lb-counter" id="lbCounter"></div>
+    <div class="lb-thumbs" id="lbThumbs"></div>
+  </div>
+
+  <script>
+  /* ================================================================
+     SUPABASE
+  ================================================================ */
+  const sb = supabase.createClient(
+    "https://mqvmxqzwvpasdytbpbke.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM"
   );
 
-  // تشغيل تلقائي (اختياري)
-  setInterval(() => go(current + 1), 5000);
+  const params  = new URLSearchParams(location.search);
+  const hotelId = params.get("id");
 
+  /* ================================================================
+     HOTEL PHOTO SLIDER (photos from hotels.photo_urls)
+  ================================================================ */
+  let hIdx = 0, hTotal = 0, hAllImgs = [];
 
-          const amenitiesBox = document.getElementById("amenities");
-          amenitiesBox.innerHTML = "";
-          let amenitiesArray = [];
-          if (typeof data.amenities === "string" && data.amenities.trim() !== "") {
-            amenitiesArray = data.amenities.split(",").map((a) => a.trim());
-          }
-          if (amenitiesArray.length > 0) {
-            amenitiesArray.forEach((item) => {
-              const span = document.createElement("span");
-              span.className = "amenity";
-              span.textContent = item;
-              amenitiesBox.appendChild(span);
-            });
-          } else {
-            amenitiesBox.innerHTML = `<p>${i18next.t("hotel.noAmenities")}</p>`;
-          }
+  function buildHotelSlider(urls) {
+    hAllImgs = urls;
+    hTotal   = urls.length;
+    const sl = document.getElementById("hotelSlides");
+    const dt = document.getElementById("hotelDots");
+    if (!urls.length) {
+      sl.innerHTML = `<div class="no-photo-placeholder"><i class="fa-solid fa-image" style="font-size:40px;margin-bottom:8px"></i>لا توجد صور للفندق</div>`;
+      dt.innerHTML = "";
+      document.getElementById("hPrev").style.display = document.getElementById("hNext").style.display = "none";
+      return;
+    }
+    sl.innerHTML = urls.map((u, i) =>
+      `<img src="${u}" alt="صورة الفندق ${i+1}" onclick="lbOpen(hAllImgs,${i})" />`
+    ).join("");
+    dt.innerHTML = urls.map((_, i) =>
+      `<span class="${i===0?"active":""}" data-i="${i}"></span>`
+    ).join("");
+    hGo(0);
+    document.getElementById("hPrev").onclick = () => hGo(hIdx - 1);
+    document.getElementById("hNext").onclick = () => hGo(hIdx + 1);
+    dt.querySelectorAll("span").forEach(d => d.onclick = () => hGo(+d.dataset.i));
+    setInterval(() => hGo(hIdx + 1), 5000);
+  }
 
-          const mapBtn = document.getElementById("mapLink");
-          if (data.map_link && data.map_link.trim() !== "") {
-            mapBtn.href = data.map_link;
-            mapBtn.style.pointerEvents = "auto";
-            mapBtn.style.opacity = "1";
-          } else {
-            mapBtn.textContent = i18next.t("hotel.mapUnavailable");
-            mapBtn.style.pointerEvents = "none";
-            mapBtn.style.opacity = "0.5";
-          }
-        } catch (err) {
-          console.error("Load hotel error:", err);
-        }
-      }
+  function hGo(i) {
+    hIdx = (i + hTotal) % hTotal;
+    document.getElementById("hotelSlides").style.transform = `translateX(-${hIdx * 100}%)`;
+    document.querySelectorAll("#hotelDots span").forEach((d, j) => d.classList.toggle("active", j === hIdx));
+  }
 
-      function updateSlider() {
-        const slidesEl = document.getElementById("slides");
-        const dotsEl = document.querySelectorAll("#dots span");
-        slidesEl.style.transform = `translateX(-${currentSlide * 100}%)`;
-        dotsEl.forEach((dot, i) => dot.classList.toggle("active", i === currentSlide));
-      }
+  /* ================================================================
+     STICKY BAR
+  ================================================================ */
+  const stickyBar = document.getElementById("stickyBar");
+  window.addEventListener("scroll", () => stickyBar.classList.toggle("visible", scrollY > 300));
 
-      document.querySelector(".nav.next")?.addEventListener("click", () => {
-        const total = document.querySelectorAll("#slides img").length;
-        if (!total) return;
-        currentSlide = (currentSlide + 1) % total;
-        updateSlider();
-      });
+  /* ================================================================
+     LIGHTBOX
+  ================================================================ */
+  let lbImgs = [], lbIdx = 0;
+  function lbOpen(imgs, idx) {
+    lbImgs = imgs; lbIdx = idx;
+    document.getElementById("lightbox").classList.add("open");
+    document.body.style.overflow = "hidden";
+    lbRender();
+    document.getElementById("lbThumbs").innerHTML = imgs.map((u, i) =>
+      `<img class="lb-thumb ${i===idx?"active":""}" src="${u}" onclick="lbJump(${i});event.stopPropagation()" />`
+    ).join("");
+  }
+  function lbRender() {
+    document.getElementById("lbImg").src = lbImgs[lbIdx];
+    document.getElementById("lbCounter").textContent = (lbIdx+1) + " / " + lbImgs.length;
+    document.querySelectorAll(".lb-thumb").forEach((t,i)=>t.classList.toggle("active",i===lbIdx));
+  }
+  function lbGo(d)  { lbIdx=(lbIdx+d+lbImgs.length)%lbImgs.length; lbRender(); }
+  function lbJump(i){ lbIdx=i; lbRender(); }
+  function lbClose(){ document.getElementById("lightbox").classList.remove("open"); document.body.style.overflow=""; }
+  function lbBgClick(e){ if(e.target.id==="lightbox") lbClose(); }
+  document.addEventListener("keydown", e => {
+    if(!document.getElementById("lightbox").classList.contains("open")) return;
+    if(e.key==="ArrowLeft")  lbGo(-1);
+    if(e.key==="ArrowRight") lbGo(1);
+    if(e.key==="Escape")     lbClose();
+  });
 
-      document.querySelector(".nav.prev")?.addEventListener("click", () => {
-        const total = document.querySelectorAll("#slides img").length;
-        if (!total) return;
-        currentSlide = (currentSlide - 1 + total) % total;
-        updateSlider();
-      });
+  /* ================================================================
+     ROOM MINI SLIDER
+  ================================================================ */
+  function buildRoomSlider(containerEl, photos) {
+    const wrap    = containerEl.querySelector(".room-slider-wrap");
+    const track   = containerEl.querySelector(".room-slider-track");
+    const counter = containerEl.querySelector(".rsl-counter");
+    const prev    = containerEl.querySelector(".rsl-prev");
+    const next    = containerEl.querySelector(".rsl-next");
+    const badge   = containerEl.querySelector(".room-cover-badge");
+    if (!photos.length) {
+      wrap.innerHTML = `<div class="no-room-photo"><i class="fa-solid fa-image" style="font-size:32px"></i>لا توجد صور</div>`;
+      return;
+    }
+    // sort by position, cover first
+    photos.sort((a,b) => (b.is_cover?1:0)-(a.is_cover?1:0) || a.position-b.position);
+    let idx = 0;
+    track.innerHTML = photos.map((p,i) =>
+      `<img src="${p.url}" alt="صورة" onclick="lbOpen(window.__roomPhotos_${containerEl.dataset.roomid},${i})" />`
+    ).join("");
+    window["__roomPhotos_"+containerEl.dataset.roomid] = photos.map(p=>p.url);
+    const update = () => {
+      track.style.transform = `translateX(-${idx*100}%)`;
+      counter.textContent   = (idx+1) + " / " + photos.length;
+      if(badge) badge.style.display = photos[idx].is_cover ? "" : "none";
+    };
+    update();
+    prev.onclick = (e) => { e.stopPropagation(); if(idx>0){ idx--; update(); } };
+    next.onclick = (e) => { e.stopPropagation(); if(idx<photos.length-1){ idx++; update(); } };
+    if(photos.length<=1){ prev.style.display="none"; next.style.display="none"; counter.style.display="none"; }
+  }
 
-      async function loadMessages() {
-        if (!hotelId) return;
-        const { data, error } = await supabaseClient
-          .from("hotel_messages").select("*")
-          .eq("hotel_id", hotelId)
-          .order("created_at", { ascending: true });
-        if (error || !data) return;
+  /* ================================================================
+     LOAD ALL ROOMS with photos + beds + features
+  ================================================================ */
+  async function loadRooms() {
+    const { data: rooms } = await sb.from("rooms").select("*").eq("hotel_id", hotelId).order("created_at", { ascending: true });
+    if (!rooms || !rooms.length) return;
 
-        const box = document.getElementById("chatBox");
-        box.innerHTML = "";
-        data.forEach((msg) => {
-          const p = document.createElement("p");
-          const senderText = msg.sender_type === "hotel"
-            ? i18next.t("chat.hotel") : i18next.t("chat.you");
-          p.textContent = senderText + " " + msg.message;
-          p.style.textAlign = msg.sender_type === "hotel" ? "left" : "right";
-          box.appendChild(p);
-        });
-        box.scrollTop = box.scrollHeight;
-      }
+    const roomIds = rooms.map(r => r.id);
 
-      async function sendMessage() {
-        const input = document.getElementById("chatInput");
-        const msg = input.value.trim();
-        if (!msg || !hotelId) return;
+    const [
+      { data: allPhotos   },
+      { data: allBeds     },
+      { data: allFeatures },
+      { data: allBathFeats},
+    ] = await Promise.all([
+      sb.from("room_photos").select("*").in("room_id", roomIds).order("position"),
+      sb.from("room_beds").select("*").in("room_id", roomIds),
+      sb.from("room_features").select("*").in("room_id", roomIds),
+      sb.from("room_bathroom_features").select("*").in("room_id", roomIds),
+    ]);
 
-        const { data: userData } = await supabaseClient.auth.getUser();
-        if (!userData.user) return alert("يجب تسجيل الدخول");
+    const photoMap   = {};
+    const bedsMap    = {};
+    const featMap    = {};
+    const bathMap    = {};
 
-        const { error } = await supabaseClient.from("hotel_messages").insert([{
-          hotel_id: hotelId,
-          hotel_name: document.getElementById("hotelName").textContent,
-          user_id: userData.user.id,
-          message: msg,
-          sender_type: "user",
-        }]);
-        if (error) return console.error(error);
+    (allPhotos    || []).forEach(p => { (photoMap[p.room_id]    = photoMap[p.room_id]    || []).push(p); });
+    (allBeds      || []).forEach(b => { (bedsMap[b.room_id]     = bedsMap[b.room_id]     || []).push(b); });
+    (allFeatures  || []).forEach(f => { (featMap[f.room_id]     = featMap[f.room_id]     || []).push(f.feature); });
+    (allBathFeats || []).forEach(f => { (bathMap[f.room_id]     = bathMap[f.room_id]     || []).push(f.feature); });
 
-        input.value = "";
-        loadMessages();
-      }
+    const grid = document.getElementById("roomsGrid");
+    grid.innerHTML = "";
 
-      document.getElementById("sendMsg").addEventListener("click", sendMessage);
-      document.getElementById("chatInput").addEventListener("keydown", (e) => {
-        if (e.key === "Enter") sendMessage();
-      });
+    rooms.forEach(room => {
+      const photos   = photoMap[room.id]  || [];
+      const beds     = bedsMap[room.id]   || [];
+      const features = featMap[room.id]   || [];
+      const bathFeat = bathMap[room.id]   || [];
+      const extraInf = Array.isArray(room.extra_info) ? room.extra_info : [];
+      const price    = Number(room.price || 0);
+      const currency = room.currency || "EGP";
+      const maxAdult = room.max_adults   || room.capacity || "";
+      const maxChild = room.max_children || 0;
 
-      document.getElementById("bookNowBtn").addEventListener("click", () => {
-        window.location.href = `booking.html?id=${hotelId}`;
-      });
+      // Tags
+      const tags = [];
+      if (room.room_type)   tags.push({ label: room.room_type, cl: "" });
+      if (room.size_sqm)    tags.push({ label: room.size_sqm + " م²", cl: "" });
+      if (maxAdult)         tags.push({ label: maxAdult + " بالغ" + (maxChild ? " + " + maxChild + " طفل" : ""), cl: "" });
+      if (room.min_stay > 1)tags.push({ label: "أدنى " + room.min_stay + " ليالي", cl: "amber" });
+      if (room.available_rooms) tags.push({ label: room.available_rooms + " غرفة متاحة", cl: "accent" });
 
-      function updateContent() {
-        document.querySelectorAll("[data-i18n]").forEach((el) => {
-          el.innerHTML = i18next.t(el.dataset.i18n);
-        });
-        document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-          el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
-        });
-        document.documentElement.lang = i18next.language;
-        document.documentElement.dir = i18next.language === "ar" ? "rtl" : "ltr";
-      }
+      // Flags (boolean features)
+      const flags = [];
+      if (room.breakfast_included)  flags.push({ label: "🥐 إفطار مشمول", cl: "green" });
+      if (room.pay_at_arrival)      flags.push({ label: "🏨 دفع عند الوصول", cl: "blue" });
+      if (room.refundable)          flags.push({ label: "✅ قابل للإلغاء", cl: "green" });
+      if (room.smoking_allowed)     flags.push({ label: "🚬 يسمح بالتدخين", cl: "amber" });
+      if (room.accessible)          flags.push({ label: "♿ لذوي الاحتياجات", cl: "blue" });
+      if (room.children_allowed)    flags.push({ label: "👶 يسمح بالأطفال", cl: "green" });
+      if (room.crib_available)      flags.push({ label: "🛏 سرير أطفال" + (room.crib_price ? " (" + room.crib_price + " " + currency + ")" : " مجاني"), cl: "blue" });
+      if (room.extra_bed_available) flags.push({ label: "🛏 سرير إضافي" + (room.extra_bed_price ? " (" + room.extra_bed_price + " " + currency + ")" : " مجاني"), cl: "blue" });
+      extraInf.forEach(ei => flags.push({ label: ei, cl: "amber" }));
 
-      i18next.init({
-        lng: localStorage.getItem("lang") || "ar",
-        fallbackLng: "en",
-        resources: {
-          ar: { translation: {
-            hotel: { price: "جنيه / ليلة", details: "عرض التفاصيل", amenities: "المرافق",
-              map: "عرض الموقع على الخريطة", mapUnavailable: "الموقع غير متوفر",
-              noHotels: "لا توجد فنادق حالياً", noAmenities: "لا توجد مرافق مسجلة" },
-            chat: { title: "الدردشة مع الفندق", placeholder: "اكتب رسالتك...",
-              send: "إرسال", you: " أنت:", hotel: " الفندق:" },
-          }},
-          en: { translation: {
-            hotel: { price: "EGP / night", details: "View details", amenities: "Amenities",
-              map: "View on map", mapUnavailable: "Location not available",
-              noHotels: "No hotels available", noAmenities: "No amenities available" },
-            chat: { title: "Chat with the hotel", placeholder: "Type your message...",
-              send: "Send", you: " You:", hotel: " Hotel:" },
-          }},
-        },
-      }, function () {
-        updateContent();
-        loadHotel();
-        loadMessages();
-        setInterval(loadMessages, 3000);
-      });
-
-const policiesBox = document.getElementById("hotelPolicies");
-
-if (policiesBox) {
-  policiesBox.innerHTML = "";
-
-  if (data.policies && data.policies.trim() !== "") {
-
-    data.policies
-      .split(",")
-      .forEach(policy => {
-
-        policiesBox.innerHTML += `
-          <div class="policy-item">
-            <i class="fa-solid fa-circle-check"></i>
-            ${policy.trim()}
+      const card = document.createElement("div");
+      card.className = "room-card";
+      card.dataset.roomid = room.id;
+      card.innerHTML = `
+        <div class="room-slider-wrap">
+          ${photos.some(p=>p.is_cover) ? '<div class="room-cover-badge">📸 الصورة الرئيسية</div>' : ''}
+          <div class="room-slider-track"></div>
+          <button type="button" class="rsl-nav rsl-prev">‹</button>
+          <button type="button" class="rsl-nav rsl-next">›</button>
+          <div class="rsl-counter"></div>
+        </div>
+        <div class="room-body">
+          <div class="room-header-row">
+            <div>
+              <div class="room-name">${room.name || room.room_type || "غرفة"}</div>
+              ${room.room_type ? `<div style="font-size:13px;color:var(--muted)">${room.room_type}</div>` : ""}
+            </div>
+            ${price ? `<div class="room-price-box">
+              <div class="room-price-val">${price.toLocaleString("ar-EG")}</div>
+              <div class="room-price-label">${currency} / ليلة</div>
+            </div>` : ""}
           </div>
-        `;
+          ${tags.length ? `<div class="room-meta-tags">${tags.map(t=>`<span class="room-tag ${t.cl}">${t.label}</span>`).join("")}</div>` : ""}
+          ${room.description ? `<p class="room-desc">${room.description}</p>` : ""}
+          ${beds.length ? `
+            <div class="room-section-title"><i class="fa-solid fa-bed"></i> الأسرّة</div>
+            <div class="room-beds-list">${beds.map(b=>`<span class="bed-tag">🛏 ${b.bed_type} × ${b.quantity}</span>`).join("")}</div>
+          ` : ""}
+          ${features.length ? `
+            <div class="room-section-title"><i class="fa-solid fa-star"></i> مرافق الغرفة</div>
+            <div class="room-features-grid">${features.map(f=>`<span class="feature-chip">✓ ${f}</span>`).join("")}</div>
+          ` : ""}
+          ${bathFeat.length ? `
+            <div class="room-section-title"><i class="fa-solid fa-shower"></i> مرافق الحمام</div>
+            <div class="room-features-grid">${bathFeat.map(f=>`<span class="feature-chip">✓ ${f}</span>`).join("")}</div>
+          ` : ""}
+          ${flags.length ? `<div class="room-flags">${flags.map(f=>`<span class="room-flag ${f.cl}">${f.label}</span>`).join("")}</div>` : ""}
+          <button class="room-book-btn" onclick="bookRoom('${room.id}')">
+            <i class="fa-solid fa-calendar-check"></i> احجز هذه الغرفة
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+      buildRoomSlider(card, photos);
+    });
 
-      });
+    document.getElementById("roomsSection").style.display = "";
+  }
 
-  } else {
+  function bookRoom(roomId) {
+    const ci = params.get("ci") || "";
+    const co = params.get("co") || "";
+    window.location.href = `booking.html?id=${hotelId}&room=${roomId}&ci=${encodeURIComponent(ci)}&co=${encodeURIComponent(co)}`;
+  }
 
-    policiesBox.innerHTML = `
-      <div class="policy-item">
-        لا توجد سياسات متاحة
+  /* ================================================================
+     LOAD HOTEL (main data)
+  ================================================================ */
+  async function loadHotel() {
+    if (!hotelId) {
+      document.body.innerHTML = `<p style="padding:48px;text-align:center;font-size:18px">❌ لم يتم تحديد الفندق</p>`;
+      return;
+    }
+    const { data, error } = await sb.from("hotels").select("*").eq("id", hotelId).single();
+    if (error || !data) {
+      document.body.innerHTML = `<p style="padding:48px;text-align:center;font-size:18px">❌ الفندق غير موجود</p>`;
+      return;
+    }
+
+    /* Title */
+    document.title = (data.hotel_name || "فندق") + " – Sunget";
+    document.getElementById("hotelName").textContent  = data.hotel_name || "";
+    document.getElementById("hotelPrice").textContent = data.price_per_night
+      ? Number(data.price_per_night).toLocaleString("ar-EG") + " جنيه / ليلة"
+      : "";
+
+    /* Meta badges */
+    const badges = [];
+    if (data.stars)            badges.push("⭐".repeat(+data.stars));
+    if (data.property_type)    badges.push(data.property_type);
+    if (data.city)             badges.push("📍 " + data.city + (data.governorate ? "، " + data.governorate : ""));
+    if (data.established_year) badges.push("🏗️ " + data.established_year);
+    document.getElementById("metaRow").innerHTML = badges.map(b => `<span class="meta-badge">${b}</span>`).join("");
+
+    /* Sticky bar */
+    document.getElementById("sbbName").textContent  = data.hotel_name || "";
+    document.getElementById("sbbPrice").textContent = data.price_per_night
+      ? Number(data.price_per_night).toLocaleString("ar-EG") + " EGP"
+      : "";
+
+    /* Hotel photos from hotels.photo_urls */
+    let hotelPhotos = [];
+    if (Array.isArray(data.photo_urls))           hotelPhotos = data.photo_urls.filter(Boolean);
+    else if (typeof data.photo_urls === "string") {
+      try { hotelPhotos = JSON.parse(data.photo_urls).filter(Boolean); }
+      catch { hotelPhotos = data.photo_urls.split(",").map(s=>s.trim()).filter(Boolean); }
+    }
+    buildHotelSlider(hotelPhotos);
+
+    /* Info grid */
+    const infoItems = [];
+    if (data.city || data.governorate)   infoItems.push({ icon: "fa-map-marker-alt",     label: "الموقع",         val: [data.city, data.governorate].filter(Boolean).join("، ") });
+    if (data.address)                    infoItems.push({ icon: "fa-road",                label: "العنوان",        val: data.address });
+    if (data.whatsapp)                   infoItems.push({ icon: "fa-brands fa-whatsapp", label: "واتساب",         val: data.whatsapp });
+    if (data.email)                      infoItems.push({ icon: "fa-envelope",            label: "البريد",         val: data.email });
+    if (data.website)                    infoItems.push({ icon: "fa-globe",               label: "الموقع الرسمي",  val: data.website });
+    if (data.guests_count)               infoItems.push({ icon: "fa-users",               label: "السعة",          val: data.guests_count + " ضيف" });
+    if (data.bathrooms_count)            infoItems.push({ icon: "fa-bath",                label: "الحمامات",       val: data.bathrooms_count + " حمام" });
+    if (data.area_size)                  infoItems.push({ icon: "fa-expand-arrows-alt",   label: "المساحة",        val: data.area_size + " " + (data.area_unit === "ft2" ? "قدم²" : "م²") });
+    if (data.has_breakfast === "yes")    infoItems.push({ icon: "fa-coffee",              label: "الإفطار",        val: data.breakfast_included === "yes" ? "مشمول في السعر" : "بتكلفة إضافية" });
+    if (data.parking_available && data.parking_available !== "no") infoItems.push({ icon: "fa-square-parking", label: "موقف سيارات", val: data.parking_available === "free" ? "مجاني" : "مدفوع" });
+    if (data.allow_children)             infoItems.push({ icon: "fa-child",               label: "الأطفال",        val: data.allow_children === "no" ? "غير مسموح" : "مسموح" });
+    const langs = Array.isArray(data.languages) ? data.languages : (data.languages || "").split(",").map(s=>s.trim()).filter(Boolean);
+    if (langs.length)                    infoItems.push({ icon: "fa-language",            label: "اللغات",         val: langs.join("، ") });
+
+    document.getElementById("infoGrid").innerHTML = infoItems.map(it => `
+      <div class="info-card">
+        <i class="fa-solid ${it.icon}"></i>
+        <div>
+          <div class="ic-label">${it.label}</div>
+          <div class="ic-val">${it.val}</div>
+        </div>
+      </div>
+    `).join("");
+
+    /* Description */
+    document.getElementById("hotelDesc").textContent = data.description || "";
+
+    /* Amenities */
+    let amenArr = [];
+    if (Array.isArray(data.amenities))           amenArr = data.amenities;
+    else if (typeof data.amenities === "string") amenArr = data.amenities.split(",").map(s=>s.trim()).filter(Boolean);
+    if (amenArr.length) {
+      document.getElementById("amenGrid").innerHTML = amenArr.map(a => `<span class="amenity">${a}</span>`).join("");
+      document.getElementById("amenSection").style.display = "";
+    }
+
+    /* Policies */
+    let polArr = [];
+    if (Array.isArray(data.policies))           polArr = data.policies;
+    else if (typeof data.policies === "string") polArr = data.policies.split(",").map(s=>s.trim()).filter(Boolean);
+    if (polArr.length) {
+      document.getElementById("polList").innerHTML = polArr.map(p => `
+        <div class="policy-item"><i class="fa-solid fa-circle-check"></i>${p}</div>
+      `).join("");
+      document.getElementById("polSection").style.display = "";
+    }
+
+    /* Cancellation policy */
+    if (data.cancellation_policy !== undefined && data.cancellation_policy !== null) {
+      const card = document.getElementById("cancelCard");
+      if (data.cancellation_policy) {
+        card.className = "cancel-box allowed";
+        card.innerHTML = `<i class="fa-solid fa-rotate-left"></i><span>يُسمح بإلغاء الحجز</span>`;
+      } else {
+        card.className = "cancel-box denied";
+        card.innerHTML = `<i class="fa-solid fa-ban"></i><span>لا يُسمح بإلغاء الحجز بعد تأكيده</span>`;
+      }
+      document.getElementById("cancelSection").style.display = "";
+    }
+
+    /* Map */
+    if (data.map_link && data.map_link.trim()) {
+      document.getElementById("mapLink").href = data.map_link;
+      document.getElementById("mapSection").style.display = "";
+    } else if (data.latitude && data.longitude) {
+      document.getElementById("mapLink").href = `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+      document.getElementById("mapSection").style.display = "";
+    }
+
+    /* Book buttons */
+    const goBook = () => {
+      const ci = params.get("ci") || "";
+      const co = params.get("co") || "";
+      window.location.href = `booking.html?id=${hotelId}&ci=${encodeURIComponent(ci)}&co=${encodeURIComponent(co)}`;
+    };
+    document.getElementById("bookNowBtn").onclick = goBook;
+    document.getElementById("sbbBookBtn").onclick  = goBook;
+
+    /* Recently viewed */
+    try {
+      const rv = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+      const entry = { id: hotelId, name: data.hotel_name, price: data.price_per_night, ts: Date.now() };
+      const filtered = rv.filter(h => h.id !== hotelId).slice(0, 4);
+      filtered.unshift(entry);
+      localStorage.setItem("recentlyViewed", JSON.stringify(filtered));
+    } catch (e) {}
+  }
+
+  /* ================================================================
+     REVIEWS
+  ================================================================ */
+  async function loadReviews() {
+    if (!hotelId) return;
+    const { data } = await sb.from("reviews").select("*").eq("hotel_id", hotelId).order("created_at", { ascending: false });
+    if (!data || !data.length) return;
+    const avg5  = data.reduce((s,r) => s + (r.rating||0), 0) / data.length;
+    const avg10 = avg5 * 2;
+    document.getElementById("avgScore").textContent = avg10.toFixed(1);
+    document.getElementById("scoreWord").textContent = avg10>=9?"ممتاز":avg10>=8?"رائع":avg10>=7?"جيد جداً":avg10>=6?"جيد":"مقبول";
+    document.getElementById("reviewCount").textContent = data.length + " تقييم";
+    document.getElementById("reviewSummary").style.display = "flex";
+    const fillBar = (bid, vid, field) => {
+      const vals = data.map(r=>r[field]).filter(Boolean);
+      if (!vals.length) return;
+      const av = vals.reduce((s,v)=>s+v,0)/vals.length;
+      const b  = document.getElementById(bid);
+      const v  = document.getElementById(vid);
+      if (b) b.style.width = (av/5*100) + "%";
+      if (v) v.textContent = av.toFixed(1);
+    };
+    fillBar("bLocation","vLocation","location_rating");
+    fillBar("bCleanliness","vCleanliness","cleanliness_rating");
+    fillBar("bComfort","vComfort","comfort_rating");
+    fillBar("bService","vService","service_rating");
+    fillBar("bValue","vValue","value_rating");
+    document.getElementById("reviewsList").innerHTML = data.map(r => `
+      <div class="review-card">
+        <div class="r-head">
+          <span class="r-name">${r.guest_name||"ضيف"}</span>
+          <span class="r-stars">${"★".repeat(r.rating||0)}${"☆".repeat(5-(r.rating||0))}</span>
+          <span class="r-date">${r.created_at?new Date(r.created_at).toLocaleDateString("ar-EG"):""}</span>
+        </div>
+        <p class="r-body">${r.comment||""}</p>
+      </div>
+    `).join("");
+  }
+
+  async function initReviewForm() {
+    const wrap = document.getElementById("reviewFormWrap");
+    const { data: u } = await sb.auth.getUser();
+    if (!u?.user) {
+      wrap.innerHTML = `<p style="text-align:center;padding:20px;color:var(--muted);font-size:15px"><a href="login.html" style="color:var(--accent);font-weight:700">سجّل دخولك</a> لإضافة تقييمك</p>`;
+      return;
+    }
+    wrap.innerHTML = `
+      <div class="review-form">
+        <h3><i class="fa-solid fa-star" style="color:var(--accent)"></i> أضف تقييمك</h3>
+        <div class="star-input">
+          <input type="radio" name="star" id="s5" value="5"><label for="s5">★</label>
+          <input type="radio" name="star" id="s4" value="4"><label for="s4">★</label>
+          <input type="radio" name="star" id="s3" value="3"><label for="s3">★</label>
+          <input type="radio" name="star" id="s2" value="2"><label for="s2">★</label>
+          <input type="radio" name="star" id="s1" value="1"><label for="s1">★</label>
+        </div>
+        <textarea class="review-ta" id="reviewText" placeholder="شارك تجربتك مع هذا الفندق..."></textarea>
+        <button class="review-submit" onclick="submitReview()">
+          <i class="fa-solid fa-paper-plane"></i> إرسال التقييم
+        </button>
       </div>
     `;
-
   }
-}
-    </script>
-   <script>
-document
-.getElementById("contactHotelBtn")
-.addEventListener("click", function(e){
 
-  e.preventDefault();
+  async function submitReview() {
+    const rEl = document.querySelector("input[name='star']:checked");
+    const txt  = document.getElementById("reviewText")?.value.trim();
+    if (!rEl) { alert("اختر عدد النجوم"); return; }
+    if (!txt)  { alert("اكتب تقييمك أولاً"); return; }
+    const { data: u } = await sb.auth.getUser();
+    if (!u?.user) { alert("يجب تسجيل الدخول"); return; }
+    const { error } = await sb.from("reviews").insert([{
+      hotel_id: hotelId, user_id: u.user.id, guest_name: u.user.email,
+      rating: +rEl.value, comment: txt,
+    }]);
+    if (error) { alert("حدث خطأ أثناء الإرسال"); return; }
+    document.getElementById("reviewFormWrap").innerHTML = `<p style="text-align:center;color:var(--success);padding:20px;font-weight:700">✅ شكراً! تم إرسال تقييمك</p>`;
+    loadReviews();
+  }
 
-  const chat = document.getElementById("chat-section");
-
-  if(chat){
-    chat.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
+  /* ================================================================
+     CHAT
+  ================================================================ */
+  async function loadMessages() {
+    if (!hotelId) return;
+    const { data } = await sb.from("hotel_messages").select("*").eq("hotel_id", hotelId).order("created_at");
+    if (!data) return;
+    const box = document.getElementById("chatBox");
+    box.innerHTML = "";
+    data.forEach(msg => {
+      const d = document.createElement("div");
+      d.className = "bubble " + (msg.sender_type==="hotel"?"theirs":"mine");
+      d.textContent = (msg.sender_type==="hotel"?"🏨 الفندق: ":"أنت: ") + msg.message;
+      box.appendChild(d);
     });
+    box.scrollTop = box.scrollHeight;
   }
 
-});
-
-window.addEventListener("load", () => {
-
-  if(window.location.hash === "#chat-section"){
-
-    const scrollToChat = () => {
-
-      const chat = document.getElementById("chat-section");
-
-      if(chat){
-
-        chat.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
-
-      }
-
-    };
-
-    // بعد تحميل كل الصور والسلايدر
-    setTimeout(scrollToChat, 1500);
-
+  async function sendMessage() {
+    const inp = document.getElementById("chatInput");
+    const msg = inp.value.trim();
+    if (!msg || !hotelId) return;
+    const { data: u } = await sb.auth.getUser();
+    if (!u?.user) { alert("يجب تسجيل الدخول أولاً"); return; }
+    const { error } = await sb.from("hotel_messages").insert([{
+      hotel_id:    hotelId,
+      hotel_name:  document.getElementById("hotelName").textContent,
+      user_id:     u.user.id,
+      message:     msg,
+      sender_type: "user",
+    }]);
+    if (error) { console.error(error); return; }
+    inp.value = "";
+    loadMessages();
   }
 
-});
-</script>
-<script src="translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <!-- تم حذف الملفات الخاصة بجوجل ترانسليت تماماً -->
-  </body>
+  document.getElementById("sendMsg").onclick = sendMessage;
+  document.getElementById("chatInput").addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); });
+
+  /* ================================================================
+     CONTACT BUTTON SMOOTH SCROLL
+  ================================================================ */
+  document.querySelector(".contact-btn").addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("chat-section").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* ================================================================
+     INIT
+  ================================================================ */
+  (async () => {
+    await loadHotel();
+    await loadRooms();
+    loadReviews();
+    initReviewForm();
+    loadMessages();
+    setInterval(loadMessages, 5000);
+    if (location.hash === "#chat-section") {
+      setTimeout(() => document.getElementById("chat-section").scrollIntoView({ behavior:"smooth" }), 1200);
+    }
+  })();
+  </script>
+</body>
 </html>

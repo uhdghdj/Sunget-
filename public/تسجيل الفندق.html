@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
@@ -2843,7 +2842,7 @@
                     ]);
                     room = r || {};
                     roomBeds = (beds||[]).map(b=>({type:b.bed_type,quantity:b.quantity}));
-                    existingPhotos = (photos||[]).map(p=>({id:p.id,url:p.url,is_cover:p.is_cover,position:p.position}));
+                    existingPhotos = (photos||[]).map(p=>({id:p.id,url:p.photo_url,is_cover:p.is_cover,position:p.position}));
                     room._features = (feats||[]).map(f=>f.feature);
                     room._bathroom_features = (bathFeats||[]).map(f=>f.feature);
                     room._extra_info = room.extra_info||[];
@@ -3188,7 +3187,7 @@
                           'upload_photo_'+i
                         );
                         const {data:urlData} = sb.storage.from('hotel-photos').getPublicUrl(path);
-                        photoRows.push({room_id:targetId,url:urlData.publicUrl,is_cover:ph.isCover,position:basePos+i});
+                        photoRows.push({room_id:targetId,photo_url:urlData.publicUrl,is_cover:ph.isCover,position:basePos+i});
                       }
                       await sbCall(sb.from('room_photos').insert(photoRows),'insert_photos');
                     }
@@ -4033,7 +4032,7 @@
               el.innerHTML = `<h2>💳 المحفظة</h2>
           <div class="grid cols-3">
             ${stat("إجمالي المبيعات", fmt(sales))}
-            ${stat("عمولة Sunget (5%)", fmt(commission))}
+            ${stat("عمولة Sunget (10%)", fmt(commission))}
             ${stat("أرباحك الصافية", fmt(earnings))}
             ${stat("مسحوبات سابقة", fmt(withdrawn))}
             ${stat("الرصيد المتاح", fmt(balance))}

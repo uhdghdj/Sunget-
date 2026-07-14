@@ -2,28 +2,24 @@ const CACHE_NAME = "sunget-v1";
 
 const urlsToCache = [
   "/",
-  "/index.html",
   "/offline.html"
 ];
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", event => {
   self.skipWaiting();
 
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
       )
     )
   );
@@ -31,24 +27,25 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const copy = response.clone();
+    caches.match(event.request).then(cached => {
+      return (
+        cached ||
+        fetch(event.request)
+          .then(response => {
+            const clone = response.clone();
 
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, copy);
-        });
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, clone);
+            });
 
-        return response;
-      })
-      .catch(() =>
-        caches.match(event.request).then(response => {
-          return response || caches.match("/offline.html");
-        })
-      )
+            return response;
+          })
+          .catch(() => caches.match("/offline.html"))
+      );
+    })
   );
 });

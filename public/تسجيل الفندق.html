@@ -2467,7 +2467,7 @@
               <input type="radio" name="payment_method" value="booking_payments" style="width:auto;margin:4px 0 0;padding:0;background:none;flex-shrink:0" ${v("payment_method") === "booking_payments" || !v("payment_method") ? "checked" : ""}>
               <div>
                 <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:4px">عبر الإنترنت: عند إجراء الحجز</div>
-                <div style="color:var(--muted);font-size:13px">ستتولى Booking.com تسهيل مدفوعات ضيوفك مع خدمة "مدفوعات Booking.com"</div>
+                <div style="color:var(--muted);font-size:13px">ستتولى sunget.com تسهيل مدفوعات ضيوفك مع خدمة "مدفوعات sunget.com"</div>
               </div>
             </label>
             <label style="display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid var(--border-dim);border-radius:12px;cursor:pointer;background:var(--surface2);transition:all .2s">
@@ -4041,7 +4041,7 @@
               el.innerHTML = `<h2>💳 المحفظة</h2>
           <div class="grid cols-3">
             ${stat("إجمالي المبيعات", fmt(sales))}
-            ${stat("عمولة Sunget (10%)", fmt(commission))}
+            ${stat("عمولة Sunget (5%)", fmt(commission))}
             ${stat("أرباحك الصافية", fmt(earnings))}
             ${stat("مسحوبات سابقة", fmt(withdrawn))}
             ${stat("الرصيد المتاح", fmt(balance))}

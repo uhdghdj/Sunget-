@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "sunget-v2";
+const CACHE_NAME = "sunget-v" + Date.now();
 
 const STATIC_FILES = [
   "/",

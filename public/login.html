@@ -1,1437 +1,992 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
-    <meta charset="UTF-8" />
-    <title>تفاصيل الفندق</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-    <link rel="stylesheet" href="hotel-details.css" />
-    <link rel="icon" href="favicon.png">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SUNGET — تسجيل دخول</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="sunget-signup.css" />
   </head>
   <style>
-/* ================== HOTEL DETAILS - SUNGET.COM ================== */
+    /* sunget-login.css - نفس الستايل الداكن الاحترافي 🔥 */
+    :root {
+      --bg: #0b0b0f;
+      --bg-2: #14141c;
+      --surface: #1a1a24;
+      --surface-2: #20202c;
+      --text: #ffffff;
+      --text-muted: #b8b8c4;
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #ffb400;
+      --accent-2: #ff7a00;
+      --danger: #e63946;
+      --success: #27b82e;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 35px 60px -15px rgba(0, 0, 0, 0.5);
+      --radius: 20px;
+      --gradient: linear-gradient(135deg, var(--accent), var(--accent-2));
+      --gradient-hover: linear-gradient(135deg, var(--accent-2), var(--accent));
+    }
 
-/* ---------- THEME VARIABLES ---------- */
-:root,
-[data-theme="dark"] {
-  --bg: #0b0b0f;
-  --bg-2: #14141c;
-  --surface: #1a1a24;
-  --surface-2: #20202c;
-  --text: #ffffff;
-  --text-muted: #b8b8c4;
-  --border: rgba(255, 255, 255, 0.08);
-  --accent: #ffb400;
-  --accent-2: #ff7a00;
-  --danger: #e63946;
-  --success: #27b82e;
-  --shadow: 0 10px 30px rgba(2, 1, 1, 0.45);
-  --radius: 14px;
-  --header-h: 80px;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-[data-theme="light"] {
-  --bg: #f7f7fb;
-  --bg-2: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f1f1f7;
-  --text: #1a1a24;
-  --text-muted: #555566;
-  --border: rgba(0, 0, 0, 0.08);
-  --accent: #ff8a00;
-  --accent-2: #ff5e00;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* ================== GOOGLE TRANSLATE - COMPLETE HIDE ================== */
-#google_translate_element,
-.goog-te-banner-frame,
-.goog-te-menu-frame,
-.goog-te-balloon-frame,
-.goog-te-gadget,
-.goog-logo-link,
-.goog-te-gadget span,
-.skiptranslate,
-.goog-te-combo,
-.VIpgJd-ZVi9od-ORHb-OEVmkb svg,
-[aria-label*="Google"],
-[title*="Google"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  width: 0 !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  z-index: -9999 !important;
-}
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 10% 30%, rgba(255, 180, 0, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 122, 0, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 40% 10%, rgba(255, 180, 0, 0.06) 0%, transparent 40%);
+      z-index: -1;
+      animation: backgroundFloat 30s ease-in-out infinite;
+    }
 
-body {
-  top: 0 !important;
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
+    @keyframes backgroundFloat {
+      0%, 100% { transform: scale(1) translateY(0px); }
+      33% { transform: scale(1.05) translateY(-20px); }
+      66% { transform: scale(1.02) translateY(-10px); }
+    }
 
-.goog-text-highlight,
-.goog-te-modal,
-.goog-te-menu-value {
-  display: none !important;
-}
+    /* Main Card */
+    .card {
+      background: rgba(26, 26, 36, 0.95);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 60px 50px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      animation: cardSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-/* ---------- RESET & BASE ---------- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+    @keyframes cardSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
 
-body {
-  font-family: "Cairo", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-  transition: background 0.3s ease, color 0.3s ease;
-}
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--gradient);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
 
-html[dir="rtl"] { direction: rtl; text-align: right; }
+    /* Logo Section */
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
 
-/* ---- HEADER ---- */
-.hotel-header {
-  background: linear-gradient(135deg, rgba(11,11,15,0.95), rgba(26,26,36,0.95));
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 25px 5%;
-  text-align: center;
-  position: relative;
-  box-shadow: var(--shadow);
-}
-.hotel-header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  opacity: 0.1;
-  z-index: 0;
-}
-.hotel-header h1 {
-  font-size: clamp(28px, 6vw, 42px);
-  font-weight: 800;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -0.5px;
-}
-.hotel-header .header-meta {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-.header-stars { color: var(--accent); font-size: 20px; letter-spacing: 2px; }
-.header-badge {
-  background: rgba(255,180,0,0.15);
-  border: 1px solid rgba(255,180,0,0.3);
-  color: var(--accent);
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 700;
-}
+    .logo-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255, 255, 255, 0.15);
+      margin: 0 auto 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-/* ---- SLIDER ---- */
-.slider-wrap { max-width: 1100px; margin: 30px auto 0; padding: 0 5%; }
-.slider {
-  position: relative;
-  overflow: hidden;
-  height: 450px;
-  border-radius: var(--radius);
-  direction: ltr;
-  background: linear-gradient(135deg, var(--surface-2), var(--surface));
-  box-shadow: var(--shadow);
-}
-.slider::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255,180,0,0.08), transparent 60%),
-              radial-gradient(circle at 70% 70%, rgba(255,122,0,0.06), transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-.slider .empty-state {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--text-muted);
-  font-size: 15px;
-  z-index: 1;
-}
-.slider .empty-state i { font-size: 40px; color: var(--accent); opacity: .8; }
-.slides {
-  display: flex;
-  flex-wrap: nowrap;
-  height: 100%;
-  width: 100%;
-  transition: transform 0.5s ease;
-  will-change: transform;
-}
-.slides img {
-  width: 100%;
-  height: 100%;
-  flex: 0 0 100%;
-  object-fit: cover;
-  user-select: none;
-  -webkit-user-drag: none;
-  pointer-events: none;
-}
-.nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px; height: 50px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
-  font-size: 22px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.nav.prev { left: 15px; }
-.nav.next { right: 15px; }
-.nav:hover { background: var(--accent); color: #000; transform: translateY(-50%) scale(1.1); }
-.dots { display: flex; gap: 8px; justify-content: center; padding: 18px 0 4px; }
-.dots span {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-.dots span.active, .dots span:hover { background: var(--accent); transform: scale(1.2); }
+    .logo-img:hover {
+      transform: scale(1.08) rotate(5deg);
+      border-color: rgba(255, 180, 0, 0.4);
+      box-shadow: 0 20px 45px rgba(255, 180, 0, 0.3);
+    }
 
-/* ---- ACTION BUTTONS ---- */
-.book-wrap {
-  padding: 0 5%;
-  margin: 20px 0 40px;
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.book-btn {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #000;
-  font-weight: 700;
-  font-size: 18px;
-  padding: 16px 40px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 10px 25px rgba(255,180,0,0.35);
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-.book-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(255,180,0,0.45); }
+    .logo h3 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+    }
 
-#contactHotelBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px 30px;
-  background: var(--surface);
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 16px;
-  border-radius: 50px;
-  border: 2px solid var(--border);
-  transition: all .3s ease;
-}
-#contactHotelBtn:hover { background: linear-gradient(135deg,var(--accent),var(--accent-2)); color:#000; border-color:var(--accent); }
+    .logo h3:nth-of-type(2) {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text);
+      background: none;
+      -webkit-text-fill-color: var(--text);
+      margin-top: 4px;
+      opacity: 0.9;
+    }
 
-/* ---- DYNAMIC SECTIONS ---- */
-.dyn-section {
-  max-width: 900px;
-  margin: 0 auto 60px;
-  padding: 0 5%;
-}
-.dyn-section h2 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: center;
-  position: relative;
-}
-.dyn-section h2::after {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  border-radius: 2px;
-  margin: 10px auto 0;
-}
+    /* Form */
+    #login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
 
-/* Info grid */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 14px;
-}
-.info-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 18px;
-  transition: .3s;
-}
-.info-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.info-card .ic-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.info-card .ic-label i { color: var(--accent); }
-.info-card .ic-value { font-size: 15px; font-weight: 600; word-break: break-word; }
-.info-card .ic-value a {
-  color: var(--accent);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.info-card .ic-value a:hover { text-decoration: underline; }
+    #login-form input {
+      width: 100%;
+      padding: 24px 28px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text);
+      font-weight: 500;
+    }
 
-/* Description */
-.desc-text {
-  font-size: 16px;
-  line-height: 1.9;
-  color: var(--text-muted);
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+    #login-form input::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
 
-/* Chips */
-.chips-wrap { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 10px 0; }
-.chip {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  padding: 8px 18px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: .3s;
-  cursor: default;
-}
-.chip:hover { background: var(--surface-2); border-color: var(--accent); }
-.chip.accent { background: rgba(255,180,0,0.12); border-color: rgba(255,180,0,0.3); color: var(--accent); }
+    #login-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow:
+        0 0 0 4px rgba(255, 180, 0, 0.15),
+        0 20px 40px rgba(0, 0, 0, 0.3);
+      transform: translateY(-3px);
+      background: var(--surface-2);
+    }
 
-/* Amenities grid */
-.amenities { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px 0; }
-.amenity {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 12px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  cursor: default;
-}
-.amenity:hover { background: var(--surface-2); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); border-color: var(--accent); }
+    /* Password Wrapper */
+    .pass-wrapper {
+      position: relative;
+      width: 100%;
+    }
 
-/* Policies */
-.policies-list { display: flex; flex-direction: column; gap: 12px; }
-.policy-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  transition: .3s;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.policy-item:hover { border-color: var(--accent); transform: translateY(-2px); }
-.policy-item i { color: var(--accent); margin-top: 2px; flex-shrink: 0; }
+    .pass-wrapper input {
+      padding-right: 60px;
+    }
 
-/* Map button */
-.map-section { max-width: 900px; margin: 0 auto 60px; padding: 0 5%; text-align: center; }
-.map-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--surface);
-  color: var(--text);
-  padding: 16px 30px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 16px;
-  border: 2px solid var(--border);
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-.map-btn:hover { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,180,0,0.35); border-color: var(--accent); }
+    .pass-wrapper button {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
 
-/* WhatsApp button */
-.wa-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #25D366;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 14px;
-  text-decoration: none;
-  transition: .3s;
-}
-.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,0.4); }
+    .pass-wrapper button:hover {
+      color: var(--accent);
+      background: rgba(255, 180, 0, 0.1);
+    }
 
-/* Social links row */
-.social-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 10px 0; }
-.social-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 14px;
-  text-decoration: none;
-  transition: .3s;
-}
-.social-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    /* Submit Button */
+    #login-form button[type="submit"] {
+      padding: 24px 36px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+      background: var(--gradient);
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: var(--shadow);
+      margin-top: 12px;
+    }
 
-/* Boolean badges */
-.bool-yes { color: var(--success); font-weight: 700; }
-.bool-no { color: var(--danger); font-weight: 700; }
+    #login-form button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      transition: left 0.7s;
+    }
 
-/* ---- REVIEWS SECTION ---- */
-.reviews-section { max-width: 960px; margin: 0 auto 60px; padding: 0 5%; }
-.reviews-inner { display: flex; flex-direction: column; gap: 28px; }
-.rating-summary { display: flex; gap: 30px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; align-items: center; }
-.rs-score-box { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
-.rs-score { font-size: 56px; font-weight: 800; background: linear-gradient(135deg, #003580, #0057b7); color: #fff; width: 90px; height: 90px; border-radius: 14px 14px 14px 0; display: flex; align-items: center; justify-content: center; }
-.rs-label { font-size: 15px; font-weight: 700; color: var(--text); }
-.rs-count { font-size: 13px; color: var(--text-muted); }
-.rs-bars { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-.rs-bar-row { display: flex; align-items: center; gap: 10px; }
-.rs-bar-label { font-size: 13px; color: var(--text-muted); min-width: 80px; text-align: left; }
-.rs-bar-track { flex: 1; height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
-.rs-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(135deg, #003580, #0057b7); transition: width 0.6s ease; }
-.rs-bar-val { font-size: 13px; font-weight: 700; color: var(--text); min-width: 28px; text-align: center; }
-.reviews-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.reviews-head h2 { font-size: 24px; font-weight: 800; position: relative; }
-.reviews-head h2::after { content: ""; display: block; width: 50px; height: 3px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 2px; margin-top: 8px; }
-.write-review-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; font-weight: 700; font-size: 14px; font-family: "Cairo", sans-serif; padding: 10px 20px; border-radius: 30px; border: none; cursor: pointer; transition: 0.3s; white-space: nowrap; }
-.write-review-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,138,0,0.4); }
-.review-form-wrap { animation: popIn 0.25s ease; }
-.review-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 18px; }
-.review-form h3 { font-size: 20px; font-weight: 800; }
-.rf-stars-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.rf-cat { font-size: 14px; font-weight: 700; color: var(--text-muted); }
-.star-picker { display: flex; gap: 4px; }
-.star-picker span { font-size: 28px; color: var(--border); cursor: pointer; transition: color 0.15s, transform 0.15s; line-height: 1; }
-.star-picker span.active, .star-picker span:hover { color: #ffb400; transform: scale(1.15); }
-.rf-score-display { font-size: 18px; font-weight: 800; color: var(--accent); min-width: 56px; }
-.rf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-.rf-sub { display: flex; flex-direction: column; gap: 6px; }
-.rf-sub label { font-size: 13px; font-weight: 700; color: var(--text-muted); }
-.rf-sub select { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-family: "Cairo", sans-serif; font-size: 14px; color: var(--text); outline: none; cursor: pointer; transition: 0.2s; }
-.rf-sub select:focus { border-color: var(--accent); }
-.rf-trip { display: flex; flex-direction: column; gap: 10px; }
-.rf-trip label { font-size: 13px; font-weight: 700; color: var(--text-muted); }
-.trip-types { display: flex; flex-wrap: wrap; gap: 8px; }
-.trip-type-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted); font-family: "Cairo", sans-serif; font-size: 13px; cursor: pointer; transition: 0.2s; }
-.trip-type-btn.active, .trip-type-btn:hover { background: var(--accent); color: #000; border-color: transparent; font-weight: 700; }
-.review-form textarea { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-family: "Cairo", sans-serif; font-size: 14px; color: var(--text); outline: none; resize: vertical; transition: 0.2s; }
-.review-form textarea:focus { border-color: var(--accent); }
-.rf-pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.rf-actions { display: flex; gap: 12px; justify-content: flex-end; }
-.rf-cancel { padding: 10px 20px; border-radius: 30px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-family: "Cairo", sans-serif; font-size: 14px; cursor: pointer; transition: 0.2s; }
-.rf-cancel:hover { background: var(--surface-2); }
-.rf-submit { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; font-weight: 700; font-family: "Cairo", sans-serif; font-size: 14px; padding: 10px 24px; border-radius: 30px; border: none; cursor: pointer; transition: 0.3s; }
-.rf-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,138,0,0.4); }
-.reviews-list { display: flex; flex-direction: column; gap: 16px; }
-.reviews-loading { text-align: center; padding: 40px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 10px; }
-.review-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 14px; transition: 0.2s; }
-.review-card:hover { border-color: rgba(255,180,0,0.3); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-.rc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.rc-user { display: flex; align-items: center; gap: 12px; }
-.rc-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #000; flex-shrink: 0; }
-.rc-user-info .rc-name { font-size: 15px; font-weight: 700; }
-.rc-user-info .rc-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.rc-trip-badge { background: var(--surface-2); padding: 2px 8px; border-radius: 10px; font-size: 11px; }
-.rc-score-box { display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0; }
-.rc-score { background: linear-gradient(135deg, #003580, #0057b7); color: #fff; font-size: 18px; font-weight: 800; padding: 6px 10px; border-radius: 8px 8px 8px 0; min-width: 42px; text-align: center; }
-.rc-score-label { font-size: 11px; color: var(--text-muted); }
-.rc-title { font-size: 16px; font-weight: 700; }
-.rc-comment { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-.rc-pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.rc-pro, .rc-con { font-size: 13px; padding: 10px 14px; border-radius: 10px; }
-.rc-pro { background: rgba(39,184,46,0.1); border: 1px solid rgba(39,184,46,0.2); color: var(--success); }
-.rc-con { background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.15); color: var(--danger); }
-.rc-sub-ratings { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-.rc-sub-item { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 60px; }
-.rc-sub-item .sub-label { font-size: 11px; color: var(--text-muted); }
-.rc-sub-item .sub-val { font-size: 13px; font-weight: 700; color: var(--text); }
-.rc-provider-reply { background: var(--surface-2); border-radius: 10px; padding: 14px; border-right: 3px solid var(--accent); font-size: 13px; }
-.rc-provider-reply .reply-label { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-.no-reviews { text-align: center; padding: 50px 20px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    #login-form button[type="submit"]:hover::before {
+      left: 100%;
+    }
 
-/* ---- CHAT ---- */
-.chat-section { max-width: 700px; margin: 0 auto 80px; background: var(--surface); border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-.chat-section h2 { font-size: 28px; font-weight: 700; margin-bottom: 20px; text-align: center; position: relative; }
-.chat-section h2::after { content: ""; display: block; width: 60px; height: 4px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 2px; margin: 10px auto 0; }
-.chat-box { background: var(--surface-2); border-radius: 16px; height: 400px; padding: 20px; overflow-y: auto; margin-bottom: 20px; border: 1px solid var(--border); }
-.chat-box p { margin-bottom: 12px; padding: 12px 16px; border-radius: 18px; max-width: 75%; font-size: 15px; line-height: 1.5; word-wrap: break-word; animation: messageSlide 0.3s ease; }
-@keyframes messageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.chat-box p[style*="text-align: right"] { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-left: auto; }
-.chat-box p[style*="text-align: left"] { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-.chat-input-wrap { display: flex; gap: 12px; align-items: center; }
-#chatInput { flex: 1; background: var(--surface-2); border: 1px solid var(--border); border-radius: 25px; padding: 14px 20px; font-family: inherit; font-size: 15px; color: var(--text); outline: none; transition: all 0.3s ease; }
-#chatInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,180,0,0.15); }
-#sendMsg { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; font-weight: 700; padding: 14px 24px; border-radius: 25px; font-size: 15px; cursor: pointer; border: none; transition: all 0.3s ease; white-space: nowrap; }
-#sendMsg:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,180,0,0.35); }
-.chat-box::-webkit-scrollbar { width: 6px; }
-.chat-box::-webkit-scrollbar-track { background: transparent; }
-.chat-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-.chat-box::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    #login-form button[type="submit"]:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 40px 60px -15px rgba(255, 180, 0, 0.45);
+    }
 
-/* ---- RESPONSIVE ---- */
-@media (max-width: 768px) {
-  .slider { height: 350px; }
-  .nav { width: 42px; height: 42px; font-size: 18px; }
-  .hotel-header { padding: 20px 4%; }
-  .book-btn { padding: 14px 30px; font-size: 16px; }
-  .amenities { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
-  .chat-section { margin-bottom: 40px; padding: 30px 20px; }
-  .chat-box { height: 300px; }
-}
-@media (max-width: 480px) {
-  .slider { height: 240px; border-radius: 12px; }
-  .nav { width: 38px; height: 38px; font-size: 16px; }
-  .nav.prev { left: 8px; }
-  .nav.next { right: 8px; }
-  .hotel-header h1 { font-size: 24px; }
-  .book-btn { padding: 12px 24px; font-size: 15px; }
-  .amenities { grid-template-columns: 1fr 1fr; }
-  .amenity { padding: 14px 10px; font-size: 13px; }
-  .chat-input-wrap { flex-direction: column; }
-  #sendMsg { width: 100%; }
-  .chat-section { padding: 25px 15px; }
-  .rf-pros-cons { grid-template-columns: 1fr; }
-  .rc-pros-cons { grid-template-columns: 1fr; }
-  .rf-grid { grid-template-columns: 1fr 1fr; }
-  .rc-top { flex-direction: column; }
-  .rating-summary { flex-direction: column; align-items: flex-start; }
-  .rs-bars { width: 100%; }
-}
+    #login-form button[type="submit"]:active {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    /* Social Login Buttons */
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .social-login button {
+      padding: 16px 24px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-login button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.6s;
+    }
+
+    .social-login button:hover::before {
+      left: 100%;
+    }
+
+    .social-login button:hover {
+      border-color: var(--accent);
+      background: rgba(255, 180, 0, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(255, 180, 0, 0.2);
+    }
+
+    #googleLogin::before {
+      content: "🔴";
+      margin-right: 8px;
+    }
+
+    #facebookLogin::before {
+      content: "📘";
+      margin-right: 8px;
+    }
+
+    /* Links Section */
+    .links-section {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .links-section .link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin: 0 8px;
+      position: relative;
+    }
+
+    .links-section .link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .links-section .link:hover {
+      color: var(--accent);
+    }
+
+    .links-section .link:hover::after {
+      width: 100%;
+    }
+
+    /* Messages */
+    #msg {
+      margin-top: 30px;
+      min-height: 24px;
+    }
+
+    .success, .error {
+      padding: 20px 28px;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      animation: msgSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(15px);
+      border: 1px solid transparent;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .success {
+      background: rgba(39, 184, 46, 0.18);
+      color: var(--success);
+      border-color: rgba(39, 184, 46, 0.35);
+    }
+
+    .error {
+      background: rgba(230, 57, 70, 0.18);
+      color: var(--danger);
+      border-color: rgba(230, 57, 70, 0.35);
+    }
+
+    @keyframes msgSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Loading State */
+    #login-form button[type="submit"].loading {
+      pointer-events: none;
+      position: relative;
+      color: #000;
+    }
+
+    #login-form button[type="submit"].loading::after {
+      content: '';
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      margin: auto;
+      border: 3px solid transparent;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Pulse Glow Animation */
+    #login-form button[type="submit"] {
+      animation: buttonPulse 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes buttonPulse {
+      from {
+        box-shadow: var(--shadow);
+      }
+      to {
+        box-shadow: 0 0 50px rgba(255, 180, 0, 0.6);
+      }
+    }
+
+    /* ================== RESPONSIVE DESIGN ================== */
+
+    /* تابلت */
+    @media (max-width: 768px) {
+      .card {
+        padding: 50px 40px;
+        margin: 15px;
+      }
+
+      .logo-img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+      }
+
+      .logo h3 {
+        font-size: 2.2rem;
+      }
+
+      .logo h3:nth-of-type(2) {
+        font-size: 1.8rem;
+      }
+
+      #login-form {
+        gap: 22px;
+      }
+
+      #login-form input {
+        padding: 20px 24px;
+        font-size: 1rem;
+      }
+
+      #login-form button[type="submit"] {
+        padding: 20px 30px;
+        font-size: 1.1rem;
+      }
+
+      .social-login {
+        gap: 10px;
+      }
+
+      .social-login button {
+        padding: 14px 20px;
+        font-size: 0.95rem;
+      }
+
+      .links-section {
+        margin-top: 26px;
+        padding-top: 22px;
+      }
+    }
+
+    /* موبايل */
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 30px;
+      }
+
+      .card {
+        padding: 40px 30px;
+        margin: 5px;
+        max-width: 100%;
+      }
+
+      .logo-img {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 18px;
+      }
+
+      .logo h3 {
+        font-size: 1.8rem;
+      }
+
+      .logo h3:nth-of-type(2) {
+        font-size: 1.5rem;
+      }
+
+      #login-form {
+        gap: 18px;
+      }
+
+      #login-form input {
+        padding: 18px 20px;
+        font-size: 0.95rem;
+        border-radius: 14px;
+      }
+
+      .pass-wrapper input {
+        padding-right: 50px;
+      }
+
+      .pass-wrapper button {
+        left: 10px;
+        font-size: 16px;
+      }
+
+      #login-form button[type="submit"] {
+        padding: 18px 28px;
+        font-size: 1rem;
+        border-radius: 40px;
+        margin-top: 8px;
+      }
+
+      .social-login {
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .social-login button {
+        padding: 12px 18px;
+        font-size: 0.9rem;
+        border-radius: 14px;
+      }
+
+      .links-section {
+        margin-top: 22px;
+        padding-top: 18px;
+      }
+
+      .links-section .link {
+        font-size: 0.85rem;
+        margin: 0 6px;
+      }
+
+      .success, .error {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        border-radius: 12px;
+      }
+
+      #msg {
+        margin-top: 20px;
+      }
+    }
+
+    /* موبايل صغير */
+    @media (max-width: 420px) {
+      body {
+        padding: 10px;
+        padding-top: 20px;
+      }
+
+      .card {
+        padding: 32px 24px;
+        margin: 5px;
+        border-radius: 18px;
+      }
+
+      .card::before {
+        height: 4px;
+      }
+
+      .logo-img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 14px;
+        border-width: 3px;
+      }
+
+      .logo h3 {
+        font-size: 1.5rem;
+        letter-spacing: -0.5px;
+      }
+
+     /* ================== GOOGLE TRANSLATE - COMPLETE HIDE ================== */
+    #google_translate_element,
+    .goog-te-banner-frame,
+    .goog-te-menu-frame,
+    .goog-te-balloon-frame,
+    .goog-te-gadget,
+    .goog-logo-link,
+    .goog-te-gadget span,
+    .skiptranslate,
+    .goog-te-combo,
+    .VIpgJd-ZVi9od-ORHb-OEVmkb svg,
+    [aria-label*="Google"],
+    [title*="Google"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      height: 0 !important;
+      width: 0 !important;
+      overflow: hidden !important;
+      position: absolute !important;
+      z-index: -9999 !important;
+    }
+
+
+    /* iPhone SE (320px) */
+    @media (max-width: 375px) {
+
+      body {
+        padding: 8px;
+        padding-top: 15px;
+        align-items: flex-start;
+      }
+
+      .card {
+        width: 100%;
+        padding: 24px 18px;
+        border-radius: 16px;
+        margin: 0;
+      }
+
+      .logo {
+        margin-bottom: 20px;
+      }
+
+      .logo-img {
+        width: 55px;
+        height: 55px;
+        margin-bottom: 10px;
+      }
+
+      .logo h3 {
+        font-size: 1.3rem;
+        line-height: 1.3;
+      }
+
+      .logo h3:nth-of-type(2) {
+        font-size: 1.15rem;
+      }
+
+      #login-form {
+        gap: 14px;
+      }
+
+      #login-form input {
+        padding: 14px 16px;
+        font-size: 14px;
+        border-radius: 12px;
+      }
+
+      .pass-wrapper input {
+        padding-right: 42px;
+      }
+
+      .pass-wrapper button {
+        left: 8px;
+        font-size: 14px;
+      }
+
+      #login-form button[type="submit"] {
+        padding: 15px;
+        font-size: 15px;
+        border-radius: 30px;
+      }
+
+      .social-login {
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .social-login button {
+        padding: 12px;
+        font-size: 13px;
+        border-radius: 12px;
+      }
+
+      .links-section {
+        margin-top: 18px;
+        padding-top: 14px;
+      }
+
+      .links-section .link {
+        display: block;
+        margin: 8px 0;
+        font-size: 13px;
+      }
+
+      .success,
+      .error {
+        padding: 12px;
+        font-size: 13px;
+      }
+    }
   </style>
   <body>
-
-    <!-- ===== HEADER ===== -->
-    <header class="hotel-header">
-      <h1 id="hotelName">جارٍ التحميل...</h1>
-      <div class="header-meta">
-        <div class="header-stars" id="hotelStars"></div>
-        <div class="header-badge" id="hotelType" style="display:none"></div>
+    <div class="card">
+      <div class="logo">
+        <h3 data-i18n="brand_name">SUNGET.COM</h3>
+        <h3 data-i18n="title">تسجيل دخول</h3>
       </div>
-    </header>
 
-    <!-- ===== SLIDER ===== -->
-    <section class="slider-section">
-      <div class="slider-wrap">
-        <div class="slider">
-          <div class="slides" id="slides"></div>
-          <button class="nav prev" aria-label="السابق">‹</button>
-          <button class="nav next" aria-label="التالي">›</button>
-          <div class="dots" id="dots"></div>
+      <form id="login-form">
+        <input
+          id="email"
+          type="email"
+          data-i18n-placeholder="email"
+          placeholder="البريد الإلكتروني"
+          required
+        />
+        <div class="pass-wrapper">
+          <input
+            id="password"
+            type="password"
+            data-i18n-placeholder="password"
+            placeholder="كلمة المرور"
+            required
+          />
+          <button type="button" id="togglePass">👁</button>
         </div>
-      </div>
-    </section>
+        <button type="submit" data-i18n="login">تسجيل الدخول</button>
+      </form>
 
-    <!-- ===== ACTION BUTTONS ===== -->
-    <div class="book-wrap">
-      <a href="#chat-section" id="contactHotelBtn">💬 تواصل مع الفندق</a>
-      <button id="bookNowBtn" class="book-btn">
-        <i class="fa-solid fa-calendar-check"></i>
-        احجز الآن
-      </button>
+      <div id="msg"></div>
+
+      <!-- Social Login -->
+      <div class="social-login">
+        <button id="googleLogin" data-i18n="google_login">
+          تسجيل دخول بجوجل
+        </button>
+        <button id="facebookLogin" data-i18n="facebook_login">
+          تسجيل دخول بفيسبوك
+        </button>
+      </div>
+
+      <!-- Links Section -->
+      <div class="links-section">
+        <a href="signup.html" class="link" data-i18n="have_account"
+          >ليس لديك حساب؟ إنشاء حساب جديد</a
+        >
+        <a href="forgot_password.html" class="link" data-i18n="forgot_password"
+          >نسيت كلمة المرور؟</a
+        >
+      </div>
     </div>
 
-    <!-- ===== DYNAMIC CONTENT CONTAINER ===== -->
-    <div id="dynamicContent"></div>
-
-    <!-- ===== MAP SECTION ===== -->
-    <section class="map-section" id="mapSection" style="display:none">
-      <a id="mapLink" href="#" target="_blank" class="map-btn">
-        <i class="fa-solid fa-map-location-dot"></i>
-        عرض الموقع على الخريطة
-      </a>
-    </section>
-
-    <!-- ===== REVIEWS SECTION ===== -->
-    <section class="reviews-section" id="reviews-section">
-      <div class="reviews-inner">
-        <div class="rating-summary" id="ratingSummary">
-          <div class="rs-score-box">
-            <div class="rs-score" id="rsScore">—</div>
-            <div class="rs-label" id="rsLabel">لا تقييمات بعد</div>
-            <div class="rs-count" id="rsCount"></div>
-          </div>
-          <div class="rs-bars" id="rsBars"></div>
-        </div>
-        <div class="reviews-head">
-          <h2>آراء النزلاء</h2>
-          <button class="write-review-btn" id="writeReviewBtn" onclick="toggleReviewForm()">
-            <i class="fa-solid fa-pen-to-square"></i>
-            اكتب تقييمك
-          </button>
-        </div>
-        <div class="review-form-wrap" id="reviewFormWrap" style="display:none">
-          <div class="review-form">
-            <h3>شاركنا تجربتك</h3>
-            <div class="rf-stars-row">
-              <span class="rf-cat">التقييم العام</span>
-              <div class="star-picker" id="starPicker">
-                <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span>
-                <span data-v="4">★</span><span data-v="5">★</span><span data-v="6">★</span>
-                <span data-v="7">★</span><span data-v="8">★</span><span data-v="9">★</span><span data-v="10">★</span>
-              </div>
-              <span class="rf-score-display" id="rfScoreDisplay">0 / 10</span>
-            </div>
-            <div class="rf-grid">
-              <div class="rf-sub"><label>النظافة</label><select id="rfCleanliness"><option value="">اختر</option><option value="10">10 - استثنائي</option><option value="9">9 - رائع</option><option value="8">8 - ممتاز</option><option value="7">7 - جيد جداً</option><option value="6">6 - جيد</option><option value="5">5 - مقبول</option></select></div>
-              <div class="rf-sub"><label>الخدمة</label><select id="rfService"><option value="">اختر</option><option value="10">10 - استثنائي</option><option value="9">9 - رائع</option><option value="8">8 - ممتاز</option><option value="7">7 - جيد جداً</option><option value="6">6 - جيد</option><option value="5">5 - مقبول</option></select></div>
-              <div class="rf-sub"><label>الموقع</label><select id="rfLocation"><option value="">اختر</option><option value="10">10 - استثنائي</option><option value="9">9 - رائع</option><option value="8">8 - ممتاز</option><option value="7">7 - جيد جداً</option><option value="6">6 - جيد</option><option value="5">5 - مقبول</option></select></div>
-              <div class="rf-sub"><label>القيمة مقابل السعر</label><select id="rfValue"><option value="">اختر</option><option value="10">10 - استثنائي</option><option value="9">9 - رائع</option><option value="8">8 - ممتاز</option><option value="7">7 - جيد جداً</option><option value="6">6 - جيد</option><option value="5">5 - مقبول</option></select></div>
-            </div>
-            <div class="rf-trip">
-              <label>نوع الرحلة</label>
-              <div class="trip-types">
-                <button type="button" class="trip-type-btn" data-type="solo" onclick="selectTripType(this)"><i class="fa-solid fa-person"></i> منفرد</button>
-                <button type="button" class="trip-type-btn" data-type="couple" onclick="selectTripType(this)"><i class="fa-solid fa-heart"></i> زوجين</button>
-                <button type="button" class="trip-type-btn" data-type="family" onclick="selectTripType(this)"><i class="fa-solid fa-people-roof"></i> عائلة</button>
-                <button type="button" class="trip-type-btn" data-type="business" onclick="selectTripType(this)"><i class="fa-solid fa-briefcase"></i> عمل</button>
-                <button type="button" class="trip-type-btn" data-type="group" onclick="selectTripType(this)"><i class="fa-solid fa-people-group"></i> مجموعة</button>
-              </div>
-            </div>
-            <textarea id="rfTitle" placeholder="عنوان تقييمك (اختياري)" rows="1" style="resize:none"></textarea>
-            <textarea id="rfComment" placeholder="اكتب تجربتك بالتفصيل..." rows="4"></textarea>
-            <div class="rf-pros-cons">
-              <textarea id="rfPros" placeholder="✅ الإيجابيات" rows="2"></textarea>
-              <textarea id="rfCons" placeholder="❌ السلبيات" rows="2"></textarea>
-            </div>
-            <div class="rf-actions">
-              <button class="rf-cancel" onclick="toggleReviewForm()">إلغاء</button>
-              <button class="rf-submit" onclick="submitReview()"><i class="fa-solid fa-paper-plane"></i> نشر التقييم</button>
-            </div>
-          </div>
-        </div>
-        <div id="reviewsList" class="reviews-list">
-          <div class="reviews-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ تحميل التقييمات...</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== CHAT ===== -->
-    <section id="chat-section" class="chat-section">
-      <h2 data-i18n="chat.title">الدردشة مع الفندق</h2>
-      <div id="chatBox" class="chat-box"></div>
-      <div class="chat-input-wrap">
-        <input type="text" id="chatInput" data-i18n-placeholder="chat.placeholder" placeholder="اكتب رسالتك..." />
-        <button id="sendMsg" data-i18n="chat.send">إرسال</button>
-      </div>
-    </section>
+    <!-- تحميل مكتبة Supabase مرة واحدة -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
 
     <script>
-    /* =====================================================================
-       SUPABASE INIT
-    ===================================================================== */
-    const supabaseClient = supabase.createClient(
-      "https://mqvmxqzwvpasdytbpbke.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM"
-    );
+      // 1️⃣ إنشاء عميل Supabase
+      const SUPABASE_URL = "https://mqvmxqzwvpasdytbpbke.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xdm14cXp3dnBhc2R5dGJwYmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODMwMjksImV4cCI6MjA3Nzg1OTAyOX0.jHrxC0IcuWYkSaB2y-guc5tl5dPPWFSoasv3rmjcxuM";
 
-    const params  = new URLSearchParams(window.location.search);
-    const hotelId = params.get("id");
+      const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    /* =====================================================================
-       FIELD SCHEMA
-       Every field the dashboard form can save is listed here.
-       Adding a new field to the form + hotels table = it appears automatically.
-       ─────────────────────────────────────────────────────────────────────
-       type values:
-         text | number | url | email | tel | whatsapp | boolean
-         stars | chips | images | time | policy | social | hidden
-    ===================================================================== */
-    const FIELD_SCHEMA = [
-      /* ── Section: معلومات الفندق ── */
-      { key: "hotel_name",       label: "اسم الفندق",          section: "_header",         type: "text",    icon: "fa-hotel" },
-      { key: "property_type",    label: "نوع المنشأة",          section: "_header",         type: "text",    icon: "fa-building" },
-      { key: "stars",            label: "تصنيف النجوم",         section: "_header",         type: "stars",   icon: "fa-star" },
-      { key: "established_year", label: "سنة الإنشاء",          section: "معلومات الفندق",  type: "number",  icon: "fa-calendar" },
-      { key: "description",      label: "وصف الفندق",           section: "وصف الفندق",      type: "text",    icon: "fa-align-right", display: "paragraph" },
+      // 2️⃣ دالة لإظهار الرسائل
+      function show(el, text, type = "error") {
+        if (!el) return;
+        el.innerHTML = `<div class="${type}">${text}</div>`;
+      }
 
-      /* ── Section: الموقع ── */
-      { key: "city",        label: "المدينة",    section: "الموقع",   type: "text",   icon: "fa-city" },
-      { key: "governorate", label: "المحافظة",   section: "الموقع",   type: "text",   icon: "fa-map" },
-      { key: "address",     label: "العنوان",    section: "الموقع",   type: "text",   icon: "fa-location-dot" },
-      { key: "latitude",    label: "خط العرض",   section: "الموقع",   type: "number", icon: "fa-crosshairs" },
-      { key: "longitude",   label: "خط الطول",   section: "الموقع",   type: "number", icon: "fa-crosshairs" },
-      { key: "map_link",    label: "رابط الخريطة", section: "_map",   type: "url",    icon: "fa-map-location-dot" },
+      // 3️⃣ التعامل مع نموذج تسجيل الدخول
+      const loginForm = document.getElementById("login-form");
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-      /* ── Section: الاتصال ── */
-      { key: "phone",     label: "الهاتف",            section: "معلومات الاتصال", type: "tel",      icon: "fa-phone" },
-      { key: "whatsapp",  label: "واتساب",             section: "معلومات الاتصال", type: "whatsapp", icon: "fa-brands fa-whatsapp" },
-      { key: "email",     label: "البريد الإلكتروني", section: "معلومات الاتصال", type: "email",    icon: "fa-envelope" },
-      { key: "website",   label: "الموقع الإلكتروني", section: "معلومات الاتصال", type: "url",      icon: "fa-globe" },
+          const emailEl = document.getElementById("email");
+          const passwordEl = document.getElementById("password");
+          const submitBtn = loginForm.querySelector('button[type="submit"]');
+          const msgEl = document.getElementById("msg");
 
-      /* ── Section: التواصل الاجتماعي ── */
-      { key: "facebook",  label: "فيسبوك",    section: "التواصل الاجتماعي", type: "social", icon: "fa-brands fa-facebook",  color: "#1877F2" },
-      { key: "instagram", label: "إنستجرام",  section: "التواصل الاجتماعي", type: "social", icon: "fa-brands fa-instagram", color: "#E1306C" },
-      { key: "tiktok",    label: "تيك توك",   section: "التواصل الاجتماعي", type: "social", icon: "fa-brands fa-tiktok",    color: "#000" },
-      { key: "youtube",   label: "يوتيوب",    section: "التواصل الاجتماعي", type: "social", icon: "fa-brands fa-youtube",   color: "#FF0000" },
-      { key: "twitter",   label: "تويتر/X",   section: "التواصل الاجتماعي", type: "social", icon: "fa-brands fa-x-twitter", color: "#000" },
-      { key: "snapchat",  label: "سناب شات",  section: "التواصل الاجتماعي", type: "social", icon: "fa-brands fa-snapchat",  color: "#FFFC00" },
+          if (!emailEl || !passwordEl || !msgEl) return;
 
-      /* ── Section: الصور ── */
-      { key: "photo_urls", label: "صور الفندق", section: "_slider", type: "images" },
+          const email = emailEl.value.trim();
+          const password = passwordEl.value;
 
-      /* ── Section: المرافق ── */
-      { key: "amenities", label: "المرافق", section: "المرافق", type: "chips", display: "amenities" },
-
-      /* ── Section: تفاصيل الإقامة ── */
-      { key: "guests_count",    label: "عدد الضيوف",         section: "تفاصيل الإقامة", type: "number",  icon: "fa-users" },
-      { key: "bathrooms_count", label: "عدد الحمامات",        section: "تفاصيل الإقامة", type: "number",  icon: "fa-bath" },
-      { key: "area_size",       label: "المساحة",             section: "تفاصيل الإقامة", type: "number",  icon: "fa-vector-square" },
-      { key: "area_unit",       label: "وحدة المساحة",        section: "_hidden",         type: "hidden" },
-      { key: "allow_children",  label: "السماح بالأطفال",     section: "تفاصيل الإقامة", type: "yesno",   icon: "fa-child",         map: { yes: "مسموح", no: "غير مسموح" } },
-      { key: "child_beds",      label: "أسرّة الأطفال",       section: "تفاصيل الإقامة", type: "yesno",   icon: "fa-baby",          map: { yes: "متاحة", no: "غير متاحة" } },
-      { key: "bedrooms",        label: "غرف النوم",            section: "تفاصيل الإقامة", type: "json",    icon: "fa-bed" },
-
-      /* ── Section: الخدمات ── */
-      { key: "has_breakfast",      label: "وجبة الإفطار",          section: "الخدمات", type: "yesno",  icon: "fa-mug-saucer",     map: { yes: "متاحة", no: "غير متاحة" } },
-      { key: "breakfast_included", label: "الإفطار مشمول بالسعر",  section: "الخدمات", type: "yesno",  icon: "fa-circle-check",   map: { yes: "نعم", no: "لا (تكلفة إضافية)" } },
-      { key: "breakfast_price",    label: "سعر الإفطار (للشخص/يوم)", section: "الخدمات", type: "price",  icon: "fa-dollar-sign" },
-      { key: "breakfast_types",    label: "أنواع الإفطار",          section: "الخدمات", type: "chips",  icon: "fa-utensils" },
-      { key: "parking_available",  label: "موقف السيارات",          section: "الخدمات", type: "text",   icon: "fa-square-parking", map: { free: "مجاني", paid: "مدفوع", no: "غير متاح" } },
-      { key: "parking_price",      label: "سعر الموقف",             section: "الخدمات", type: "price",  icon: "fa-dollar-sign" },
-      { key: "parking_period",     label: "فترة الموقف",            section: "الخدمات", type: "text",   icon: "fa-clock",          map: { night: "لليلة", day: "لليوم", hour: "للساعة" } },
-      { key: "parking_location",   label: "موقع الموقف",            section: "الخدمات", type: "text",   icon: "fa-location-dot",   map: { on_site: "داخل المنشأة", off_site: "خارج المنشأة" } },
-      { key: "parking_type",       label: "نوع الموقف",             section: "الخدمات", type: "text",   icon: "fa-car",            map: { private: "خاص", public: "عام" } },
-      { key: "parking_reservation",label: "حجز الموقف",             section: "الخدمات", type: "text",   icon: "fa-calendar-check", map: { required: "مطلوب", not_required: "غير مطلوب" } },
-
-      /* ── Section: السياسات ── */
-      { key: "pol_children",        label: "سياسة الأطفال",           section: "سياسات الفندق", type: "policy", icon: "fa-child",              map: { all_ages: "مسموح للأطفال من جميع الأعمار", older_only: "مسموح للأطفال الأكبر سناً فقط", no: "غير مسموح للأطفال" } },
-      { key: "pol_min_child_age",   label: "الحد الأدنى لسن الأطفال", section: "سياسات الفندق", type: "number", icon: "fa-child" },
-      { key: "pol_extra_beds",      label: "الأسرّة الإضافية",         section: "سياسات الفندق", type: "policy", icon: "fa-bed",                map: { yes_free: "متاحة مجاناً", yes_fee: "متاحة برسوم إضافية", no: "غير متاحة" } },
-      { key: "pol_extra_bed_price", label: "رسوم السرير الإضافي/ليلة", section: "سياسات الفندق", type: "price",  icon: "fa-dollar-sign" },
-      { key: "pol_pets",            label: "الحيوانات الأليفة",         section: "سياسات الفندق", type: "policy", icon: "fa-paw",                map: { yes_free: "مسموح بها مجاناً", yes_fee: "مسموح بها برسوم", no: "غير مسموح بها" } },
-      { key: "pol_pets_price",      label: "رسوم الحيوان الأليف/ليلة", section: "سياسات الفندق", type: "price",  icon: "fa-dollar-sign" },
-      { key: "pol_breakfast",       label: "سياسة الإفطار",             section: "سياسات الفندق", type: "policy", icon: "fa-mug-saucer",         map: { included: "مشمول في السعر", extra_charge: "متاح بتكلفة إضافية", not_available: "غير متاح" } },
-      { key: "pol_parking",         label: "سياسة الموقف",              section: "سياسات الفندق", type: "policy", icon: "fa-square-parking",     map: { free: "متاح مجاناً", paid: "متاح برسوم", no: "غير متاح" } },
-      { key: "pol_checkin_from",    label: "Check-in (من)",              section: "مواعيد الوصول والمغادرة", type: "time",   icon: "fa-clock" },
-      { key: "pol_checkin_until",   label: "Check-in (حتى)",             section: "مواعيد الوصول والمغادرة", type: "time",   icon: "fa-clock" },
-      { key: "pol_checkout_from",   label: "Check-out (من)",             section: "مواعيد الوصول والمغادرة", type: "time",   icon: "fa-clock" },
-      { key: "pol_checkout_until",  label: "Check-out (حتى)",            section: "مواعيد الوصول والمغادرة", type: "time",   icon: "fa-clock" },
-      { key: "pol_smoking",         label: "سياسة التدخين",              section: "سياسات الفندق", type: "policy", icon: "fa-smoking",            map: { allowed: "مسموح في جميع أنحاء المنشأة", designated: "مسموح في أماكن مخصصة فقط", no: "ممنوع تماماً" } },
-      { key: "pol_parties",         label: "الحفلات والفعاليات",          section: "سياسات الفندق", type: "policy", icon: "fa-champagne-glasses",  map: { yes: "مسموح بها", on_request: "بناءً على الطلب", no: "غير مسموح بها" } },
-      { key: "pol_cancellation",    label: "سياسة الإلغاء",              section: "سياسة الإلغاء", type: "policy", icon: "fa-rotate-left",        map: { free: "إلغاء مجاني حتى يوم الوصول", free_48h: "إلغاء مجاني حتى 48 ساعة قبل الوصول", free_7d: "إلغاء مجاني حتى 7 أيام قبل الوصول", no_refund: "غير قابل للاسترداد بعد التأكيد" } },
-      { key: "pol_prepayment",      label: "الدفع المسبق",               section: "سياسات الفندق", type: "policy", icon: "fa-credit-card",        map: { not_required: "لا يشترط الدفع المسبق", partial: "دفع جزئي مسبق مطلوب", full: "الدفع الكامل مسبقاً مطلوب" } },
-      { key: "pol_prepayment_pct",  label: "نسبة الدفع المسبق",          section: "سياسات الفندق", type: "number", icon: "fa-percent" },
-
-      /* ── Section: اللغات ── */
-      { key: "languages", label: "اللغات المتاحة", section: "اللغات المتاحة", type: "chips", icon: "fa-language" },
-
-      /* ── Section: طريقة الدفع ── */
-      { key: "payment_method", label: "طريقة الدفع", section: "معلومات الدفع", type: "text", icon: "fa-credit-card", map: { booking_payments: "عبر الإنترنت (عند الحجز)", credit_card_on_site: "بطاقة ائتمان في الموقع عند الوصول" } },
-      { key: "payment_type",   label: "نوع الدفع",   section: "معلومات الدفع", type: "text", icon: "fa-wallet" },
-
-      /* ── Fields shown in summary / hidden from dynamic render ── */
-      { key: "price_per_night", label: "السعر لليلة", section: "معلومات الفندق", type: "price", icon: "fa-tag" },
-      { key: "rating",          label: "التقييم",      section: "معلومات الفندق", type: "number", icon: "fa-star" },
-
-      /* ── Internal fields – always skip ── */
-      { key: "id",         section: "_hidden", type: "hidden" },
-      { key: "owner_id",   section: "_hidden", type: "hidden" },
-      { key: "created_at", section: "_hidden", type: "hidden" },
-      { key: "updated_at", section: "_hidden", type: "hidden" },
-      { key: "is_active",  section: "_hidden", type: "hidden" },
-      { key: "is_approved",section: "_hidden", type: "hidden" },
-      { key: "status",     section: "_hidden", type: "hidden" },
-      { key: "policies",   section: "_hidden", type: "hidden" },  // legacy text field
-      { key: "cancellation_policy", section: "_hidden", type: "hidden" }, // legacy
-    ];
-
-    /* Build quick-lookup maps */
-    const SCHEMA_MAP = {};
-    FIELD_SCHEMA.forEach(f => SCHEMA_MAP[f.key] = f);
-
-    /* Sections order for display */
-    const SECTION_ORDER = [
-      "وصف الفندق",
-      "المرافق",
-      "الموقع",
-      "معلومات الاتصال",
-      "التواصل الاجتماعي",
-      "تفاصيل الإقامة",
-      "الخدمات",
-      "مواعيد الوصول والمغادرة",
-      "سياسة الإلغاء",
-      "سياسات الفندق",
-      "اللغات المتاحة",
-      "معلومات الدفع",
-      "معلومات الفندق",
-    ];
-
-    /* =====================================================================
-       RENDERER HELPERS
-    ===================================================================== */
-    function isEmpty(val) {
-      if (val === null || val === undefined || val === "") return true;
-      if (Array.isArray(val) && val.length === 0) return true;
-      return false;
-    }
-
-    function renderValue(fieldDef, value, data) {
-      if (!fieldDef) return escHtml(String(value));
-      const { type, map, icon } = fieldDef;
-
-      // Apply value mapping if defined
-      const resolved = (map && map[value]) ? map[value] : null;
-
-      switch (type) {
-        case "hidden": return null;
-
-        case "stars": {
-          const n = parseInt(value);
-          if (!n) return escHtml(String(value));
-          return "★".repeat(n) + "☆".repeat(Math.max(0, 5 - n));
-        }
-
-        case "email":
-          return `<a href="mailto:${escAttr(value)}"><i class="fa-solid fa-envelope"></i> ${escHtml(value)}</a>`;
-
-        case "tel":
-          return `<a href="tel:${escAttr(value)}"><i class="fa-solid fa-phone"></i> ${escHtml(value)}</a>`;
-
-        case "whatsapp": {
-          const num = String(value).replace(/\D/g, "");
-          return `<a href="https://wa.me/${num}" target="_blank" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> ${escHtml(value)}</a>`;
-        }
-
-        case "url":
-          return `<a href="${escAttr(value)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${escHtml(value)}</a>`;
-
-        case "social":
-          return `<a href="${escAttr(value)}" target="_blank" rel="noopener" class="social-btn" style="color:${fieldDef.color||'inherit'}"><i class="${escAttr(fieldDef.icon||'fa-solid fa-link')}"></i> ${escHtml(fieldDef.label)}</a>`;
-
-        case "boolean":
-          return value ? '<span class="bool-yes">✅ نعم</span>' : '<span class="bool-no">❌ لا</span>';
-
-        case "yesno":
-          return resolved ? `<span class="bool-yes">✅ ${resolved}</span>` : `<span class="bool-no">❌ ${escHtml(String(value))}</span>`;
-
-        case "policy":
-          return resolved ? escHtml(resolved) : escHtml(String(value));
-
-        case "price": {
-          const unit = data.area_unit || "USD";
-          return `${parseFloat(value).toLocaleString("ar")} ${unit === "m2" ? "م²" : unit === "ft2" ? "قدم²" : "$US"}`;
-        }
-
-        case "number":
-          if (fieldDef.key === "area_size") {
-            const u = data.area_unit;
-            const uLabel = u === "ft2" ? "قدم مربع" : "متر مربع";
-            return `${parseFloat(value).toLocaleString("ar")} ${uLabel}`;
+          if (!email || !password) {
+            show(msgEl, "❌ يرجى إدخال البريد الإلكتروني وكلمة المرور");
+            return;
           }
-          return String(value);
 
-        case "time":
-          return escHtml(String(value));
+          submitBtn.classList.add("loading");
+          submitBtn.textContent =
+            i18next.t("msg_loading") || "جارٍ تسجيل الدخول...";
 
-        case "chips":
-        case "images":
-          return null; // handled separately
-
-        case "json":
           try {
-            const obj = typeof value === "string" ? JSON.parse(value) : value;
-            if (Array.isArray(obj))
-              return obj.map(o => `<span class="chip">${escHtml(typeof o === "object" ? JSON.stringify(o) : String(o))}</span>`).join(" ");
-            return `<pre style="font-size:12px;color:var(--text-muted);white-space:pre-wrap">${escHtml(JSON.stringify(obj, null, 2))}</pre>`;
-          } catch { return escHtml(String(value)); }
+            const { data, error } = await sb.auth.signInWithPassword({
+              email,
+              password,
+            });
 
-        default:
-          return resolved ? escHtml(resolved) : escHtml(String(value));
-      }
-    }
+            if (error) {
+              show(
+                msgEl,
+                i18next.t("msg_wrong") ||
+                  "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة",
+              );
+              return;
+            }
 
-    function escHtml(s) {
-      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-    }
-    function escAttr(s) {
-      return String(s).replace(/"/g,"&quot;");
-    }
+            if (!data.user) {
+              show(
+                msgEl,
+                i18next.t("msg_no_account") || "❌ حدث خطأ: المستخدم غير موجود",
+              );
+              return;
+            }
 
-    /* =====================================================================
-       DYNAMIC SECTION BUILDER
-    ===================================================================== */
-    function buildDynamicContent(data) {
-      const container = document.getElementById("dynamicContent");
-      if (!container) return;
+            console.log("User:", data.user);
+            console.log("Metadata:", data.user.user_metadata);
 
-      // Group fields by section
-      const sections = {};
+            const role = data.user.user_metadata?.role;
 
-      // 1. Known schema fields
-      FIELD_SCHEMA.forEach(def => {
-        if (def.section.startsWith("_")) return; // special / hidden
-        const val = data[def.key];
-        if (isEmpty(val)) return;
-        if (!sections[def.section]) sections[def.section] = [];
-        sections[def.section].push({ def, val });
-      });
+            if (role === "user") {
+              show(
+                msgEl,
+                i18next.t("msg_user_success") || "✅ تم تسجيل الدخول كمستخدم",
+                "success",
+              );
+              setTimeout(() => {
+                window.location.href = "index.html";
+              }, 1500);
+              return;
+            }
 
-      // 2. Unknown fields (in DB but not in schema) → catch-all section
-      const knownKeys = new Set(FIELD_SCHEMA.map(f => f.key));
-      Object.keys(data).forEach(key => {
-        if (knownKeys.has(key)) return;
-        const val = data[key];
-        if (isEmpty(val)) return;
-        if (!sections["بيانات إضافية"]) sections["بيانات إضافية"] = [];
-        sections["بيانات إضافية"].push({
-          def: { key, label: key, type: "text", icon: "fa-circle-info" },
-          val
-        });
-      });
+            if (role === "provider") {
+              show(
+                msgEl,
+                i18next.t("msg_provider_success") ||
+                  "✅ تم تسجيل الدخول كمزود خدمة",
+                "success",
+              );
+              setTimeout(() => {
+                window.location.href = "تسجيل الفندق.html";
+              }, 1500);
+              return;
+            }
 
-      // Build HTML in section order, then unknown sections
-      const orderedSections = [
-        ...SECTION_ORDER.filter(s => sections[s]),
-        ...Object.keys(sections).filter(s => !SECTION_ORDER.includes(s))
-      ];
-
-      let html = "";
-      orderedSections.forEach(sectionName => {
-        const items = sections[sectionName];
-        if (!items || !items.length) return;
-
-        html += `<section class="dyn-section"><h2>${escHtml(sectionName)}</h2>`;
-
-        // ── Special render: description paragraph ──
-        if (sectionName === "وصف الفندق") {
-          const descItem = items.find(i => i.def.key === "description");
-          if (descItem) {
-            html += `<p class="desc-text">${escHtml(String(descItem.val))}</p>`;
+            show(msgEl, "❌ نوع الحساب غير محدد");
+          } catch (err) {
+            console.error("Login Error:", err);
+            show(msgEl, i18next.t("msg_error") || "❌ حدث خطأ غير متوقع");
+          } finally {
+            submitBtn.classList.remove("loading");
+            submitBtn.textContent = i18next.t("login") || "تسجيل الدخول";
           }
-          html += "</section>";
-          return;
-        }
-
-        // ── Special render: amenities grid ──
-        if (sectionName === "المرافق") {
-          const amenItem = items.find(i => i.def.key === "amenities");
-          if (amenItem) {
-            const arr = normalizeArray(amenItem.val);
-            html += `<div class="amenities">${arr.map(a => `<span class="amenity">${escHtml(a)}</span>`).join("")}</div>`;
-          }
-          html += "</section>";
-          return;
-        }
-
-        // ── Special render: social links row ──
-        if (sectionName === "التواصل الاجتماعي") {
-          html += `<div class="social-row">`;
-          items.forEach(({ def, val }) => {
-            html += `<a href="${escAttr(val)}" target="_blank" rel="noopener" class="social-btn" style="color:${def.color||'inherit'}">
-              <i class="${escAttr(def.icon||'fa-solid fa-link')}"></i> ${escHtml(def.label)}
-            </a>`;
-          });
-          html += `</div></section>`;
-          return;
-        }
-
-        // ── Special render: chips-only sections ──
-        if (sectionName === "اللغات المتاحة") {
-          const langItem = items.find(i => i.def.key === "languages");
-          if (langItem) {
-            const arr = normalizeArray(langItem.val);
-            html += `<div class="chips-wrap">${arr.map(l => `<span class="chip accent">${escHtml(l)}</span>`).join("")}</div>`;
-          }
-          html += "</section>";
-          return;
-        }
-
-        // ── Special render: مواعيد الوصول والمغادرة ──
-        if (sectionName === "مواعيد الوصول والمغادرة") {
-          const get = k => items.find(i => i.def.key === k)?.val || "—";
-          html += `<div class="policies-list">
-            <div class="policy-item"><i class="fa-solid fa-arrow-right-to-bracket"></i><div><strong>تسجيل الوصول:</strong> من ${escHtml(get("pol_checkin_from"))} حتى ${escHtml(get("pol_checkin_until"))}</div></div>
-            <div class="policy-item"><i class="fa-solid fa-arrow-right-from-bracket"></i><div><strong>تسجيل المغادرة:</strong> من ${escHtml(get("pol_checkout_from"))} حتى ${escHtml(get("pol_checkout_until"))}</div></div>
-          </div></section>`;
-          return;
-        }
-
-        // ── Special render: policies list ──
-        if (sectionName === "سياسات الفندق" || sectionName === "سياسة الإلغاء") {
-          html += `<div class="policies-list">`;
-          items.forEach(({ def, val }) => {
-            const resolved = (def.map && def.map[val]) ? def.map[val] : String(val);
-            const iconClass = def.icon || "fa-circle-check";
-            const isCancellation = def.key === "pol_cancellation";
-            const isBad = isCancellation && val === "no_refund";
-            html += `<div class="policy-item">
-              <i class="fa-solid ${escAttr(iconClass)}" style="color:${isBad ? 'var(--danger)' : 'var(--accent)'}"></i>
-              <div><strong>${escHtml(def.label)}:</strong> ${escHtml(resolved)}</div>
-            </div>`;
-          });
-          html += `</div></section>`;
-          return;
-        }
-
-        // ── Default render: info-card grid ──
-        html += `<div class="info-grid">`;
-        items.forEach(({ def, val }) => {
-          // Skip chips arrays – render them as chips below grid
-          if (def.type === "chips" || def.type === "images") return;
-
-          const rendered = renderValue(def, val, data);
-          if (rendered === null) return;
-          const icon = def.icon || "fa-circle-info";
-          html += `<div class="info-card">
-            <div class="ic-label"><i class="fa-solid ${escAttr(icon)}"></i> ${escHtml(def.label)}</div>
-            <div class="ic-value">${rendered}</div>
-          </div>`;
         });
-        html += `</div>`;
-
-        // Chip arrays after the grid
-        items.forEach(({ def, val }) => {
-          if (def.type !== "chips") return;
-          const arr = normalizeArray(val);
-          if (!arr.length) return;
-          html += `<div style="margin-top:18px"><div class="ic-label" style="text-align:center;margin-bottom:10px;justify-content:center"><i class="fa-solid ${escAttr(def.icon||'fa-tags')}"></i> ${escHtml(def.label)}</div>
-            <div class="chips-wrap">${arr.map(c => `<span class="chip">${escHtml(c)}</span>`).join("")}</div></div>`;
-        });
-
-        html += "</section>";
-      });
-
-      container.innerHTML = html;
-    }
-
-    /* Normalize a value to a plain array of strings */
-    function normalizeArray(val) {
-      if (Array.isArray(val)) return val.map(String);
-      if (typeof val === "string" && val.trim()) {
-        try {
-          const parsed = JSON.parse(val);
-          if (Array.isArray(parsed)) return parsed.map(String);
-        } catch {}
-        return val.split(",").map(s => s.trim()).filter(Boolean);
-      }
-      return [];
-    }
-
-    /* =====================================================================
-       SLIDER BUILDER
-    ===================================================================== */
-    function buildSlider(imagesArray) {
-      const slidesEl  = document.querySelector(".slides");
-      const dotsEl    = document.querySelector(".dots");
-      const sliderEl  = document.querySelector(".slider");
-      if (!slidesEl) return;
-
-      if (!imagesArray || !imagesArray.length) {
-        slidesEl.innerHTML = "";
-        if (dotsEl) dotsEl.innerHTML = "";
-        if (sliderEl && !sliderEl.querySelector(".empty-state")) {
-          const empty = document.createElement("div");
-          empty.className = "empty-state";
-          empty.innerHTML = '<i class="fa-solid fa-image"></i><span>لا توجد صور متاحة حالياً</span>';
-          sliderEl.appendChild(empty);
-        }
-        return;
       }
 
-      sliderEl?.querySelector(".empty-state")?.remove();
-      slidesEl.innerHTML = imagesArray.map(url => `<img src="${escAttr(url)}" alt="hotel" loading="lazy"/>`).join("");
-      if (dotsEl) dotsEl.innerHTML = imagesArray.map((_, i) => `<span class="${i === 0 ? "active" : ""}" data-i="${i}"></span>`).join("");
-
-      let current = 0;
-      const total = imagesArray.length;
-      const go = i => {
-        current = (i + total) % total;
-        slidesEl.style.transform = `translateX(-${current * 100}%)`;
-        dotsEl?.querySelectorAll("span").forEach((d, idx) => d.classList.toggle("active", idx === current));
+      // Google & Facebook Login
+      document.getElementById("googleLogin").onclick = async () => {
+        await sb.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/index.html",
+          },
+        });
       };
 
-      document.querySelector(".nav.prev")?.addEventListener("click", () => go(current - 1));
-      document.querySelector(".nav.next")?.addEventListener("click", () => go(current + 1));
-      dotsEl?.querySelectorAll("span").forEach(d => d.addEventListener("click", () => go(+d.dataset.i)));
-      if (total > 1) setInterval(() => go(current + 1), 5000);
-    }
-
-    /* =====================================================================
-       HEADER BUILDER
-    ===================================================================== */
-    function buildHeader(data) {
-      document.getElementById("hotelName").textContent = data.hotel_name || "الفندق";
-
-      const starsEl = document.getElementById("hotelStars");
-      const n = parseInt(data.stars);
-      if (n) {
-        starsEl.textContent = "★".repeat(n) + "☆".repeat(Math.max(0, 5 - n));
-        starsEl.style.display = "";
-      } else {
-        starsEl.style.display = "none";
-      }
-
-      const typeEl = document.getElementById("hotelType");
-      if (data.property_type) {
-        typeEl.textContent = data.property_type;
-        typeEl.style.display = "";
-      }
-
-      document.title = (data.hotel_name || "فندق") + " – تفاصيل";
-    }
-
-    /* =====================================================================
-       MAP SECTION
-    ===================================================================== */
-    function buildMap(mapLink) {
-      const sec = document.getElementById("mapSection");
-      const btn = document.getElementById("mapLink");
-      if (mapLink && mapLink.trim()) {
-        btn.href = mapLink;
-        sec.style.display = "";
-      } else {
-        sec.style.display = "none";
-      }
-    }
-
-    /* =====================================================================
-       MAIN LOAD
-    ===================================================================== */
-    async function loadHotel() {
-      if (!hotelId) return;
-      try {
-        const { data, error } = await supabaseClient
-          .from("hotels").select("*").eq("id", hotelId).single();
-
-        if (error || !data) {
-          document.body.innerHTML = "<div style='text-align:center;padding:80px;font-size:20px'>❌ الفندق غير موجود</div>";
-          return;
-        }
-
-        // 1. Header
-        buildHeader(data);
-
-        // 2. Slider: prefer room photos, fallback to hotel photo_urls
-        const { data: roomsData } = await supabaseClient
-          .from("rooms")
-          .select("id, room_photos ( url, is_cover, position )")
-          .eq("hotel_id", hotelId);
-
-        const allPhotos = [];
-        (roomsData || []).forEach(r => {
-          (r.room_photos || []).forEach(ph => { if (ph && ph.url) allPhotos.push(ph); });
+      document.getElementById("facebookLogin").onclick = async () => {
+        await sb.auth.signInWithOAuth({
+          provider: "facebook",
+          options: {
+            redirectTo: window.location.origin + "/index.html",
+          },
         });
-        allPhotos.sort((a, b) => {
-          if (!!b.is_cover - !!a.is_cover !== 0) return !!b.is_cover - !!a.is_cover;
-          return (a.position ?? 0) - (b.position ?? 0);
+      };
+
+      // Password Toggle
+      const toggleBtn = document.getElementById("togglePass");
+      const passwordInput = document.getElementById("password");
+
+      if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener("click", () => {
+          const isHidden = passwordInput.type === "password";
+          passwordInput.type = isHidden ? "text" : "password";
+          toggleBtn.textContent = isHidden ? "🙈" : "👁";
         });
-
-        const sliderImages = allPhotos.length
-          ? allPhotos.map(p => p.url)
-          : normalizeArray(data.photo_urls);
-
-        buildSlider(sliderImages);
-
-        // 3. Dynamic content (all fields from DB)
-        buildDynamicContent(data);
-
-        // 4. Map
-        buildMap(data.map_link);
-
-      } catch (err) {
-        console.error("Load hotel error:", err);
       }
-    }
+    </script>
 
-    /* =====================================================================
-       CHAT
-    ===================================================================== */
-    async function loadMessages() {
-      if (!hotelId) return;
-      const { data } = await supabaseClient
-        .from("hotel_messages").select("*")
-        .eq("hotel_id", hotelId)
-        .order("created_at", { ascending: true });
-      if (!data) return;
+    <script>
+      const resources = {
+        ar: {
+          translation: {
+            brand_name: "SUNGET.COM",
+            title: "تسجيل دخول",
+            email: "البريد الإلكتروني",
+            password: "كلمة المرور",
+            login: "تسجيل الدخول",
+            google_login: "تسجيل دخول بجوجل",
+            facebook_login: "تسجيل دخول بفيسبوك",
+            have_account: "ليس لديك حساب؟ إنشاء حساب جديد",
+            forgot_password: "نسيت كلمة المرور؟",
+            msg_loading: "جارٍ تسجيل الدخول...",
+            msg_user_success: "✅ تم تسجيل الدخول كمستخدم بنجاح",
+            msg_provider_success: "✅ تم تسجيل الدخول كمزود خدمة بنجاح",
+            msg_wrong: "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة",
+            msg_no_account: "❌ لا يوجد حساب مرتبط بهذا البريد الإلكتروني",
+            msg_error: "❌ حدث خطأ أثناء تسجيل الدخول",
+          },
+        },
+        en: {
+          translation: {
+            brand_name: "SUNGET.COM",
+            title: "Login",
+            email: "Email",
+            password: "Password",
+            login: "Log In",
+            google_login: "Login with Google",
+            facebook_login: "Login with Facebook",
+            have_account: "Don't have an account? Create new",
+            forgot_password: "Forgot password?",
+            msg_loading: "Logging in...",
+            msg_user_success: "✅ Successfully logged in as user",
+            msg_provider_success: "✅ Successfully logged in as provider",
+            msg_wrong: "❌ Incorrect email or password",
+            msg_no_account: "❌ No account associated with this email",
+            msg_error: "❌ An error occurred during login",
+          },
+        },
+        // باقي اللغات...
+      };
 
-      const box = document.getElementById("chatBox");
-      box.innerHTML = "";
-      data.forEach(msg => {
-        const p = document.createElement("p");
-        const senderText = msg.sender_type === "hotel" ? " الفندق:" : " أنت:";
-        p.textContent = senderText + " " + msg.message;
-        p.style.textAlign = msg.sender_type === "hotel" ? "left" : "right";
-        box.appendChild(p);
-      });
-      box.scrollTop = box.scrollHeight;
-    }
+      // تهيئة i18next
+      i18next.init(
+        {
+          lng: localStorage.getItem("lang") || "ar",
+          fallbackLng: "en",
+          debug: false,
+          resources,
+        },
+        function () {
+          updateContent();
+        },
+      );
 
-    async function sendMessage() {
-      const input = document.getElementById("chatInput");
-      const msg = input.value.trim();
-      if (!msg || !hotelId) return;
-      const { data: userData } = await supabaseClient.auth.getUser();
-      if (!userData.user) return alert("يجب تسجيل الدخول");
-      const { error } = await supabaseClient.from("hotel_messages").insert([{
-        hotel_id: hotelId,
-        hotel_name: document.getElementById("hotelName").textContent,
-        user_id: userData.user.id,
-        message: msg,
-        sender_type: "user",
-      }]);
-      if (error) return console.error(error);
-      input.value = "";
-      loadMessages();
-    }
-
-    document.getElementById("sendMsg").addEventListener("click", sendMessage);
-    document.getElementById("chatInput").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
-    document.getElementById("bookNowBtn").addEventListener("click", () => {
-      window.location.href = `booking.html?id=${hotelId}`;
-    });
-    document.getElementById("contactHotelBtn").addEventListener("click", function(e) {
-      e.preventDefault();
-      document.getElementById("chat-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-
-    /* =====================================================================
-       REVIEWS
-    ===================================================================== */
-    let selectedRating = 0;
-    let selectedTripType = "";
-
-    async function loadReviews() {
-      if (!hotelId) return;
-      const { data, error } = await supabaseClient
-        .from("reviews").select("*")
-        .eq("hotel_id", hotelId)
-        .eq("is_published", true)
-        .order("created_at", { ascending: false });
-
-      const list = document.getElementById("reviewsList");
-      if (!list) return;
-
-      if (error || !data || data.length === 0) {
-        list.innerHTML = `<div class="no-reviews"><i class="fa-regular fa-star" style="font-size:40px;opacity:0.3"></i><p>لا توجد تقييمات بعد — كن أول من يقيّم!</p></div>`;
-        return;
-      }
-
-      const avg = v => data.reduce((s, r) => s + (r[v] || 0), 0) / data.length;
-      const overall = avg("rating_overall");
-      const label = overall >= 9 ? "استثنائي" : overall >= 8 ? "ممتاز" : overall >= 7 ? "جيد جداً" : overall >= 6 ? "جيد" : "مقبول";
-
-      document.getElementById("rsScore").textContent = overall.toFixed(1);
-      document.getElementById("rsLabel").textContent = label;
-      document.getElementById("rsCount").textContent = `${data.length} تقييم`;
-
-      const bars = [
-        { label: "النظافة", key: "rating_cleanliness" },
-        { label: "الخدمة",  key: "rating_service" },
-        { label: "الموقع",  key: "rating_location" },
-        { label: "القيمة",  key: "rating_value" },
-        { label: "الراحة",  key: "rating_comfort" },
-      ];
-      const rsBars = document.getElementById("rsBars");
-      if (rsBars) rsBars.innerHTML = bars.map(b => {
-        const val = avg(b.key);
-        return `<div class="rs-bar-row">
-          <span class="rs-bar-label">${b.label}</span>
-          <div class="rs-bar-track"><div class="rs-bar-fill" style="width:${val*10}%"></div></div>
-          <span class="rs-bar-val">${val > 0 ? val.toFixed(1) : "—"}</span>
-        </div>`;
-      }).join("");
-
-      const tripLabels = { solo:"منفرد", couple:"زوجين", family:"عائلة", business:"عمل", group:"مجموعة" };
-      list.innerHTML = data.map(r => {
-        const initials = (r.user_name || r.reviewer_name || "م").charAt(0).toUpperCase();
-        const scoreLabel = r.rating_overall >= 9 ? "استثنائي" : r.rating_overall >= 8 ? "ممتاز" : r.rating_overall >= 7 ? "جيد جداً" : "جيد";
-        const date = new Date(r.created_at).toLocaleDateString("ar-EG", { year:"numeric", month:"long" });
-        const hasSubs = r.rating_cleanliness || r.rating_service || r.rating_location;
-        return `<div class="review-card">
-          <div class="rc-top">
-            <div class="rc-user">
-              <div class="rc-avatar">${initials}</div>
-              <div class="rc-user-info">
-                <div class="rc-name">${r.user_name || r.reviewer_name || "مستخدم"}</div>
-                <div class="rc-meta">
-                  <span>${date}</span>
-                  ${r.trip_type ? `<span class="rc-trip-badge">${tripLabels[r.trip_type]||r.trip_type}</span>` : ""}
-                  ${r.stay_nights ? `<span>${r.stay_nights} ليلة</span>` : ""}
-                </div>
-              </div>
-            </div>
-            <div class="rc-score-box">
-              <div class="rc-score">${r.rating_overall?.toFixed(1)||"—"}</div>
-              <div class="rc-score-label">${scoreLabel}</div>
-            </div>
-          </div>
-          ${r.title ? `<div class="rc-title">${r.title}</div>` : ""}
-          ${r.comment ? `<div class="rc-comment">${r.comment}</div>` : ""}
-          ${(r.pros || r.cons) ? `<div class="rc-pros-cons">
-            ${r.pros ? `<div class="rc-pro">👍 ${r.pros}</div>` : ""}
-            ${r.cons ? `<div class="rc-con">👎 ${r.cons}</div>` : ""}
-          </div>` : ""}
-          ${hasSubs ? `<div class="rc-sub-ratings">
-            ${r.rating_cleanliness ? `<div class="rc-sub-item"><span class="sub-label">نظافة</span><span class="sub-val">${r.rating_cleanliness}</span></div>` : ""}
-            ${r.rating_service ? `<div class="rc-sub-item"><span class="sub-label">خدمة</span><span class="sub-val">${r.rating_service}</span></div>` : ""}
-            ${r.rating_location ? `<div class="rc-sub-item"><span class="sub-label">موقع</span><span class="sub-val">${r.rating_location}</span></div>` : ""}
-            ${r.rating_value ? `<div class="rc-sub-item"><span class="sub-label">قيمة</span><span class="sub-val">${r.rating_value}</span></div>` : ""}
-          </div>` : ""}
-          ${r.provider_reply ? `<div class="rc-provider-reply"><div class="reply-label"><i class="fa-solid fa-reply"></i> رد الفندق</div>${r.provider_reply}</div>` : ""}
-        </div>`;
-      }).join("");
-    }
-
-    function toggleReviewForm() {
-      const wrap = document.getElementById("reviewFormWrap");
-      if (!wrap) return;
-      const isHidden = wrap.style.display === "none" || !wrap.style.display;
-      wrap.style.display = isHidden ? "block" : "none";
-      if (isHidden) wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    function selectTripType(btn) {
-      document.querySelectorAll(".trip-type-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      selectedTripType = btn.dataset.type;
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const stars = document.querySelectorAll(".star-picker span");
-      stars.forEach(star => {
-        star.addEventListener("click", () => {
-          selectedRating = +star.dataset.v;
-          stars.forEach(s => s.classList.toggle("active", +s.dataset.v <= selectedRating));
-          document.getElementById("rfScoreDisplay").textContent = `${selectedRating} / 10`;
+      function updateContent() {
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          el.innerHTML = i18next.t(el.dataset.i18n);
         });
-        star.addEventListener("mouseenter", () => { stars.forEach(s => s.classList.toggle("active", +s.dataset.v <= +star.dataset.v)); });
-        star.addEventListener("mouseleave", () => { stars.forEach(s => s.classList.toggle("active", +s.dataset.v <= selectedRating)); });
-      });
-    });
-
-    async function submitReview() {
-      const { data: userData } = await supabaseClient.auth.getUser();
-      if (!userData?.user) { alert("يجب تسجيل الدخول لكتابة تقييم"); return; }
-      if (!selectedRating) { alert("اختر التقييم العام (1-10)"); return; }
-      const comment = document.getElementById("rfComment").value.trim();
-      if (!comment) { alert("اكتب تعليقك"); return; }
-      const btn = document.querySelector(".rf-submit");
-      btn.disabled = true; btn.textContent = "جارٍ النشر...";
-      const { error } = await supabaseClient.from("reviews").insert({
-        hotel_id: hotelId,
-        user_id: userData.user.id,
-        user_name: userData.user.user_metadata?.full_name || "مستخدم",
-        rating_overall: selectedRating,
-        rating_cleanliness: +document.getElementById("rfCleanliness").value || null,
-        rating_service: +document.getElementById("rfService").value || null,
-        rating_location: +document.getElementById("rfLocation").value || null,
-        rating_value: +document.getElementById("rfValue").value || null,
-        title: document.getElementById("rfTitle").value.trim() || null,
-        comment,
-        pros: document.getElementById("rfPros").value.trim() || null,
-        cons: document.getElementById("rfCons").value.trim() || null,
-        trip_type: selectedTripType || null,
-        is_published: true,
-      });
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> نشر التقييم';
-      if (error) { alert("حدث خطأ: " + error.message); return; }
-      document.getElementById("reviewFormWrap").style.display = "none";
-      alert("✅ شكراً! تم نشر تقييمك");
-      loadReviews();
-    }
-
-    /* =====================================================================
-       INIT
-    ===================================================================== */
-    i18next.init({
-      lng: localStorage.getItem("lang") || "ar",
-      fallbackLng: "en",
-      resources: {
-        ar: { translation: {
-          chat: { title: "الدردشة مع الفندق", placeholder: "اكتب رسالتك...", send: "إرسال", you: " أنت:", hotel: " الفندق:" },
-        }},
-        en: { translation: {
-          chat: { title: "Chat with the hotel", placeholder: "Type your message...", send: "Send", you: " You:", hotel: " Hotel:" },
-        }},
-      },
-    }, function() {
-      document.querySelectorAll("[data-i18n]").forEach(el => { el.innerHTML = i18next.t(el.dataset.i18n); });
-      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => { el.placeholder = i18next.t(el.dataset.i18nPlaceholder); });
-      loadHotel();
-      loadMessages();
-      loadReviews();
-      setInterval(loadMessages, 3000);
-    });
-
-    window.addEventListener("load", () => {
-      if (window.location.hash === "#chat-section") {
-        setTimeout(() => document.getElementById("chat-section")?.scrollIntoView({ behavior: "smooth", block: "start" }), 1500);
+        document
+          .querySelectorAll("input[data-i18n-placeholder]")
+          .forEach((el) => {
+            el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
+          });
+        document.documentElement.lang = i18next.language;
+        document.documentElement.dir =
+          i18next.language === "ar" ? "rtl" : "ltr";
       }
-    });
     </script>
     <script src="translate.js"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
 </html>
